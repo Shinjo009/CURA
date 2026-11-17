@@ -161,6 +161,14 @@ def answer_uploaded_document(
             facts = _select_facts(contexts, keys, selectors)
             if keys or selectors:
                 return _maybe_explain(_structured_answer(facts, keys, selectors, contexts, message), message)
+        # A general question ("explain this document") on a report whose text has no narrative
+        # sections still has its extracted values: answer from those, not with no match.
+        if not keys:
+            overview_facts = lookup_facts(contexts, keys=None)
+            if overview_facts:
+                return _maybe_explain(
+                    _structured_answer(overview_facts, [], {"ALL"}, contexts, message), message
+                )
         return DocumentAnswer(answer=DOCUMENT_NO_MATCH, status="document_no_match")
 
     facts = _select_facts(contexts, keys, selectors)

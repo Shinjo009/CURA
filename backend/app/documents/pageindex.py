@@ -12,13 +12,16 @@ from app.documents.extraction import ExtractedPage
 
 _HEADING = re.compile(
     r"^(?:"
-    r"[A-Z][A-Z0-9 /,&:-]{3,72}|"
+    r"(?-i:[A-Z][A-Z0-9 /,&:-]{3,72})|"
     r"\d+(?:\.\d+)*\s+[A-Z][A-Za-z0-9 /,&:-]{2,72}|"
     r"(?:Impression|Findings|Recommendation|Recommendations|Conclusion|Clinical notes|"
     r"Microscopy|Diagnosis|Summary|History|Technique|Comparison|Opinion|"
     r"Gross description|Clinical information|Report comments)s?"
     r")\s*$",
     re.I,
+)
+_CLINICAL_TITLE = re.compile(
+    r"impression|findings|recommendation|conclusion|diagnosis|opinion|summary|comments", re.I
 )
 _TOKEN = re.compile(r"[a-z0-9]+", re.I)
 _OVERVIEW = re.compile(
@@ -131,8 +134,12 @@ def retrieve_pageindex(tree: PageIndexTree | None, query: str, *, limit: int = 3
         title_hits = len(q_tokens & title_tokens)
         body_hits = len(q_tokens & body_tokens)
         score = (4.0 * title_hits) + body_hits
-        if not (node.text or "").strip():
+        body = (node.text or "").strip()
+        if not body:
             score *= 0.05
+        elif len(body) < 40 and not _CLINICAL_TITLE.search(node.title):
+            # A one line section is usually a report header, not a result page.
+            score *= 0.1
         if score <= 0:
             continue
         scored.append(

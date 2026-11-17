@@ -29,7 +29,10 @@ _STRUCTURED = re.compile(
     re.I,
 )
 _SUMMARY = re.compile(
-    r"\b(explain this (?:whole |entire )?report|summar(?:y|ize|ise) this (?:whole |entire )?(?:report|document)|"
+    r"\b(explain (?:this|the|my) (?:whole |entire |uploaded )?(?:report|document|pdf|file)|"
+    r"what(?:'s| is) (?:in|inside) (?:this|the|my) (?:report|document|pdf|file)|"
+    r"(?:walk me through|go through) (?:this|the|my) (?:report|document|pdf|file)|"
+    r"summar(?:y|ize|ise) this (?:whole |entire )?(?:report|document)|"
     r"what (?:does|did) this (?:report|pdf|document|discharge summary|prescription) (?:say|show)|"
     r"summar(?:y|ize|ise) this discharge summary|"
     r"summar\w*.{0,48}\b(?:findings|report|document|results)\b|"
