@@ -33,3 +33,13 @@ def test_overview_question_retrieves_text():
 def test_explain_this_document_is_a_summary_request():
     for text in ("Explain this document in simple words", "what is in this pdf", "Explain this report"):
         assert wants_document_summary(text)
+
+
+def test_page_numbers_are_removed_from_document_replies():
+    from app.pipeline.document_answer import _evidence_for_model, strip_page_mentions
+
+    assert strip_page_mentions("HbA1c is 5%, within 4.2% to 5.7% on page 1.") == "HbA1c is 5%, within 4.2% to 5.7%."
+    assert "page" not in strip_page_mentions("LDL is 152 (page 2). See page 3 for details.").lower()
+    evidence = "HbA1c 5 % page 1\nConflicting values for X: 5.7, 15%\nLDL 152 mg/dL page 1"
+    cleaned = _evidence_for_model(evidence)
+    assert "page" not in cleaned and "Conflicting" not in cleaned

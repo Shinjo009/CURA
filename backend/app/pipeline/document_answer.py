@@ -382,7 +382,7 @@ def explanation_messages(message: str, evidence: str, *, document_kind: str = "g
             "role": "user",
             "content": (
                 f"Question: {message}\n\n"
-                "Evidence from the selected uploaded document. Unresolved rows are not confirmed results.\n"
+                "Evidence from the selected uploaded document.\n"
                 f"{evidence}"
             ),
         },
@@ -390,6 +390,13 @@ def explanation_messages(message: str, evidence: str, *, document_kind: str = "g
 
 
 def _maybe_explain(answer: DocumentAnswer, message: str, plan: QueryPlan | None = None) -> DocumentAnswer:
+    result = _explain_inner(answer, message, plan)
+    if result.answer:
+        result.answer = strip_page_mentions(result.answer)
+    return result
+
+
+def _explain_inner(answer: DocumentAnswer, message: str, plan: QueryPlan | None = None) -> DocumentAnswer:
     """Explanations use one model call when the document flag or the global LLM flag is on."""
     # When an approved model is on, it words the document answer. Lookups still pass only verified text.
     if not (_wants_explanation(message, plan) or _document_model_enabled()):
@@ -428,7 +435,7 @@ def _maybe_explain(answer: DocumentAnswer, message: str, plan: QueryPlan | None 
         answer.llm_mode = "document_fallback"
         answer.fallback_reason = "model_unavailable"
         return answer
-    text = _answer_text(raw)
+    text = strip_page_mentions(_answer_text(raw))
     if not text:
         answer.answer = _plain_explanation(evidence)
         answer.llm_called = False
@@ -487,7 +494,7 @@ def _plain_explanation(evidence: str) -> str:
         if stripped.startswith("I couldn't find") or stripped.startswith("Conflicting"):
             rows.append(stripped)
             continue
-        if "page" in stripped:
+        if "page" in stripped or any(ch.isdigit() for ch in stripped):
             rows.append(stripped.rstrip(".") + ".")
     if not rows:
         return evidence
@@ -507,7 +514,29 @@ def _evidence_for_model(evidence: str) -> str:
         re.I,
     )
     kept = [line for line in (evidence or "").splitlines() if not injection.search(line)]
-    return "\n".join(kept)
+    confirmed = [line for line in kept if line.strip() and not line.strip().startswith("Conflicting")]
+    if len(confirmed) > 1:
+        kept = [line for line in kept if not line.strip().startswith("Conflicting")]
+    return strip_page_mentions("\n".join(kept))
+
+
+_PAGE_MENTION = None
+
+
+def strip_page_mentions(text: str) -> str:
+    """The person does not need PDF page numbers in the reply; sources stay on the evidence card."""
+    import re
+
+    global _PAGE_MENTION
+    if _PAGE_MENTION is None:
+        _PAGE_MENTION = re.compile(
+            r"\s*[,;(]?\s*\b(?:(?:on|from|in|at|see|across)\s+)?pages?\s+\d+(?:\s*(?:-|to|and)\s*\d+)?\)?",
+            re.I,
+        )
+    import re as _re
+
+    text = _re.sub(r"(?:\bSee|\bRefer to)\s+pages?\s+\d+(?:\s+for [^.\n]*)?\.?\s*", "", text or "", flags=_re.I)
+    return _PAGE_MENTION.sub("", text)
 
 
 def _number_not_in_evidence(model_text: str, evidence: str) -> bool:

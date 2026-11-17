@@ -1,5 +1,6 @@
 """Document explanations: deterministic lookup, prose fallback, one guarded model call."""
 
+from app.pipeline.document_answer import strip_page_mentions
 from app.pipeline.document_answer import (
     DocumentAnswer,
     _maybe_explain,
@@ -13,13 +14,13 @@ EVIDENCE = "Creatinine                  1.06 mg/dL page 8   In range   0.7-1.4\n
 
 def test_lookup_wording_is_not_rewritten():
     answer = DocumentAnswer(answer=EVIDENCE)
-    assert _maybe_explain(answer, "What is my creatinine?").answer == EVIDENCE
+    assert _maybe_explain(answer, "What is my creatinine?").answer == strip_page_mentions(EVIDENCE)
 
 
 def test_explanation_without_a_model_is_plain_language():
     text = _maybe_explain(DocumentAnswer(answer=EVIDENCE), "Explain my kidney function test").answer
     assert text.startswith("The uploaded report shows")
-    assert "1.06" in text and "page 8" in text
+    assert "1.06" in text and "page 8" not in text
     assert "not a diagnosis" in text
 
 
@@ -87,4 +88,4 @@ def test_model_unavailable_uses_the_same_fallback(monkeypatch):
 
     monkeypatch.setattr("app.llm.factory.get_llm_client", _boom)
     out = _maybe_explain(DocumentAnswer(answer=EVIDENCE), "Summarize the main findings in my uploaded PDF")
-    assert out.answer == _plain_explanation(EVIDENCE)
+    assert out.answer == strip_page_mentions(_plain_explanation(EVIDENCE))
