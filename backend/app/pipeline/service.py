@@ -555,7 +555,6 @@ class ChatService:
             bio_entities = [item for item in conv_state.active_entities if item in BIO_KEYS]
             if bio_entities and re.search(r"\b(my|it|that|this|risk|mean)\b", routing_message or "", re.I):
                 plan.needs_bio_ai = True
-                plan.needs_personal_data = True
                 plan.knowledge_scope = KnowledgeScope.personal
                 plan.needs_general = False
                 if not plan.topic or plan.topic not in BIO_KEYS:
