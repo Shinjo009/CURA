@@ -245,9 +245,13 @@ def _model_explains(plan: QueryPlan) -> bool:
 
 
 def _without_clinical_claim(answer: str) -> str:
-    parts = re.split(r"(?<=[.!?])\s+", (answer or "").strip())
-    kept = [part for part in parts if part and not _CLINICAL_CHANGE.search(part)]
-    return " ".join(kept).strip()
+    lines = []
+    for line in (answer or "").strip().split("\n"):
+        parts = re.split(r"(?<=[.!?])\s+", line.strip())
+        kept = [part for part in parts if part and not _CLINICAL_CHANGE.search(part)]
+        if kept or not line.strip():
+            lines.append(" ".join(kept).strip())
+    return "\n".join(lines).strip()
 
 
 def explanation_requested(plan: QueryPlan, message: str | None = None) -> bool:

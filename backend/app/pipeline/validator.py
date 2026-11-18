@@ -181,8 +181,19 @@ def _drop_unsupported(answer: str, unsupported: list[tuple[str, str]]) -> str | 
 
     bad = {sentence.strip() for sentence, _ in unsupported}
     text = to_ascii_digits(answer or "")
-    sentences = re.split(r"(?<=[.!?।])\s+", text)
-    kept = [s for s in sentences if s.strip() not in bad]
-    if not kept or len(kept) < len(sentences) / 2:
+    lines = text.split("\n")
+    total = kept_count = 0
+    rebuilt: list[str] = []
+    for line in lines:
+        if not line.strip():
+            rebuilt.append(line)
+            continue
+        sentences = re.split(r"(?<=[.!?।])\s+", line)
+        kept = [s for s in sentences if s.strip() not in bad]
+        total += len(sentences)
+        kept_count += len(kept)
+        if kept:
+            rebuilt.append(" ".join(kept).strip())
+    if not kept_count or kept_count < total / 2:
         return None
-    return " ".join(kept).strip()
+    return re.sub(r"\n{3,}", "\n\n", "\n".join(rebuilt)).strip()

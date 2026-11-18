@@ -6,6 +6,7 @@ import re
 
 from app.contracts.health_context import HealthContext
 from app.contracts.query import QueryPlan
+from app.pipeline.line_safe import per_line
 
 _CAUSAL = re.compile(
     r"\b(caused your|caused the|this proves that|directly caused|is the cause of)\b",
@@ -96,6 +97,7 @@ def _measured_markers(context: HealthContext):
     return out
 
 
+@per_line
 def correct_false_absence(answer: str, context: HealthContext) -> tuple[str, list[str]]:
     """Replace a 'not on file' sentence when that marker is already in the record.
 
@@ -127,6 +129,7 @@ def correct_false_absence(answer: str, context: HealthContext) -> tuple[str, lis
     return " ".join(part for part in kept if part).strip(), flags
 
 
+@per_line
 def drop_unsupported_lifestyle(answer: str, context: HealthContext) -> tuple[str, list[str]]:
     """Remove a personal lifestyle claim that the questionnaire does not support.
 
@@ -164,6 +167,7 @@ _TREND = re.compile(
 )
 
 
+@per_line
 def drop_unsupported_trends(answer: str, context: HealthContext) -> tuple[str, list[str]]:
     """A change claim needs a dated comparison. 'Newly abnormal' needs a prior result that was in range."""
     if not answer or not _TREND.search(answer):
