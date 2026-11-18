@@ -23,10 +23,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: Stroke Risk",
@@ -49,10 +49,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: Heart Disease Risk (Cardiac Health)",
@@ -78,10 +78,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: PCOS / PCOD",
@@ -105,10 +105,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: Metabolic Syndrome",
@@ -131,10 +131,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: Hypothyroidism (Underactive Thyroid)",
@@ -160,10 +160,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: Obesity and Excess Body Fat",
@@ -187,10 +187,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: Type 2 Diabetes",
@@ -214,10 +214,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: High Blood Pressure (Hypertension)",
@@ -242,10 +242,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: Fatty Liver (MASLD / NAFLD)",
@@ -272,9 +272,9 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   }
 ]

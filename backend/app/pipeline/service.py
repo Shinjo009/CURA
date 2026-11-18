@@ -132,7 +132,7 @@ from app.core.log_ids import subject_ref
 from app.pipeline.claim_check import supporting_passages
 from app.pipeline.questionnaire_relevance import should_enrich_with_questionnaire
 from app.retrieval.hybrid import HybridMedicalKnowledgeProvider
-from app.retrieval.medical import passage_label
+from app.retrieval.medical import BIO_AI_EXPLAINER, passage_label
 from app.pipeline.translation import target_language, translate_answer
 from app.pipeline.safety_messages import emergency_contacts, see_doctor_soon_message
 from app.pipeline.safety import (
@@ -1326,16 +1326,26 @@ class ChatService:
         use_knowledge = (
             getattr(plan, "medical_evidence_required", False) or general_answer
         ) and (settings.report_use_knowledge_base or not report_question)
+        # A personal Bio-AI question still needs the Bio-AI guide (score is not a probability, what a
+        # percentile is). Only that guide is allowed here; the person's own values stay authoritative.
+        explainer_only = bool(
+            not use_knowledge and report_question and getattr(plan, "needs_bio_ai", False)
+        )
+        if explainer_only:
+            use_knowledge = True
         if use_knowledge:
             # Three passages by default, five for broader "what should I do" questions (plan 4.5).
             limit = 5 if re.search(r"\b(treatment|options|should|avoid|foods|diet|lifestyle|exercise)\b", payload.message, re.I) else 3
+            if explainer_only:
+                limit = 2
             with perf.stage("knowledge_lookup"):
                 from app.pipeline.evidence_inventory import requested_marker_keys
                 from app.retrieval.relationship_map import related_keys
 
                 focus = " ".join(related_keys(requested_marker_keys(payload.message), payload.message)[:6])
+                query_kwargs = {"only_provenance": BIO_AI_EXPLAINER} if explainer_only else {}
                 medical_hits = self.medical_knowledge.query(
-                    f"{payload.message} {focus}".strip(), plan.topic, limit=limit
+                    f"{payload.message} {focus}".strip(), plan.topic, limit=limit, **query_kwargs
                 )
             context.medical_passages = [passage_label(doc) for doc in medical_hits]
             attach_medical_evidence(context, medical_hits)

@@ -20,7 +20,7 @@ from typing import Protocol
 
 from app.pipeline.indic_terms import english_names_for_localized_terms, latinize_spelled_abbreviations
 from app.pipeline.lab_parameters import match_lab_keys
-from app.retrieval.medical import MedicalEvidenceDoc, active_corpus
+from app.retrieval.medical import BIO_AI_EXPLAINER, MedicalEvidenceDoc, active_corpus, any_bio_ai_anchor
 
 # Condition and lay-term ontology -> corpus topics. Biomarkers come from match_lab_keys.
 ONTOLOGY: dict[str, tuple[str, ...]] = {
@@ -121,8 +121,19 @@ class HybridMedicalKnowledgeProvider:
         self.embedder = embedder
         self.min_score = min_score
 
-    def query(self, message: str, topic: str | None = None, limit: int = DEFAULT_LIMIT) -> list[MedicalEvidenceDoc]:
+    def query(
+        self,
+        message: str,
+        topic: str | None = None,
+        limit: int = DEFAULT_LIMIT,
+        *,
+        only_provenance: str | None = None,
+    ) -> list[MedicalEvidenceDoc]:
         docs = list(active_corpus())
+        if only_provenance:
+            docs = [doc for doc in docs if doc.provenance == only_provenance]
+        if not any_bio_ai_anchor(message):
+            docs = [doc for doc in docs if doc.provenance != BIO_AI_EXPLAINER]
         if not docs:
             return []
         normalized = normalize_query(message)
@@ -143,6 +154,9 @@ class HybridMedicalKnowledgeProvider:
             if score >= self.min_score:
                 ranked.append((score, -doc.tier, -index, doc))
         ranked.sort(key=lambda row: (row[0], row[1], row[2]), reverse=True)
+        if not ranked and only_provenance:
+            # A personal Bio-AI question with no specific wording still gets the basics of the scale.
+            return [doc for doc in docs if "bio_ai_default" in doc.topics][: max(1, min(limit, MAX_LIMIT))]
         picked: list[MedicalEvidenceDoc] = []
         seen: set[tuple[str, str]] = set()
         for _, _, _, doc in ranked:

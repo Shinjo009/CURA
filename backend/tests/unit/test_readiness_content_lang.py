@@ -48,6 +48,13 @@ def test_only_reviewed_in_date_entries_are_servable(overrides, servable):
 
 
 def test_unreviewed_index_is_not_served_when_review_required(monkeypatch):
+    import dataclasses
+
+    drafts = tuple(
+        dataclasses.replace(doc, review_status="draft", reviewer=None, reviewed_on=None, expires_on=None)
+        for doc in medical.load_content_dir(medical.CONTENT_DIR)
+    )
+    monkeypatch.setattr(medical, "load_content_dir", lambda _path: drafts)
     monkeypatch.setattr(settings, "medical_require_reviewed", True)
     assert medical.retrieve_medical_evidence("what is hypertension") == []
     monkeypatch.setattr(settings, "medical_require_reviewed", False)

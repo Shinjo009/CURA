@@ -352,6 +352,28 @@ _NO_FIELD_NAMES = (
 )
 
 
+BIO_AI_RULES = (
+    "BIO-AI RULES. A Bio-AI score is a model risk indicator from 0 to 100 (0 to 25 Healthy, 26 to 50 Increased Risk, "
+    "51 to 75 High Risk, 76 to 100 Very High Risk, unless the person's report uses other labels). Copy the score and "
+    "label exactly from the report. A score is not a probability, not a percentage chance, not a diagnosis and not how "
+    "much of an organ is affected; 100 does not mean definitely ill and 0 does not mean no risk. Never mix up the risk "
+    "score, the percentile, the lifestyle contribution, the overall metabolic score and metabolic age. A normal blood "
+    "marker does not cancel a high score, and a low score does not cancel an abnormal blood marker. Do not invent how "
+    "the model works, its weights, a genetic test or what caused a score. Use the Bio-AI guide passages for general "
+    "explanations and the person's own report for their values. Explain a medical term the first time you use it."
+)
+
+_BIO_AI_TOPIC = re.compile(
+    r"bio[\s-]?ai|metsights|metflux|risk score|metabolic (?:score|age|risk)|health rank|percentile|"
+    r"lifestyle contribution|\b\d{1,3}\s*/\s*100\b|\bscore (?:of|is|was|came) (?:in at )?\d",
+    re.I,
+)
+
+
+def is_bio_ai_question(context, message: str) -> bool:
+    return bool(_BIO_AI_TOPIC.search(message or "")) or bool(getattr(context, "bio_ai_risks", None))
+
+
 def has_focus_brief(context) -> bool:
     from app.contracts.common import IntentType
 
@@ -368,6 +390,8 @@ def house_system(context: HealthContext, message: str) -> str:
         parts.append(NUTRITION_OVERVIEW)
     if has_focus_brief(context):
         parts.append(FOCUS_SHAPE)
+    if is_bio_ai_question(context, message):
+        parts.append(BIO_AI_RULES)
     for name in modules_for(context, message):
         if name in _HOUSE_MODULES:
             parts.append(_HOUSE_MODULES[name])

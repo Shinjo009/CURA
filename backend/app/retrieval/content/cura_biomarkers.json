@@ -19,10 +19,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: Red Blood Cells (RBC)",
@@ -47,10 +47,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: PCV / Hematocrit",
@@ -74,10 +74,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: MCV (Mean Corpuscular Volume)",
@@ -101,10 +101,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: MCH (Mean Corpuscular Hemoglobin)",
@@ -127,10 +127,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: MCHC (Mean Corpuscular Hemoglobin Concentration)",
@@ -153,10 +153,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: RDW",
@@ -179,10 +179,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: RDW-CV",
@@ -204,10 +204,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: Mentzer Index (MCV/RBC)",
@@ -232,10 +232,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: GK Index (Green and King Index)",
@@ -259,10 +259,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: RDWI (RDW Index)",
@@ -285,10 +285,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: Platelet Count",
@@ -310,10 +310,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: MPV (Mean Platelet Volume)",
@@ -336,10 +336,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: WBC (White Blood Cell Count)",
@@ -364,10 +364,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: Neutrophils",
@@ -390,10 +390,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: Lymphocytes",
@@ -414,10 +414,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: Monocytes",
@@ -438,10 +438,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: Eosinophils",
@@ -462,10 +462,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: Basophils",
@@ -486,10 +486,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: Absolute Neutrophil Count",
@@ -511,10 +511,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: Absolute Lymphocyte Count",
@@ -535,10 +535,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: Absolute Monocyte Count",
@@ -559,10 +559,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: Absolute Eosinophils Count",
@@ -584,10 +584,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: Absolute Basophils Count",
@@ -609,10 +609,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: ESR (Erythrocyte Sedimentation Rate)",
@@ -637,10 +637,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: Urine pH",
@@ -661,10 +661,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: Urobilinogen",
@@ -686,10 +686,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: Urine Colour",
@@ -711,10 +711,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: Urine Transparency",
@@ -737,10 +737,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: Urine Sugar",
@@ -762,10 +762,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: Urine Blood",
@@ -788,10 +788,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: Urine RBC",
@@ -813,10 +813,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: Pus Cells",
@@ -839,10 +839,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: Epithelial Cells",
@@ -864,10 +864,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: Crystals",
@@ -889,10 +889,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: Casts",
@@ -914,10 +914,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: Bacteria",
@@ -938,10 +938,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: Yeast Cells",
@@ -963,10 +963,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: Nitrite",
@@ -988,10 +988,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: Urine Ketones",
@@ -1013,10 +1013,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: Urine Protein",
@@ -1039,10 +1039,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: Leucocyte Esterase",
@@ -1063,10 +1063,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: Bile Pigments",
@@ -1088,10 +1088,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: Specific Gravity",
@@ -1112,10 +1112,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: Urine Volume",
@@ -1136,10 +1136,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: Others (Urine)",
@@ -1162,10 +1162,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: Homocysteine",
@@ -1186,10 +1186,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: hs-CRP (High-Sensitivity C-Reactive Protein)",
@@ -1215,10 +1215,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: Magnesium",
@@ -1240,10 +1240,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: Zinc",
@@ -1264,10 +1264,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: Serum Iron",
@@ -1289,10 +1289,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: TIBC (Total Iron Binding Capacity)",
@@ -1315,10 +1315,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: UIBC (Unsaturated Iron Binding Capacity)",
@@ -1341,10 +1341,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: Transferrin Saturation",
@@ -1367,10 +1367,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: Albumin",
@@ -1391,10 +1391,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: Alkaline Phosphatase (ALP)",
@@ -1418,10 +1418,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: Direct Bilirubin",
@@ -1443,10 +1443,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: Total Bilirubin",
@@ -1469,10 +1469,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: Indirect Bilirubin",
@@ -1494,10 +1494,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: GGTP / GGT",
@@ -1520,10 +1520,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: Total Serum Proteins",
@@ -1546,10 +1546,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: SGOT (AST)",
@@ -1573,10 +1573,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: SGPT (ALT)",
@@ -1600,10 +1600,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: Globulin",
@@ -1624,10 +1624,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: A/G Ratio",
@@ -1649,10 +1649,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: SGOT/SGPT Ratio",
@@ -1675,10 +1675,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: Total Cholesterol",
@@ -1700,10 +1700,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: HDL Cholesterol",
@@ -1725,10 +1725,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: Triglycerides",
@@ -1750,10 +1750,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: Non-HDL Cholesterol",
@@ -1775,10 +1775,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: Total Cholesterol/HDL Ratio",
@@ -1801,10 +1801,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: LDL Cholesterol (Calculated)",
@@ -1828,10 +1828,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: VLDL Cholesterol",
@@ -1853,10 +1853,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: LDL/HDL Ratio",
@@ -1877,10 +1877,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: HDL/LDL Ratio",
@@ -1901,10 +1901,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: Lipoprotein(a), Lp(a)",
@@ -1928,10 +1928,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: Apolipoprotein B (ApoB)",
@@ -1955,10 +1955,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: Fasting Blood Glucose",
@@ -1981,10 +1981,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: HbA1c (Glycated Hemoglobin)",
@@ -2009,10 +2009,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: Fasting Insulin",
@@ -2034,10 +2034,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: Vitamin B12",
@@ -2059,10 +2059,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: Vitamin D Total (25-Hydroxy)",
@@ -2088,10 +2088,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: Vitamin C",
@@ -2113,10 +2113,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: Total Testosterone",
@@ -2139,10 +2139,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: Luteinizing Hormone (LH)",
@@ -2165,10 +2165,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: Follicle-Stimulating Hormone (FSH)",
@@ -2191,10 +2191,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: Cortisol",
@@ -2217,10 +2217,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: Prolactin",
@@ -2241,10 +2241,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: DHEAS (Dehydroepiandrosterone Sulfate)",
@@ -2269,10 +2269,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: IGF-1 (Insulin-Like Growth Factor 1)",
@@ -2297,10 +2297,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: Parathyroid Hormone (PTH)",
@@ -2324,10 +2324,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: CA 125",
@@ -2350,10 +2350,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: CA 15-3",
@@ -2376,10 +2376,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: CA 19-9",
@@ -2402,10 +2402,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: CEA (Carcinoembryonic Antigen)",
@@ -2427,10 +2427,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: AFP (Alpha-Fetoprotein)",
@@ -2454,10 +2454,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: PSA (Prostate-Specific Antigen)",
@@ -2480,10 +2480,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: Calcium",
@@ -2506,10 +2506,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: Creatinine",
@@ -2531,10 +2531,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: eGFR (Estimated Glomerular Filtration Rate)",
@@ -2557,10 +2557,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: Urea",
@@ -2582,10 +2582,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: BUN (Blood Urea Nitrogen)",
@@ -2607,10 +2607,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: BUN/Creatinine Ratio",
@@ -2632,10 +2632,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: Urea/Creatinine Ratio",
@@ -2656,10 +2656,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: Uric Acid",
@@ -2682,10 +2682,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: Sodium",
@@ -2707,10 +2707,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: Potassium",
@@ -2732,10 +2732,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: Chloride",
@@ -2757,10 +2757,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: Inorganic Phosphorus",
@@ -2783,10 +2783,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: TSH (Thyroid-Stimulating Hormone)",
@@ -2811,10 +2811,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: T4 (Thyroxine)",
@@ -2837,10 +2837,10 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   },
   {
     "name": "Cura knowledge base: T3 (Triiodothyronine)",
@@ -2863,9 +2863,9 @@
     "region": "IN",
     "provenance": "cura_knowledge_base",
     "version": "cura-kb-v1",
-    "review_status": "draft",
-    "reviewer": null,
-    "reviewed_on": null,
-    "expires_on": null
+    "review_status": "published",
+    "reviewer": "Yukti",
+    "reviewed_on": "2026-11-18",
+    "expires_on": "2027-11-17"
   }
 ]

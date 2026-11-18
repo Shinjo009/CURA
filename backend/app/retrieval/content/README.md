@@ -29,3 +29,11 @@ if `review_status` is `reviewed` or `published`, it names a `reviewer` and a
 
 `content_kind` must be `quoted_passage` only for exact source text whose licence allows
 quoting. Everything else is `cura_summary`, and Cura never presents it as the source's words.
+
+## Markdown guides
+
+A guide written as markdown goes in `markdown/` with a sidecar `<name>.meta.json` that holds the
+review details and the topics and keywords for each numbered section. Sections listed in
+`skip_sections` (for example the system instructions) are not served. Reviewer and review date are
+only used to decide whether a passage may be served; they are never added to answers.
+`cura_bio_ai_knowledge_base.md` is the Bio-AI guide. It is only retrieved for Bio-AI questions.

@@ -329,10 +329,107 @@ def load_content_dir(path: Path) -> tuple[MedicalEvidenceDoc, ...]:
 
 
 CONTENT_DIR = Path(__file__).resolve().parent / "content"
+BIO_AI_EXPLAINER = "cura_bio_ai_explainer"
+
+# The Bio-AI guide is only relevant when the question is about Bio-AI itself, so it never
+# competes with condition or biomarker passages for other questions.
+_BIO_AI_ANCHOR = re.compile(
+    r"bio[\s-]?ai|metsights|metflux|risk score|risk assessment|metabolic (?:score|age|risk)|"
+    r"health rank|percentile|lifestyle contribution|\b\d{1,3}\s*/\s*100\b|\bscore (?:of|is|was|came) (?:in at )?\d",
+    re.I,
+)
+
+
+def any_bio_ai_anchor(message: str) -> bool:
+    return bool(_BIO_AI_ANCHOR.search(message or ""))
+
+
+def _clean_markdown(text: str) -> str:
+    """Plain text for the model: no markup, tables as sentences, ranges written with 'to'."""
+    out: list[str] = []
+    for raw in text.splitlines():
+        line = raw.strip()
+        if not line or set(line) <= set("-| :"):
+            continue
+        line = re.sub(r"^>\s*", "", line)
+        if line.startswith("|"):
+            cells = [c.strip() for c in line.strip("|").split("|")]
+            if cells and cells[0].lower() in {"score", "blood marker or group", "report area"}:
+                continue
+            line = (cells[0] + ": " + ". ".join(c for c in cells[1:] if c)) if len(cells) > 1 else cells[0]
+        line = re.sub(r"(\d)\s*[\u2013\u2014-]\s*(\d)", r"\1 to \2", line)
+        line = line.replace("\u2260", "is not").replace("\u2013", ",").replace("\u2014", ",")
+        line = re.sub(r"\*\*|`", "", line)
+        out.append(line)
+    return "\n".join(out)
+
+
+def _markdown_chunks(text: str, skip: set[str]) -> list[tuple[str, str, str]]:
+    """Split by section. A section with numbered subsections (3.1, 3.2 ...) becomes one chunk per subsection."""
+    sections = re.split(r"(?m)^## ", text)[1:]
+    chunks: list[tuple[str, str, str]] = []
+    for sec in sections:
+        head, _, body = sec.partition("\n")
+        number = (re.match(r"(\d+)\.", head) or [None, ""])[1]
+        if not number or number in skip:
+            continue
+        title = re.sub(r"^\d+\.\s*", "", head).strip()
+        parts = re.split(r"(?m)^### (?=\d+\.\d+)", body)
+        if len(parts) == 1:
+            chunks.append((number, title, body))
+            continue
+        intro = parts[0]
+        for index, part in enumerate(parts[1:]):
+            sub_head, _, sub_body = part.partition("\n")
+            sub_id = re.match(r"(\d+\.\d+)", sub_head).group(1)
+            sub_title = re.sub(r"^\d+\.\d+\s*", "", sub_head).strip()
+            chunks.append((sub_id, sub_title, (intro + "\n" if index == 0 else "") + sub_body))
+    return chunks
+
+
+def load_markdown_dir(path: Path) -> tuple[MedicalEvidenceDoc, ...]:
+    """Load Cura guides written as markdown, with a sidecar .meta.json for review and keywords."""
+    docs: list[MedicalEvidenceDoc] = []
+    if not path.is_dir():
+        return ()
+    for meta_file in sorted(path.glob("*.meta.json")):
+        meta = json.loads(meta_file.read_text(encoding="utf-8"))
+        source = path / meta["document"]
+        if not source.is_file():
+            continue
+        skip = set(meta.get("skip_sections") or [])
+        for chunk_id, title, body in _markdown_chunks(source.read_text(encoding="utf-8"), skip):
+            conf = (meta.get("chunks") or {}).get(chunk_id)
+            excerpt = _clean_markdown(body)
+            if not conf or not excerpt:
+                continue
+            docs.append(
+                MedicalEvidenceDoc(
+                    name=meta["name"],
+                    title=title,
+                    url="",
+                    source_type="cura_knowledge_base",
+                    tier=2,
+                    topics=tuple(conf.get("topics") or meta.get("topics") or ()),
+                    keywords=tuple(k.lower() for k in conf.get("keywords") or ()),
+                    excerpt=excerpt,
+                    publication_date=meta.get("publication_date"),
+                    provenance=BIO_AI_EXPLAINER,
+                    review_status=meta.get("review_status", "draft"),
+                    version=meta.get("version", "cura-kb-v1"),
+                    content_kind="cura_summary",
+                    reviewer=meta.get("reviewer"),
+                    reviewed_on=meta.get("reviewed_on"),
+                    expires_on=meta.get("expires_on"),
+                    licence_status="own_content",
+                    region="IN",
+                )
+            )
+    return tuple(docs)
 
 
 def active_corpus() -> tuple[MedicalEvidenceDoc, ...]:
-    corpus = CORPUS + load_content_dir(CONTENT_DIR)
+    corpus = CORPUS + load_content_dir(CONTENT_DIR) + load_markdown_dir(CONTENT_DIR / "markdown")
     if settings.medical_require_reviewed_enabled():
         return tuple(doc for doc in corpus if is_servable(doc))
     return corpus
@@ -348,15 +445,24 @@ class MedicalKnowledgeProvider(Protocol):
 class CuratedMedicalKnowledgeProvider:
     """Curated guideline index. Not a vector store and not a source of personal values."""
 
-    def query(self, message: str, topic: str | None = None, limit: int = 2) -> list[MedicalEvidenceDoc]:
-        return retrieve_medical_evidence(message, topic, limit=limit)
+    def query(
+        self, message: str, topic: str | None = None, limit: int = 2, *, only_provenance: str | None = None
+    ) -> list[MedicalEvidenceDoc]:
+        return retrieve_medical_evidence(message, topic, limit=limit, only_provenance=only_provenance)
 
 
-def retrieve_medical_evidence(message: str, topic: str | None = None, limit: int = 2) -> list[MedicalEvidenceDoc]:
+def retrieve_medical_evidence(
+    message: str, topic: str | None = None, limit: int = 2, *, only_provenance: str | None = None
+) -> list[MedicalEvidenceDoc]:
     text = (message or "").lower()
     topic_key = (topic or "").lower().replace(" ", "_")
+    bio_ai_question = bool(_BIO_AI_ANCHOR.search(text))
     scored: list[tuple[int, int, int, MedicalEvidenceDoc]] = []
     for index, doc in enumerate(active_corpus()):
+        if only_provenance and doc.provenance != only_provenance:
+            continue
+        if doc.provenance == BIO_AI_EXPLAINER and not bio_ai_question:
+            continue
         score = 0
         if topic_key and topic_key in doc.topics:
             score += 4

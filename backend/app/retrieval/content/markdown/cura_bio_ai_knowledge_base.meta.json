@@ -1,0 +1,324 @@
+{
+  "document": "cura_bio_ai_knowledge_base.md",
+  "name": "Cura Bio-AI knowledge base",
+  "version": "cura-kb-bio-ai-1.0",
+  "publication_date": "2026-11-18",
+  "review_status": "published",
+  "reviewer": "Yukti",
+  "reviewed_on": "2026-11-18",
+  "expires_on": "2027-11-17",
+  "topics": [
+    "bio_ai"
+  ],
+  "skip_sections": [
+    "11"
+  ],
+  "chunks": {
+    "1": {
+      "topics": [
+        "bio_ai"
+      ],
+      "keywords": [
+        "what is bio-ai",
+        "what is bio ai",
+        "what's bio-ai",
+        "about bio-ai",
+        "bio-ai explained",
+        "explain bio-ai",
+        "explain bio ai",
+        "how does bio-ai work",
+        "bio-ai work",
+        "what does bio-ai do",
+        "metsights",
+        "metflux",
+        "early warning",
+        "bio-ai a diagnosis",
+        "bio-ai diagnose"
+      ]
+    },
+    "2.1": {
+      "topics": [
+        "bio_ai"
+      ],
+      "keywords": [
+        "what goes into bio-ai",
+        "bio-ai use my blood",
+        "blood markers bio-ai",
+        "which blood tests",
+        "bio-ai inputs",
+        "bio-ai look at",
+        "bio-ai based on"
+      ]
+    },
+    "2.2": {
+      "topics": [
+        "bio_ai"
+      ],
+      "keywords": [
+        "questionnaire",
+        "lifestyle questionnaire",
+        "lifestyle information",
+        "bio-ai lifestyle",
+        "bio ai lifestyle"
+      ]
+    },
+    "2.3": {
+      "topics": [
+        "bio_ai"
+      ],
+      "keywords": [
+        "how bio-ai works",
+        "how is bio-ai calculated",
+        "how is my score calculated",
+        "how is the score calculated",
+        "how is it calculated",
+        "genetic",
+        "how does bio-ai combine"
+      ]
+    },
+    "3.1": {
+      "topics": [
+        "bio_ai",
+        "bio_ai_default"
+      ],
+      "keywords": [
+        "risk score",
+        "score out of 100",
+        "risk category",
+        "risk categories",
+        "increased risk",
+        "high risk",
+        "very high risk",
+        "healthy score",
+        "what does my score mean",
+        "score mean",
+        "bio-ai score",
+        "bio ai score",
+        "0 to 100",
+        "score ranges",
+        "score bands",
+        "26 to 50",
+        "51 to 75",
+        "76 to 100"
+      ]
+    },
+    "3.2": {
+      "topics": [
+        "bio_ai",
+        "bio_ai_default"
+      ],
+      "keywords": [
+        "probability",
+        "percent chance",
+        "% chance",
+        "chance of",
+        "likelihood",
+        "do i have",
+        "does it mean i have",
+        "will i get",
+        "will i develop",
+        "does that mean"
+      ]
+    },
+    "3.3": {
+      "topics": [
+        "bio_ai"
+      ],
+      "keywords": [
+        "score of 100",
+        "100/100",
+        "scored 100",
+        "definitely",
+        "am i sick",
+        "highest score",
+        "maximum score"
+      ]
+    },
+    "3.4": {
+      "topics": [
+        "bio_ai"
+      ],
+      "keywords": [
+        "score of 0",
+        "0/100",
+        "low score",
+        "zero risk",
+        "no risk",
+        "healthy mean"
+      ]
+    },
+    "3.5": {
+      "topics": [
+        "bio_ai"
+      ],
+      "keywords": [
+        "compare scores",
+        "compare my scores",
+        "twice as likely",
+        "which risk is higher",
+        "which score is higher",
+        "score differences"
+      ]
+    },
+    "4.1": {
+      "topics": [
+        "bio_ai"
+      ],
+      "keywords": [
+        "difference between",
+        "risk score and",
+        "score versus",
+        "risk score vs"
+      ]
+    },
+    "4.2": {
+      "topics": [
+        "bio_ai"
+      ],
+      "keywords": [
+        "percentile",
+        "health rank",
+        "similar age",
+        "same age and gender"
+      ]
+    },
+    "4.3": {
+      "topics": [
+        "bio_ai"
+      ],
+      "keywords": [
+        "lifestyle contribution",
+        "lifestyle score",
+        "lifestyle factor",
+        "lifestyle impact",
+        "habits contributing"
+      ]
+    },
+    "4.4": {
+      "topics": [
+        "bio_ai"
+      ],
+      "keywords": [
+        "overall metabolic",
+        "metabolic risk score",
+        "metabolic score",
+        "overall score",
+        "overall risk"
+      ]
+    },
+    "4.5": {
+      "topics": [
+        "bio_ai"
+      ],
+      "keywords": [
+        "metabolic age",
+        "biological age",
+        "real age",
+        "body age"
+      ]
+    },
+    "5": {
+      "topics": [
+        "bio_ai"
+      ],
+      "keywords": [
+        "conditions covered",
+        "which conditions",
+        "what conditions",
+        "nine conditions",
+        "which diseases",
+        "what does bio-ai cover",
+        "bio-ai cover",
+        "bio-ai check",
+        "risk areas",
+        "what risks"
+      ]
+    },
+    "6": {
+      "topics": [
+        "bio_ai"
+      ],
+      "keywords": [
+        "blood tests are normal",
+        "blood test is normal",
+        "normal blood tests",
+        "normal blood report",
+        "why is my risk high",
+        "high risk but normal",
+        "despite normal",
+        "even though my blood",
+        "is normal",
+        "are normal",
+        "looks normal",
+        "look normal",
+        "normal results",
+        "normal test",
+        "within range",
+        "in range"
+      ]
+    },
+    "7": {
+      "topics": [
+        "bio_ai"
+      ],
+      "keywords": [
+        "abnormal blood",
+        "blood test is abnormal",
+        "blood tests are abnormal",
+        "risk low but",
+        "score is low but",
+        "is abnormal",
+        "are abnormal",
+        "is high but",
+        "out of range",
+        "low risk"
+      ]
+    },
+    "8": {
+      "topics": [
+        "bio_ai"
+      ],
+      "keywords": [
+        "improve my score",
+        "lower my score",
+        "reduce my score",
+        "bring my score down",
+        "improve my bio-ai",
+        "reduce my risk",
+        "lower my risk",
+        "improve my risk",
+        "change my score",
+        "improve my health score"
+      ]
+    },
+    "9": {
+      "topics": [
+        "bio_ai"
+      ],
+      "keywords": [
+        "see a doctor",
+        "should i see a doctor",
+        "when to see",
+        "consult a doctor",
+        "talk to a doctor",
+        "need a doctor",
+        "worried about my score",
+        "follow up with a doctor"
+      ]
+    },
+    "12": {
+      "topics": [
+        "bio_ai"
+      ],
+      "keywords": [
+        "75/100",
+        "64/100",
+        "83/100",
+        "fatty liver score",
+        "diabetes risk is",
+        "is 83%",
+        "cholesterol is normal so why"
+      ]
+    }
+  }
+}
