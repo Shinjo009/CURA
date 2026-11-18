@@ -106,11 +106,13 @@ def render_missing_blood_marker(context: HealthContext) -> str:
         if label and item.related_available:
             return (
                 f"I don't see {label} in {scope}. It does list {item.related_available}, which is a "
-                "related kidney marker but a different measurement, so I won't treat one as the other."
+                "a related kidney marker, but it is a different measurement, so I won't swap one for the other. "
+                "If you have a report that includes it, upload it and I will walk you through it."
             )
         if label:
             return (
-                f"I don't see {label} in {scope}, so that value is not available to me and I won't guess it."
+                f"I don't see {label} in {scope}, so that value is not available to me yet, and I would rather not guess. "
+                "If it was tested somewhere else, upload that report and I will explain it for you."
             )
         return f"That biomarker is not available in {scope}. I will not invent a value."
     if label:
@@ -487,7 +489,7 @@ class DeterministicRenderer:
             from app.core.copy import GENERAL_KNOWLEDGE_UNAVAILABLE
 
             return GENERAL_KNOWLEDGE_UNAVAILABLE
-        return "I could not find matching personal health data for that question."
+        return "I could not find that in your records yet. Try asking about a specific result, like your vitamin D or HbA1c, or upload a report and I will explain it."
 
 
 def _iron_pattern_note(context: HealthContext) -> str:
