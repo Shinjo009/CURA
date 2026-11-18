@@ -318,3 +318,12 @@ def test_quality_gate_flags_a_denied_score_and_an_invented_number():
     assert "bio_ai_scores_denied" in denied.flags or "requested_score_omitted" in denied.flags
     invented = review_answer("Type 2 diabetes is 88.", plan, context)
     assert "unsupported_number" in invented.flags
+
+
+def test_my_marker_with_a_typo_or_any_marker_gets_a_marker_contract():
+    from app.pipeline.task_contract import build_task_contract
+
+    for question in ("is my cholestrol normal?", "is my vitamin d normal?", "What is my ferritin?"):
+        assert build_task_contract(question).response_type == "MARKER_LOOKUP", question
+    for question in ("What does cholesterol do in my body?", "What is vitamin D?"):
+        assert build_task_contract(question).response_type == "DIRECT_ANSWER", question

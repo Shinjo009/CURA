@@ -41,6 +41,21 @@ _QUOTED_PERSONAL_CONTEXT = re.compile(
 )
 
 
+def _names_own_marker(text: str) -> bool:
+    """'my <marker>' for any known marker, including misspellings ('cholestrol'), not a fixed word list."""
+    if _PERSONAL_MARKER.search(text):
+        return True
+    mine = re.search(r"\bmy\b", text, re.I)
+    if not mine:
+        return False
+    # Questions about change over time or a comparison are routed by their own rules.
+    if re.search(r"\b(?:improv\w*|chang\w*|compar\w*|trend\w*|since|better|worse|progress|uploaded|upload|pdf|document|report)\b", text, re.I):
+        return False
+    from app.pipeline.lab_parameters import match_lab_keys
+
+    return bool(match_lab_keys(text[mine.start():]))
+
+
 class ReasoningOperation(str, Enum):
     lookup = "LOOKUP"
     interpret = "INTERPRET"
@@ -206,7 +221,7 @@ def build_task_contract(message: str | None) -> TaskContract:
         sources.append("blood_report")
         response = "ABNORMAL_LIST"
     elif (
-        _PERSONAL_MARKER.search(text)
+        _names_own_marker(text)
         and not _QUOTED_PERSONAL_CONTEXT.search(text)
         and not re.search(r"\bhow does\b", text, re.I)
     ):

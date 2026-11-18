@@ -276,6 +276,21 @@ _MY_CONDITION_SCORE = re.compile(
     r"\bmy\s+([a-z][a-z0-9]+(?:[\s-][a-z][a-z0-9]+){0,2}?)\s+(?:risk|score|assessment)\b",
     re.I,
 )
+class _WhyIfMy:
+    """'Why is my X high if my Y is normal?' is about the person's own results, not a hypothetical."""
+
+    _CLAUSE = re.compile(r"(\b(?:why|how come|how is|how can)\b[^.?!]{0,80}?\b)if\s+(?=my\b)", re.I)
+
+    def __init__(self, rx):
+        self._rx = rx
+
+    def search(self, text, *args):
+        return self._rx.search(self._CLAUSE.sub(r"\1when ", text or ""), *args)
+
+    def __getattr__(self, name):
+        return getattr(self._rx, name)
+
+
 _HYPOTHETICAL = re.compile(
     r"\b("
     r"if (?:my|someone(?:'s)?|a person(?:'s)?|one(?:'s)?|the) |"
@@ -287,6 +302,7 @@ _HYPOTHETICAL = re.compile(
     r")\b",
     re.I,
 )
+_HYPOTHETICAL = _WhyIfMy(_HYPOTHETICAL)
 _ADVICE_REQUEST = re.compile(
     r"\b(what should i|what can i|what should someone|treatment options|foods? (?:to )?(?:avoid|eat)|"
     r"what (?:foods|diet))\b",

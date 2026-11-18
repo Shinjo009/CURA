@@ -99,3 +99,25 @@ def test_response_never_shows_reviewer_or_review_date():
     assert reply.status_code == 200
     blob = json.dumps(reply.json()).lower()
     assert "yukti" not in blob and "2026-11-18" not in blob and "reviewer" not in blob
+
+
+def test_why_my_risk_is_high_if_my_marker_is_normal_is_personal():
+    from app.pipeline.intent import requires_personal_record
+
+    for question in (
+        "Why is my Bio-AI cardiac risk high if my cholesterol is normal?",
+        "Why is my diabetes risk high if my HbA1c is normal?",
+    ):
+        assert requires_personal_record(question) is True
+
+    from fastapi.testclient import TestClient
+
+    from app.main import app
+
+    reply = TestClient(app).post(
+        "/api/v1/chat",
+        headers={"X-Cura-User-Id": "demo-user-001"},
+        json={"message": "Why is my Bio-AI cardiac risk high if my cholesterol is normal?"},
+    ).json()
+    sources = [s["name"].lower() for s in reply["provenance"]["sources"]]
+    assert any("bio-ai" in name or "blood report" in name for name in sources), sources

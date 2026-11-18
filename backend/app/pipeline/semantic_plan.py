@@ -220,6 +220,7 @@ _HYPOTHETICAL = _rx(
     r"\b(?:(?:if|suppose|supposing|what if|say)\s+my\b|in general|generally|typically|usually|someone|somebody|a person|people|anyone|if (?:a|an|someone)|"
     r"what is (?:a|an)\b|what are\b|normal range for)\b"
 )
+_WHY_IF_MY = re.compile(r"(\b(?:why|how come|how is|how can)\b[^.?!]{0,80}?\b)if\s+(?=my\b)", re.I)
 _EXPLICIT_VALUE = _rx(r"\b(?:of|at|is|=)\s*\d+(?:\.\d+)?\s*(?:%|mg|ng|mmol|g/dl|iu|pg|u/l)?\b")
 # A message that is essentially a number to judge ("Is 120 bad?", "140 ok?") with no named
 # measure. "Top 3 things", "last 2 reports" are counts, not measurements.
@@ -337,9 +338,12 @@ def build_semantic_plan(
 
     self_ref = bool(_SELF.search(text))
     conditional = bool(re.search(r"\b(?:if|suppose|supposing|what if)\s+my\b", text, re.I))
+    # "Why is my cardiac risk high if my cholesterol is normal?" asks about the person's own results.
+    if conditional and re.search(r"\b(?:why|how come|how is|how can)\b[^.?!]{0,80}?\bif\s+my\b", text, re.I):
+        conditional = False
     # "What are the top 3 things I should work on?" is about the member: a generic phrasing
     # only signals general knowledge when the user does not refer to themselves.
-    hypothetical = conditional or (bool(_HYPOTHETICAL.search(text)) and not self_ref)
+    hypothetical = conditional or (bool(_HYPOTHETICAL.search(_WHY_IF_MY.sub(r'\1when my', text))) and not self_ref)
     explicit_value = bool(_EXPLICIT_VALUE.search(text)) and not re.search(r"\bmy\b", text, re.I)
 
     # Personalization: does the answer depend on THIS member's data?
