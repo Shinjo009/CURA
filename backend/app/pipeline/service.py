@@ -185,6 +185,15 @@ _NARROW_INTENTS = frozenset({
 })
 
 
+def _use_langchain() -> bool:
+    """LangChain sequence when configured and installed; otherwise the native path, never an error."""
+    if (settings.orchestration_engine or "native").strip().lower() != "langchain":
+        return False
+    from app.orchestration.chain import langchain_available
+
+    return langchain_available()
+
+
 class ChatService:
     def __init__(self, db: Session, registry: ProviderRegistry):
         self.db = db
@@ -273,32 +282,50 @@ class ChatService:
         self._progress = progress or ProgressEmitter()
         request_perf = perf.begin(request_id)
         try:
-            response = self._execute_chat(principal, payload, request_id, eval_turn)
-            response = apply_response_mode(response, eval_turn.get("model_follow_ups"))
-            if eval_turn.get("context") is not None:
-                try:
-                    response.semantic = build_semantic_response(
-                        response,
-                        eval_turn["context"],
-                        eval_turn.get("llm_result"),
-                        (eval_turn.get("answer_stages") or {}).get("path"),
-                    )
-                    from app.pipeline.semantic_blocks import ensure_bio_ai_clarification, suppress_duplicate_findings
+            if _use_langchain():
+                from app.orchestration.chain import run_chat_chain
 
-                    suppress_duplicate_findings(response.presentation, response.semantic)
-                    ensure_bio_ai_clarification(response)
-                except Exception:  # noqa: BLE001 - the Markdown answer is always there
-                    logger.warning("semantic_response_failed request_id=%s", request_id, exc_info=True)
-            # Last pass over everything visible: no em dashes, repeated disclaimers, duplicate
-            # paragraphs, "None to None" ranges, or full report tables under other answers.
-            response = finalize_response(response, payload.message, eval_turn.get("routing_plan"), eval_turn.get("context"))
-            with perf.stage("persistence"):
-                response = self._record_evaluation(response, eval_turn)
-            _attach_perf(response, eval_turn, request_perf)
-            _record_model_routing(response, eval_turn)
-            return response
+                return run_chat_chain(self, principal, payload, request_id, eval_turn, request_perf)
+            response = self._step_execute(principal, payload, request_id, eval_turn)
+            response = self._step_shape(response, request_id, eval_turn)
+            response = self._step_finalize(response, payload, eval_turn)
+            return self._step_persist(response, eval_turn, request_perf)
         finally:
             perf.end()
+
+    # The four stages of a chat turn. Both engines (native and LangChain) call exactly these.
+    def _step_execute(self, principal, payload, request_id, eval_turn):
+        return self._execute_chat(principal, payload, request_id, eval_turn)
+
+    def _step_shape(self, response, request_id, eval_turn):
+        response = apply_response_mode(response, eval_turn.get("model_follow_ups"))
+        if eval_turn.get("context") is not None:
+            try:
+                response.semantic = build_semantic_response(
+                    response,
+                    eval_turn["context"],
+                    eval_turn.get("llm_result"),
+                    (eval_turn.get("answer_stages") or {}).get("path"),
+                )
+                from app.pipeline.semantic_blocks import ensure_bio_ai_clarification, suppress_duplicate_findings
+
+                suppress_duplicate_findings(response.presentation, response.semantic)
+                ensure_bio_ai_clarification(response)
+            except Exception:  # noqa: BLE001 - the Markdown answer is always there
+                logger.warning("semantic_response_failed request_id=%s", request_id, exc_info=True)
+        return response
+
+    def _step_finalize(self, response, payload, eval_turn):
+        # Last pass over everything visible: no em dashes, repeated disclaimers, duplicate
+        # paragraphs, "None to None" ranges, or full report tables under other answers.
+        return finalize_response(response, payload.message, eval_turn.get("routing_plan"), eval_turn.get("context"))
+
+    def _step_persist(self, response, eval_turn, request_perf):
+        with perf.stage("persistence"):
+            response = self._record_evaluation(response, eval_turn)
+        _attach_perf(response, eval_turn, request_perf)
+        _record_model_routing(response, eval_turn)
+        return response
 
     def _emit_plan_stages(self, plan, *, follow_up: bool) -> None:
         if follow_up:
