@@ -242,6 +242,32 @@ def drop_doctor_for_healthy(text: str) -> str:
     return "\n".join(out)
 
 
+_ROUTINE_DOCTOR = re.compile(
+    r"\b(?:doctor|clinician|physician|healthcare provider)\b[^.!?\n]*\b(?:routine|next|regular)\s+(?:visit|check|appointment|checkup|check-up)\b"
+    r"|\b(?:routine|next|regular)\s+(?:visit|check|appointment|checkup|check-up)\b[^.!?\n]*\b(?:doctor|clinician|physician)\b"
+    r"|^\W*(?:please\s+)?(?:discuss|talk about|go through|review)\s+(?:this|these|them|it)\s+with\s+(?:your|a)\s+(?:doctor|clinician)\W*$",
+    re.I,
+)
+
+
+def drop_routine_doctor(text: str) -> str:
+    """A routine-visit or generic "discuss this with your doctor" sentence is filler. Drop it wherever it appears.
+    A real referral says how soon or why ("within a few weeks", "as this is well above range") and is kept."""
+    if not text:
+        return text
+    out: list[str] = []
+    for line in text.split("\n"):
+        if not _ROUTINE_DOCTOR.search(line):
+            out.append(line)
+            continue
+        kept = [x for x in re.split(r"(?<=[.!?])\s+", line) if not _ROUTINE_DOCTOR.search(x)]
+        joined = " ".join(kept).strip()
+        marker = re.match(r"^(\s*[-*]\s+)", line)
+        if joined and (not marker or len(joined.split()) > 2) and joined not in ("-", "*"):
+            out.append(joined if joined.startswith(marker.group(1).strip()) or not marker else marker.group(1) + joined)
+    return "\n".join(out)
+
+
 _PRAISE_OPENER = re.compile(
     r"^\s*(?:(?:thanks|thank you)[,!.]?\s*)?(?:that'?s |what )?(?:a |an )?(?:really |very |such )?"
     r"(?:great|good|nice|excellent|fair|smart|interesting|important|lovely|wonderful)\s+(?:question|ask)\b[^\n]*",

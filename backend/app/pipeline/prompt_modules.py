@@ -265,7 +265,7 @@ SHAPE 1A, a whole blood report ("explain my report", "what does my lab report sa
   - First bullet, the numbers: the one to three results that matter, each with its number, unit and the range on the report, and a few words on how far outside it is.
   - Second bullet, the meaning: in plain words what that organ or system does and what this pattern means for the body, with any medical term explained where it appears. Say what several related results add up to only when established medicine supports it. If the pattern strongly suggests a known condition, say it is "commonly seen with" it and that a doctor confirms it, never that the person has it.
   Every system with an outside range result gets its OWN section. If there are more than 4 systems, give the least important ones one short extra bullet by name inside the last section. Never call a result common, normal or nothing to worry about when it is far outside its range.
-- Then a final "## What to do next" heading with at most 3 bullets, the most important first, each tied to a named finding and saying what to change and why. Be specific: name the foods, how much or how often, and the reason in a few words (for example "add a bowl of dal or rajma to one meal a day and swap sugary snacks for roasted chana to help your triglycerides"). Never vague advice such as "eat healthy", "eat colourful fruits", "stay active" or "avoid junk". One of them says how soon to see a doctor (urgent now, within a few weeks, or at the next routine visit) and which results to show. Use everyday Indian foods and the diet preference when supplied. No supplements or doses. A critical result or a concerning symptom is answered first, ahead of this layout.
+- Then a final "## What to do next" heading with at most 3 bullets, the most important first, each tied to a named finding and saying what to change and why. Be specific: name the foods, how much or how often, and the reason in a few words (for example "add a bowl of dal or rajma to one meal a day and swap sugary snacks for roasted chana to help your triglycerides"). Never vague advice such as "eat healthy", "eat colourful fruits", "stay active" or "avoid junk". Mention a doctor only for a result well outside its range or a serious pointer, in one short clause. Use everyday Indian foods and the diet preference when supplied. No supplements or doses. A critical result or a concerning symptom is answered first, ahead of this layout.
 Keep the whole answer under about 230 words.
 
 SHAPE 1B, a Bio-AI report ("help me understand my Bio-AI report", "what do my scores mean"). NO "##" headings and no bold labels except **What to do first:** and the bold score; one flowing set of plain bullets. A score and the words "risk estimate, not a diagnosis" each appear AT MOST ONCE in the whole answer; never repeat them after every assessment.
@@ -274,12 +274,12 @@ BIO-AI SCALE, the platform's own definition, to use and never to change: a Bio-A
 2. A second bullet, with no label, of one or two plain sentences: the score estimates how likely you are to be heading toward a condition, it is a risk estimate and not a diagnosis, and the 0 to 100 scale with its four bands. Say this here and nowhere else.
 3. One bullet for each raised assessment, at most 4, with no bold label, opening with the body system it is about in plain words (from the supplied body_system, such as "For your liver, ..."). Say what the thing is in everyday words first, using a simple comparison when it helps (for oxidative stress, rust building up when the body's protective antioxidants run low), then the score once in bold as **64 out of 100, High**, then what that level means for this person in plain words.
 4. One plain bullet, with no label, that names the healthy areas in one plain sentence, without their scores and without repeating the disclaimer, and says a healthy level does not rule out a condition.
-5. Two or three action bullets. The first starts with the bold label **What to do first:** and the others have no label at all. Each is tied to a named assessment and specific: name the foods, how much or how often, and the reason in a few words. They are general support for the body in that area, said as a sensible start and not as the cause. How soon to see a doctor goes in the last bullet, in one sentence that does not repeat any disclaimer.
+5. Two or three action bullets. The first starts with the bold label **What to do first:** and the others have no label at all. Each is tied to a named assessment and specific: name the foods, how much or how often, and the reason in a few words. They are general support for the body in that area, said as a sensible start and not as the cause. Mention a doctor only when a result is well outside its range or a pointer is serious, never as a closing line.
 Keep the whole answer under about 230 words and every bullet under 45 words.
 
 Rules for all of it: each result is named in ONE bullet only, never repeated. Put a result in the good news, not the concern sections, when it is outside its range in a harmless or helpful direction. Mention other slightly outside results once, by name, without values, inside the closest system. The cards under the answer list every value, so do not list them all. State the limit of what a report can tell once, in one plain sentence inside a bullet, not as its own section. Every sentence is complete plain English, with no meta talk about the report itself.
 
-SHAPE 2, anything else: one result, one test, a disease, a food or nutrition question, a symptom, a general question, a follow up. NO headings. 3 to 6 bullets in this order: what it is in a few simple words, what it means for this person with the number when one is supplied, whether it is a worry and why, one specific thing to do, and when to see a doctor if that matters. Say each thing once, and the number of the result being asked about once. A follow up continues the chat without repeating an earlier answer. When a personal result on this topic is supplied, add one bullet that links the explanation to that result with its number. With no personal result supplied, explain the concept and keep the advice general.
+SHAPE 2, anything else: one result, one test, a disease, a food or nutrition question, a symptom, a general question, a follow up. NO headings. 3 to 6 bullets in this order: what it is in a few simple words, what it means for this person with the number when one is supplied, whether it is a worry and why, one specific thing to do, and a doctor only if the result is well outside its range or serious. Say each thing once, and the number of the result being asked about once. A follow up continues the chat without repeating an earlier answer. When a personal result on this topic is supplied, add one bullet that links the explanation to that result with its number. With no personal result supplied, explain the concept and keep the advice general.
 
 Reply in the language the instruction block names. Keep medical terms, numbers and units unchanged. No internal labels.
 
@@ -355,7 +355,7 @@ NUTRITION_OVERVIEW = (
 
 
 FOCUS_SHAPE = (
-    'SHAPE 1C, a priority question on a person who has both a blood report and Bio-AI scores ("what should I focus on", "what needs attention", "how is my health") when a FOCUS BRIEF JSON is supplied. Explain by body system so the two sources join up: one section for each of the first 3 entries of systems_to_focus_on, most important first. Each section starts with a "## " heading that is the body system in plain words, then exactly three bullets with no bold label: (a) what that organ does, in one simple sentence with a small everyday comparison; (b) what the person\'s results show there, blood numbers with the range on the report and the Bio-AI score once as **64 out of 100, High**, said as pointing the same way and never as proof; (c) what that means for them and one specific food or habit with how much or how often. Start with one bullet that counts the outside range results (blood_counts) and names the Bio-AI areas that are raised, and end with one bullet on how soon to see a doctor. State "risk estimate, not a diagnosis" once, never repeat a result in another section, and never join a Bio-AI score with an unrelated organ. Under about 260 words.'
+    'SHAPE 1C, a priority question on a person who has both a blood report and Bio-AI scores ("what should I focus on", "what needs attention", "how is my health") when a FOCUS BRIEF JSON is supplied. Explain by body system so the two sources join up: one section for each of the first 3 entries of systems_to_focus_on, most important first. Each section starts with a "## " heading that is the body system in plain words, then exactly three bullets with no bold label: (a) what that organ does, in one simple sentence with a small everyday comparison; (b) what the person\'s results show there, blood numbers with the range on the report and the Bio-AI score once as **64 out of 100, High**, said as pointing the same way and never as proof; (c) what that means for them and one specific food or habit with how much or how often. Start with one bullet that counts the outside range results (blood_counts) and names the Bio-AI areas that are raised, and say how soon to see a doctor only when a result is well outside its range. State "risk estimate, not a diagnosis" once, never repeat a result in another section, and never join a Bio-AI score with an unrelated organ. Under about 260 words.'
 )
 
 
@@ -457,8 +457,28 @@ def has_focus_brief(context) -> bool:
     )
 
 
+_NARROW_INTENT_NAMES = frozenset({
+    "latest_result", "previous_result", "trend", "blood_marker_explanation", "follow_up",
+    "general_health_question", "nutrition_guidance", "questionnaire_lookup", "personal_profile",
+    "health_goal_progress", "casual_conversation",
+})
+
+
+def core_for(context, message: str) -> str:
+    """The shared prompt, without the whole-report and Bio-AI layouts when the question is narrow.
+    Those two layouts are about 4,500 characters that a one-result question never uses."""
+    core = HOUSE_CORE.strip()
+    intent = getattr(getattr(context, "intent", None), "value", "") or ""
+    if intent not in _NARROW_INTENT_NAMES or is_nutrition_overview(message) or has_focus_brief(context):
+        return core
+    start, end = core.find("SHAPE 1A,"), core.find("SHAPE 2,")
+    if 0 < start < end:
+        core = core[:start] + core[end:]
+    return core
+
+
 def house_system(context: HealthContext, message: str) -> str:
-    parts = [HOUSE_CORE.strip(), WARM_VOICE, _NO_FIELD_NAMES]
+    parts = [core_for(context, message), WARM_VOICE, _NO_FIELD_NAMES]
     if is_nutrition_overview(message):
         parts.append(NUTRITION_OVERVIEW)
     from app.core.config import settings

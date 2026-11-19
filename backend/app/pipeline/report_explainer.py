@@ -399,8 +399,7 @@ def explain_markers(markers: list[BloodMarker]) -> str:
     if not flagged:
         parts.append("Everything here is within your lab's normal range, so there is nothing that needs action.")
     elif not clinical_notes(flagged) and not patterns:
-        parts.append("Results a little outside the range are common and often settle on their own. "
-                     "It is worth mentioning them to your doctor at your next visit.")
+        parts.append("Results a little outside the range are common and often settle on their own.")
     if one_test and len(parts) <= 2:
         return "\n\n".join(parts)  # a simple question stays a short paragraph
     return _bullets(parts)
@@ -733,7 +732,7 @@ def _top_answer(markers: list[BloodMarker]) -> str | None:
     text = f"The most important result to look at is your {_value(lead)}. {reason}".strip()
     if others:
         text += " After that: " + ", ".join(_value(m) for m in others) + "."
-    return text + " It is worth going through these with your doctor."
+    return text + (" It is worth going through these with your doctor." if notes else "")
 
 
 def answer_markers(markers: list[BloodMarker], message: str | None = None) -> str:
