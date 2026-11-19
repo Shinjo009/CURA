@@ -17,7 +17,7 @@ from app.core.copy import general_knowledge_unavailable
 from app.core.errors import LLMUnavailableError
 from app.llm.factory import get_llm_client
 from app.llm.models import LLMStructuredOutput
-from app.llm.registry import answer_timeout_for_tier, fallback_tiers, uses_answer_llm
+from app.llm.registry import answer_timeout_for_tier, fallback_tiers, model_id_for_tier, safety_net_model, uses_answer_llm
 from app.pipeline.planner import plan_needs_reasoning
 from app.pipeline.quality_gate import review_answer, should_escalate_to_deep
 from app.pipeline.prompt_builder import PromptBuilder
@@ -695,7 +695,10 @@ class ReasoningService:
         openrouter_policy().assert_privacy_for_health(personal_health=bool(plan.needs_personal_data))
         last_error = None
         remaining = budget.remaining() if budget is not None else float(settings.llm_timeout_seconds)
+        tried: set[str] = set()
+        tier = None
         for index, tier in enumerate(fallback_tiers(plan.answer_model_tier, plan.complexity_score)):
+            tried.add(model_id_for_tier(tier))
             timeout = min(float(settings.llm_timeout_seconds), remaining, answer_timeout_for_tier(tier))
             if budget is not None:
                 timeout = budget.timeout_for(timeout)
@@ -722,6 +725,21 @@ class ReasoningService:
             except LLMUnavailableError as exc:
                 last_error = exc
                 remaining = budget.remaining() if budget is not None else remaining
+        model = safety_net_model(tried)
+        if model is not None and tier is not None and last_error is not None:
+            timeout = min(float(settings.llm_timeout_seconds), remaining, answer_timeout_for_tier(tier))
+            if budget is not None:
+                timeout = budget.timeout_for(timeout)
+            if timeout >= 2.0:
+                try:
+                    client = get_llm_client(model=model, timeout=timeout, personal_health=bool(plan.needs_personal_data))
+                    result = client.complete_structured(messages)
+                    logger.warning("answer_llm_safety_net_used model=%s", model)
+                    return result, client, tier, True
+                except SecurityBlockedError as exc:
+                    raise LLMUnavailableError("LLM request blocked by privacy policy") from exc
+                except LLMUnavailableError as exc:
+                    logger.warning("answer_llm_safety_net_failed model=%s reason=%s", model, str(exc))
         raise last_error or LLMUnavailableError("LLM request failed")
 
 

@@ -49,7 +49,7 @@ from integrations.supershyft.db import DB_NO_RECORDS, DB_PROVIDER_NOT_CALLED
 from app.core.errors import LLMUnavailableError, ProviderUnavailableError
 from app.db.repositories import ConversationRepository
 from app.llm.factory import get_llm_client
-from app.llm.registry import answer_timeout_for_tier, estimate_cost_usd, fallback_tiers, model_id_for_tier, provider_for_model, uses_answer_llm
+from app.llm.registry import answer_timeout_for_tier, estimate_cost_usd, fallback_tiers, model_id_for_tier, safety_net_model, provider_for_model, uses_answer_llm
 from app.llm.structured import looks_like_structured_json, public_answer_text
 from app.memory.conversation import FollowUpMemory
 from app.pipeline.conversation_state import ConversationStateResolver, persistable_state, stated_measurement_keys
@@ -225,7 +225,10 @@ class ChatService:
         stream_cb = getattr(self, "_stream_cb", None)
         last_error = None
         remaining = budget.remaining() if budget is not None else float(settings.llm_timeout_seconds)
+        tried: set[str] = set()
+        tier = None
         for index, tier in enumerate(fallback_tiers(plan.answer_model_tier, plan.complexity_score)):
+            tried.add(model_id_for_tier(tier))
             timeout = min(float(settings.llm_timeout_seconds), remaining, answer_timeout_for_tier(tier))
             if budget is not None:
                 timeout = budget.timeout_for(timeout)
@@ -269,7 +272,34 @@ class ChatService:
                     str(exc),
                     int((time.perf_counter() - started) * 1000),
                 )
+        net = self._try_safety_net(messages, plan, budget, tried, tier, last_error)
+        if net is not None:
+            return net
         raise last_error or LLMUnavailableError("LLM request failed")
+
+    def _try_safety_net(self, messages, plan, budget, tried, tier, last_error):
+        """One last attempt on a different vendor, only after every tier model failed. Same privacy checks."""
+        from app.pipeline.dlp import SecurityBlockedError
+
+        model = safety_net_model(tried)
+        if model is None or tier is None or last_error is None:
+            return None
+        remaining = budget.remaining() if budget is not None else float(settings.llm_timeout_seconds)
+        timeout = min(float(settings.llm_timeout_seconds), remaining, answer_timeout_for_tier(tier))
+        if budget is not None:
+            timeout = budget.timeout_for(timeout)
+        if timeout < 2.0:
+            return None
+        try:
+            client = get_llm_client(model=model, timeout=timeout, personal_health=bool(plan.needs_personal_data))
+            result = client.complete_structured(messages)
+        except SecurityBlockedError as exc:
+            raise LLMUnavailableError("LLM request blocked by privacy policy") from exc
+        except LLMUnavailableError as exc:
+            logger.warning("answer_llm_safety_net_failed model=%s reason=%s", model, str(exc))
+            return None
+        logger.warning("answer_llm_safety_net_used model=%s", model)
+        return result, client, tier, True
 
     def chat(
         self,

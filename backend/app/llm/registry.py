@@ -73,6 +73,12 @@ def fallback_tiers(tier: AnswerModelTier | str | None, complexity_score: int | N
     return _distinct_models(_fallback_order(selected, complexity_score))
 
 
+def safety_net_model(tried: set[str]) -> str | None:
+    """The last-resort model, or None when it is off or was already tried under a tier."""
+    model = (settings.answer_model_safety_net or "").strip()
+    return model if model and model not in tried else None
+
+
 def _distinct_models(tiers: list[AnswerModelTier]) -> list[AnswerModelTier]:
     """Never retry the same model under another tier name: that repeats the failed call."""
     seen: set[str] = set()

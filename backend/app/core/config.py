@@ -94,6 +94,9 @@ class Settings(BaseSettings):
     answer_model_standard_medical: str = Field(
         "openai/gpt-5-mini", validation_alias=AliasChoices("CURA_STANDARD_MODEL", "ANSWER_MODEL_STANDARD_MEDICAL", "answer_model_standard_medical")
     )
+    # Tried once, last, only when every tier model failed. A different vendor, so a single provider outage does not
+    # stop answers. Empty turns it off. CURA_SAFETY_NET_MODEL overrides it.
+    answer_model_safety_net: str = Field("google/gemini-3.8-flash", validation_alias=AliasChoices("CURA_SAFETY_NET_MODEL", "answer_model_safety_net"))
     answer_model_deep_medical: str = Field(
         "openai/gpt-5.6-luna", validation_alias=AliasChoices("CURA_DEEP_MODEL", "ANSWER_MODEL_DEEP_MEDICAL", "answer_model_deep_medical")
     )
