@@ -25,6 +25,17 @@ DIAGNOSIS = re.compile(
     r"\b(diagnosed with|this confirms|this proves you|you have (?:a |an )?(?:[a-z]+ )?(?:condition|disease|disorder|deficiency|diabetes|anaemia|anemia|infection|syndrome))\b",
     re.I,
 )
+_NEGATION_BEFORE = re.compile(r"\b(?:not|never|no|n't|nor|cannot|doesn't|does not|don't|do not|neither)\b[^.!?]{0,40}$", re.I)
+
+
+def _asserts_diagnosis(text: str) -> bool:
+    """A diagnosis claim, not a sentence that rules one out ("this does not mean you have heart disease")."""
+    for match in DIAGNOSIS.finditer(text or ""):
+        if not _NEGATION_BEFORE.search(text[max(0, match.start() - 60):match.start()]):
+            return True
+    return False
+
+
 MEDICATION = re.compile(r"\b(take \d+ mg|prescribe|dosage of|start metformin|take insulin)\b", re.I)
 EMERGENCY = re.compile(r"\b(call 911|emergency department immediately|you are having a heart attack)\b", re.I)
 IMPROVED = re.compile(r"\b(your (health|diabetes) (improved|got worse)|this confirms diabetes)\b", re.I)
@@ -542,7 +553,7 @@ class SafetyLayer:
                 "\n\nI can't advise starting, stopping, switching or changing the dose of a medicine. "
                 "Please talk to the clinician who manages it."
             )
-        if DIAGNOSIS.search(answer):
+        if _asserts_diagnosis(answer):
             flags.append("diagnosis_language")
             out += "\n\nThis is not a diagnosis. Discuss results with a clinician."
         if MEDICATION.search(answer):

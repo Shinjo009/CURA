@@ -27,3 +27,10 @@ def test_narrow_questions_skip_report_layouts():
     wide = SimpleNamespace(intent=IntentType.broad_health_summary)
     assert "SHAPE 1A, a whole" not in core_for(narrow, "What is urea?") and "SHAPE 2" in core_for(narrow, "What is urea?")
     assert "SHAPE 1A, a whole" in core_for(wide, "Explain my report")
+
+
+def test_negated_diagnosis_wording_gets_no_boilerplate():
+    from app.pipeline.safety import _asserts_diagnosis
+    assert not _asserts_diagnosis("It does not mean you have heart disease.")
+    assert not _asserts_diagnosis("neither one alone proves that you have a condition")
+    assert _asserts_diagnosis("You have diabetes.")

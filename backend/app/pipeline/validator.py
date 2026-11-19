@@ -140,6 +140,9 @@ def _entity_coverage(answer: str, plan: QueryPlan, context: HealthContext) -> Qu
         slug = code.replace("_", " ").lower()
         aliases = [slug, name, code.lower(), *aliases_for(code)]
         mentioned = any(alias.lower() in blob for alias in aliases if alias)
+        # "my cholesterol" is answered by LDL, HDL or triglycerides; total cholesterol being absent is not news.
+        if not mentioned and code.lower() in {"cholesterol", "total_cholesterol", "lipids", "lipid_profile"}:
+            mentioned = any(term in blob for term in ("ldl", "hdl", "triglyceride"))
         if mentioned:
             continue
         if code.lower() in missing_keys or code in DERIVED_ENTITY_KEYS:
