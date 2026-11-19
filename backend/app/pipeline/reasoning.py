@@ -356,8 +356,7 @@ class ReasoningService:
                 answer = render_bio_ai_score_list(context.bio_ai_risks)
             return ReasoningResult(answer=answer, llm_mode="structured_bio_ai")
         if (
-            lookup
-            and plan.intent == IntentType.bio_ai_score
+            plan.intent == IntentType.bio_ai_score
             and context.status == "ambiguous"
             and not plan.needs_user_uploaded
         ):

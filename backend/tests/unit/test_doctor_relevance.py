@@ -34,3 +34,9 @@ def test_negated_diagnosis_wording_gets_no_boilerplate():
     assert not _asserts_diagnosis("It does not mean you have heart disease.")
     assert not _asserts_diagnosis("neither one alone proves that you have a condition")
     assert _asserts_diagnosis("You have diabetes.")
+
+
+def test_cross_source_question_keeps_blood_measurements():
+    import inspect
+    from app.pipeline import evidence_inventory
+    assert "plan.needs_blood" in inspect.getsource(evidence_inventory.assemble_evidence)

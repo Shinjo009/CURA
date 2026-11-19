@@ -244,6 +244,7 @@ def assemble_evidence(plan: QueryPlan, context: HealthContext) -> EvidencePackag
         getattr(plan.intent, "value", "") == "bio_ai_score"
         and not requested_marker_keys(message)
         and not (contract.get("broad_summary"))
+        and not plan.needs_blood  # a question about both reports keeps its blood results
     ):
         measurements = []
     selected_risks = _select_risks(kind, message, context.bio_ai_risks)
