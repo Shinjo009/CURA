@@ -41,8 +41,18 @@ _QUOTED_PERSONAL_CONTEXT = re.compile(
 )
 
 
+_PHRASE_STOP = {"to", "for", "with", "and", "or", "in", "on", "at", "from", "is", "was", "are", "be", "been", "that", "which", "if", "when", "why"}
+_FOOD_QUESTION = re.compile(r"\b(?:foods?|meals?|diet|eat|eating|recipes?|snacks?|menu|vegetarian|vegan)\b", re.I)
+
+
 def _names_own_marker(text: str) -> bool:
-    """'my <marker>' for any known marker, including misspellings ('cholestrol'), not a fixed word list."""
+    """'my <marker>' for any known marker, including misspellings ('cholestrol'), not a fixed word list.
+
+    The marker must be what 'my' points at, the first few words after it. 'my usual vegetarian meals
+    to raise urea' is about meals, not a request to look up urea.
+    """
+    if _FOOD_QUESTION.search(text):
+        return False
     if _PERSONAL_MARKER.search(text):
         return True
     mine = re.search(r"\bmy\b", text, re.I)
@@ -53,7 +63,12 @@ def _names_own_marker(text: str) -> bool:
         return False
     from app.pipeline.lab_parameters import match_lab_keys
 
-    return bool(match_lab_keys(text[mine.start():]))
+    words: list[str] = []
+    for word in re.findall(r"[A-Za-z0-9][A-Za-z0-9\-/]*", text[mine.end():]):
+        if word.lower() in _PHRASE_STOP or len(words) >= 4:
+            break
+        words.append(word)
+    return bool(words) and bool(match_lab_keys(" ".join(words)))
 
 
 class ReasoningOperation(str, Enum):

@@ -298,6 +298,7 @@ WARM_VOICE = """TONE, applies on top of VOICE. Sound like a kind, upbeat friend 
 - Make the next step feel small and doable, one tiny win for this week, tied to a named result and an everyday Indian food or routine. Never a list of chores.
 - Close the last bullet with one short line of encouragement that fits the facts (for example that small steady changes add up). Never promise an outcome and never make the person feel blamed.
 - A worry is stated once, plainly and kindly. Never alarm, never scold, never pile on caveats. If the person sounds anxious, acknowledge it in half a sentence first.
+- Follow up questions never ask how to push a waste product marker (urea, creatinine, uric acid, bilirubin) up or down as a goal, and a follow up chat answer never repeats the earlier explanation.
 - Vary your openers across the conversation. Never start two answers the same way, and never praise the question ("Nice question", "Great question").
 - All FACT RULES still win over tone: warmth never changes a number, a range, a date or a safety instruction, and an urgent finding is stated first and clearly."""
 
@@ -365,7 +366,7 @@ RESULT_WALKTHROUGH = (
     "4) What could explain it: two or three common reasons that can push THIS test in THIS direction, as possibilities, never as a cause or a diagnosis. "
     "5) Should you worry: a calm, honest answer with the reason, based on the size of the gap. "
     "6) What to do now: one small specific step, with an everyday Indian food or habit when it fits, and how soon to see a doctor only when the result is outside the range. "
-    "Leave out dates and remarks that one report cannot show a trend unless an earlier result is supplied."
+    "For a gap of only a few percent say it is usually minor and a routine recheck is enough, not a plan to chase it. Leave out dates and remarks that one report cannot show a trend unless an earlier result is supplied."
 )
 
 LIFESTYLE_FOCUS = (
@@ -397,12 +398,21 @@ def is_lifestyle_topic_question(message: str) -> bool:
         return True
 
 
+_ACTION_OR_FOOD_FOLLOW_UP = re.compile(
+    r"\b(?:foods?|meals?|diet|eat|eating|recipes?|snacks?|how (?:can|do|should) i|what should i (?:do|eat|try)|improve|raise|lower|increase|reduce|boost|fix|recheck|retest|repeat the)\b",
+    re.I,
+)
+
+
 def is_result_walkthrough(context, message: str) -> bool:
     contract = getattr(context, "task_contract", None) or {}
     goal = str(contract.get("goal") or "")
     kind = str(contract.get("response_type") or "")
     intent = getattr(getattr(context, "intent", None), "value", "")
     explaining = (kind == "MARKER_LOOKUP" and goal in {"interpret", "explain", "assess", "risk"}) or intent == "blood_marker_explanation"
+    if _ACTION_OR_FOOD_FOLLOW_UP.search(message or ""):
+        # A food or "how do I" follow-up continues the chat. It must not repeat the whole walkthrough.
+        return False
     return bool(explaining and getattr(context, "markers", None) and not contract.get("broad_summary"))
 
 

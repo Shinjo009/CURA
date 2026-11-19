@@ -11,7 +11,9 @@ from __future__ import annotations
 from app.core.config import settings
 from app.llm.structured import looks_like_structured_json, public_answer_text
 from app.pipeline.markdown_tidy import (
+    drop_bullet_labels,
     drop_doctor_for_healthy,
+    drop_praise_opener,
     drop_repeated_limits,
     cap_report_sections,
     cap_total_bullets,
@@ -110,7 +112,7 @@ def plain_answer(answer: str, path: str | None, context, *, whole_report: bool =
     # The safety-approved answer is the prose. Lookups and report listings stay in cards.
     cleaned = remove_em_dashes(sanitize_internal_ids(prefer_report_range(text, context))).strip()
     if settings.cura_prompt_variant == "house":
-        cleaned = friendly_text(tidy_markdown(cleaned))
+        cleaned = friendly_text(tidy_markdown(drop_bullet_labels(drop_praise_opener(cleaned))))
         if whole_report:
             cleaned = cap_total_bullets(cap_report_sections(drop_empty_headings(drop_doctor_for_healthy(drop_repeated_limits(cleaned)))))
         else:

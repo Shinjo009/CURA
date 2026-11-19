@@ -240,3 +240,37 @@ def drop_doctor_for_healthy(text: str) -> str:
             continue
         out.append(line)
     return "\n".join(out)
+
+
+_PRAISE_OPENER = re.compile(
+    r"^\s*(?:(?:thanks|thank you)[,!.]?\s*)?(?:that'?s |what )?(?:a |an )?(?:really |very |such )?"
+    r"(?:great|good|nice|excellent|fair|smart|interesting|important|lovely|wonderful)\s+(?:question|ask)\b[^\n]*",
+    re.I,
+)
+_BULLET_LABEL = re.compile(r"(?m)^(\s*[-*]\s+)(?:[A-Z][A-Za-z']*)(?: [A-Za-z']+){0,3}:\s+(?=[^\s\d])")
+
+
+def drop_praise_opener(text: str) -> str:
+    """'Great question about ...' is not an answer. The first line goes when it only praises the question."""
+    if not text:
+        return text
+    lines = text.lstrip().split("\n")
+    if lines and not lines[0].lstrip().startswith(("-", "*", "#")) and _PRAISE_OPENER.match(lines[0]):
+        return "\n".join(lines[1:]).lstrip("\n")
+    return text
+
+
+def drop_bullet_labels(text: str) -> str:
+    """A bullet is a sentence, not 'Worry level: ...'. Bold labels the report shapes allow are left alone."""
+    def _strip(match: re.Match) -> str:
+        rest = match.string[match.end():match.end() + 1]
+        return match.group(1) + rest.upper()
+
+    out = []
+    for line in (text or "").split("\n"):
+        m = _BULLET_LABEL.match(line)
+        if m:
+            tail = line[m.end():]
+            line = m.group(1) + tail[:1].upper() + tail[1:]
+        out.append(line)
+    return "\n".join(out)
