@@ -464,31 +464,21 @@ _NARROW_INTENT_NAMES = frozenset({
 })
 
 
-def core_for(context, message: str) -> tuple[str, str]:
-    """The shared prompt and its shape. A narrow question leaves out the whole-report and Bio-AI layouts
-    (about 4,500 characters it never uses); a report-wide question gets the full text in its original order."""
+def core_for(context, message: str) -> str:
+    """The shared prompt. A narrow question leaves out the whole-report and Bio-AI layouts
+    (about 4,500 characters it never uses); a report-wide question gets the full text."""
     core = HOUSE_CORE.strip()
     intent = getattr(getattr(context, "intent", None), "value", "") or ""
     if intent not in _NARROW_INTENT_NAMES or is_nutrition_overview(message) or has_focus_brief(context):
-        return core, "wide"
+        return core
     start, end = core.find("SHAPE 1A,"), core.find("SHAPE 2,")
     if 0 < start < end:
         core = core[:start] + core[end:]
-    return core, "narrow"
+    return core
 
 
 def house_system(context: HealthContext, message: str) -> str:
-    core, shape = core_for(context, message)
-    parts = [core, WARM_VOICE, _NO_FIELD_NAMES]
-    # Everything above is static instruction text, identical for every member and every question of this shape.
-    # Everything appended below varies by question. Evidence, reports and history are in the user message.
-    from app.llm.prompt_cache import set_boundary
-
-    static_text = "\n\n".join(parts)
-    if shape == "wide":
-        # A report-wide request keeps its original order. The text before the report layouts is still shared.
-        static_text = static_text[: static_text.find("SHAPE 1A,")]
-    set_boundary(static_text, shape)
+    parts = [core_for(context, message), WARM_VOICE, _NO_FIELD_NAMES]
     if is_nutrition_overview(message):
         parts.append(NUTRITION_OVERVIEW)
     from app.core.config import settings

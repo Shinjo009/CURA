@@ -189,9 +189,7 @@ class OpenAICompatibleLLMClient:
         return list(dict.fromkeys(formats))
 
     def _build_payload(self, messages: list[dict[str, str]], fmt: str) -> dict:
-        from app.llm.prompt_cache import apply_cache_fields
-
-        payload = apply_cache_fields(self._build_payload_base(messages, fmt), self.model)
+        payload = self._build_payload_base(messages, fmt)
         if settings.cura_prompt_variant == "house" and "response_format" in payload:
             # Structured answers were pinned to temperature 0, which makes the prose flat.
             # A little variation reads more naturally; facts are still checked after generation.
@@ -325,7 +323,6 @@ class OpenAICompatibleLLMClient:
                 "input_tokens": usage.get("prompt_tokens"),
                 "output_tokens": usage.get("completion_tokens"),
                 "cached_tokens": cached,
-                "cache_write_tokens": details.get("cache_write_tokens"),
                 "reasoning_tokens": reasoning,
                 "provider_cost": usage.get("cost"),
                 "usage_reported": True,
@@ -357,9 +354,6 @@ class OpenAICompatibleLLMClient:
             raise LLMUnavailableError("LLM returned an empty answer")
         openrouter_breaker.record_success()
         logger.info("llm_complete model=%s format=%s latency_ms=%s", self.model, fmt, latency_ms)
-        from app.llm.prompt_cache import record as record_cache
-
-        record_cache(model=self.model, upstream_provider=data.get("provider"), usage=self.last_usage, latency_ms=latency_ms)
         return cleaned
 
     def _send_streaming(self, url: str, headers: dict, payload: dict, fmt: str, started: float) -> str:
@@ -414,7 +408,6 @@ class OpenAICompatibleLLMClient:
             "input_tokens": usage.get("prompt_tokens"),
             "output_tokens": usage.get("completion_tokens"),
             "cached_tokens": (usage.get("prompt_tokens_details") or {}).get("cached_tokens"),
-            "cache_write_tokens": (usage.get("prompt_tokens_details") or {}).get("cache_write_tokens"),
             "reasoning_tokens": (usage.get("completion_tokens_details") or {}).get("reasoning_tokens"),
             "provider_cost": usage.get("cost"),
             "usage_reported": bool(usage),
@@ -430,9 +423,6 @@ class OpenAICompatibleLLMClient:
             raise LLMUnavailableError("LLM returned an empty answer")
         openrouter_breaker.record_success()
         logger.info("llm_complete_streamed model=%s format=%s latency_ms=%s", self.model, fmt, latency_ms)
-        from app.llm.prompt_cache import record as record_cache
-
-        record_cache(model=self.model, upstream_provider=None, usage=self.last_usage, latency_ms=latency_ms)
         return cleaned
 
     def _complete_with_mode(self, messages: list[dict[str, str]], json_mode: bool) -> str:
