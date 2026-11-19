@@ -54,6 +54,8 @@ class Settings(BaseSettings):
     # house (default): the SuperShyft Health Assistant voice, warm and complete, no hidden
     # brevity hints. legacy keeps the old system text. modular uses the compact core plus task modules.
     cura_prompt_variant: str = "house"
+    # Adaptive answer plan: "off", "shadow" (build and log the plan only) or "on" (the model also gets the plan).
+    answer_plan_mode: str = "on"
     # Diagnostic package cards and retest suggestions. Clinical policy still decides
     # whether a card is allowed; this only turns the feature off.
     cura_test_suggestions_enabled: bool = True

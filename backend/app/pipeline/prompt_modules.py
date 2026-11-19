@@ -7,6 +7,7 @@ CURA_PROMPT_VARIANT=modular.
 
 from __future__ import annotations
 
+import logging
 import re
 
 from app.contracts.health_context import HealthContext
@@ -222,6 +223,8 @@ def compose_system(context: HealthContext, message: str) -> str:
 # routine advice, one specific closing line. Each rule appears once. Depth comes from the
 # question, not from a word cap. The JSON contract below is the one the pipeline parses.
 # ---------------------------------------------------------------------------
+
+logger = logging.getLogger("cura.prompt_modules")
 
 HOUSE_CORE = """You are the SuperShyft Health Assistant. You explain blood reports, Bio-AI reports and general health questions to people with no medical background.
 
@@ -458,9 +461,24 @@ def house_system(context: HealthContext, message: str) -> str:
     parts = [HOUSE_CORE.strip(), WARM_VOICE, _NO_FIELD_NAMES]
     if is_nutrition_overview(message):
         parts.append(NUTRITION_OVERVIEW)
+    from app.core.config import settings
+    from app.pipeline.answer_plan import build_answer_plan, log_plan, plan_prompt
+
     lifestyle = is_lifestyle_topic_question(message)
+    mode = (settings.answer_plan_mode or "off").lower()
+    plan_text = ""
+    if mode in {"shadow", "on"}:
+        try:
+            answer_plan = build_answer_plan(context, message)
+            log_plan(answer_plan)
+            if mode == "on" and not lifestyle:
+                plan_text = plan_prompt(answer_plan)
+        except Exception:  # noqa: BLE001 - the plan helps the answer, it must never break it
+            logger.warning("answer_plan_failed", exc_info=True)
     if lifestyle:
         parts.append(LIFESTYLE_FOCUS)
+    elif plan_text:
+        parts.append(plan_text)
     elif is_result_walkthrough(context, message):
         parts.append(RESULT_WALKTHROUGH)
     if has_focus_brief(context) and not lifestyle:
