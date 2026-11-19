@@ -111,3 +111,36 @@ def test_already_explained_names_are_plain_words():
     ctx = _ctx([urea], turn="FOLLOW_UP_QUESTION", explained=["vitamin_d"])
     assert "vitamin d" in plan_prompt(build_answer_plan(ctx, "Which foods can help?"))
     assert "vitamin_d" not in plan_prompt(build_answer_plan(ctx, "Which foods can help?"))
+
+
+def test_plain_lookup_is_brief_not_an_explanation():
+    ldl = _marker("ldl", "LDL", 160.0, 0.0, 100.0, "high")
+    plan = build_answer_plan(_ctx([ldl], goal="lookup"), "What is my LDL?")
+    assert plan.intent == PlanIntent.lookup and plan.detail_level == "brief"
+    assert Component.simple_explanation not in plan.components and Component.mechanism not in plan.components
+
+
+def test_general_questions_with_a_marker_name_are_not_result_interpretations():
+    vit_d = _marker("vitamin_d", "Vitamin D", 12.6, 30.0, 100.0, "low")
+    ctx = _ctx([vit_d], kind=None, goal="explain", intent="blood_marker_explanation")
+    assert build_answer_plan(ctx, "Can I take vitamin D with calcium?").intent != PlanIntent.personal_interpretation
+    assert build_answer_plan(ctx, "Do I need a thyroid test?").intent != PlanIntent.personal_interpretation
+
+
+def test_comparing_two_markers_is_not_a_trend():
+    ctx = _ctx([_marker("glucose", "Glucose", 95.0, 70.0, 100.0, "normal")], kind=None, goal="compare")
+    ctx.comparisons = [object()]
+    assert build_answer_plan(ctx, "Compare my sugar and insulin").intent != PlanIntent.trend
+
+
+def test_why_follow_up_keeps_the_reasons_but_not_the_definition():
+    vit_d = _marker("vitamin_d", "Vitamin D", 12.6, 30.0, 100.0, "low")
+    ctx = _ctx([vit_d], turn="FOLLOW_UP_QUESTION", explained=["vitamin_d"], kind=None, goal="explain")
+    plan = build_answer_plan(ctx, "Why is it low?")
+    assert plan.intent == PlanIntent.cause
+    assert Component.mechanism in plan.components and Component.simple_explanation not in plan.components
+
+
+def test_why_is_it_important_is_an_explanation_not_a_cause_question():
+    tsh = _marker("tsh", "TSH", 2.0, 0.4, 4.0, "normal")
+    assert build_answer_plan(_ctx([tsh]), "Why is my TSH important?").intent == PlanIntent.personal_interpretation

@@ -24,6 +24,7 @@ SCHEMA_VERSION = 1
 
 class PlanIntent(str, Enum):
     education = "education"
+    lookup = "lookup"
     personal_interpretation = "personal_interpretation"
     cause = "cause"
     risk_explanation = "risk_explanation"
@@ -76,8 +77,9 @@ ACTION_OR_FOOD = re.compile(
     r"improve|raise|lower|increase|reduce|boost|fix|recheck|retest|repeat the)\b",
     re.I,
 )
+_IMPORTANCE = re.compile(r"\b(?:why (?:is|are|does|do) .{0,40}(?:important|matter)|what is .{0,30} for)\b", re.I)
 _CAUSE = re.compile(r"\b(?:why|cause[sd]?|reason|what could explain|how come)\b", re.I)
-_CHANGE = re.compile(r"\b(?:chang\w*|improv\w*|worse\w*|better|trend\w*|since|previous\w*|earlier|last (?:report|time|result)|compar\w*|progress\w*|over time|going (?:up|down))\b", re.I)
+_CHANGE = re.compile(r"\b(?:chang\w*|improv\w*|worse\w*|better|trend\w*|since|previous\w*|earlier|last (?:report|time|result)|compared? (?:it |this |that )?(?:to|with) (?:last|previous|earlier|before)|progress\w*|over time|going (?:up|down))\b", re.I)
 _FOLLOW_UP_TURNS = {"FOLLOW_UP_QUESTION", "REFERENCE_RESOLUTION", "CLARIFICATION", "CONFIRMATION", "CORRECTION"}
 _WASTE_MARKERS = {"urea", "bun", "blood_urea_nitrogen", "creatinine", "uric_acid", "bilirubin"}
 
@@ -179,14 +181,24 @@ def build_answer_plan(context, message: str) -> AnswerPlan:
         if not follow_up:
             parts = [Component.personal_finding, Component.implications, Component.next_steps]
         plan.detail_level, plan.answer_length_target_words = "concise", 100
-    elif contract.get("goal") == "compare" or (getattr(context, "comparisons", None) and _CHANGE.search(message or "")):
+    elif _CHANGE.search(message or "") and (getattr(context, "comparisons", None) or contract.get("goal") == "compare"):
         plan.intent = PlanIntent.trend
         plan.personal_data_required = True
         parts = [Component.personal_finding, Component.trend, Component.implications]
         plan.detail_level, plan.answer_length_target_words = "concise", 100
         plan.required_evidence = ["measured_biomarker", "earlier_measurement"]
-    elif markers and (kind == "MARKER_LOOKUP" or intent_value == "blood_marker_explanation"):
-        plan.intent = PlanIntent.cause if _CAUSE.search(message or "") else PlanIntent.personal_interpretation
+    elif markers and kind == "MARKER_LOOKUP" and contract.get("goal") == "lookup":
+        # "What is my LDL?" is a brief lookup, not an explanation.
+        plan.intent = PlanIntent.lookup
+        plan.personal_data_required = True
+        parts = [Component.personal_finding, Component.reference_comparison]
+        if proportion not in {Proportion.within_range, Proportion.unknown}:
+            parts.append(Component.next_steps)
+        plan.detail_level, plan.answer_length_target_words = "brief", 60
+        plan.required_evidence = ["measured_biomarker", "unit"]
+        plan.available_evidence = ["measured_biomarker"]
+    elif markers and kind == "MARKER_LOOKUP":
+        plan.intent = PlanIntent.cause if _CAUSE.search(message or "") and not _IMPORTANCE.search(message or "") else PlanIntent.personal_interpretation
         plan.personal_data_required = True
         plan.education_required = True
         parts = [Component.simple_explanation, Component.personal_finding]
@@ -202,8 +214,10 @@ def build_answer_plan(context, message: str) -> AnswerPlan:
         plan.required_evidence = ["measured_biomarker", "unit", "laboratory_reference_interval"]
         plan.available_evidence = ["measured_biomarker"] + (["laboratory_reference_interval"] if focus is not None and (focus.reference_low is not None or focus.reference_high is not None) else [])
     elif follow_up:
-        plan.intent = PlanIntent.follow_up
-        parts = [Component.implications, Component.next_steps]
+        asks_why = bool(_CAUSE.search(message or ""))
+        plan.intent = PlanIntent.cause if asks_why else PlanIntent.follow_up
+        plan.personal_data_required = bool(markers)
+        parts = [Component.mechanism, Component.implications, Component.next_steps] if asks_why else [Component.implications, Component.next_steps]
     else:
         plan.intent = PlanIntent.education if not markers else PlanIntent.general
         plan.education_required = True
@@ -211,7 +225,10 @@ def build_answer_plan(context, message: str) -> AnswerPlan:
 
     if follow_up and explained:
         # Already explained in this chat: do not teach it again.
-        parts = [c for c in parts if c not in {Component.simple_explanation, Component.mechanism, Component.reference_comparison}]
+        teach = {Component.simple_explanation, Component.reference_comparison}
+        if plan.intent != PlanIntent.cause:
+            teach.add(Component.mechanism)  # a "why" question still needs the reasons
+        parts = [c for c in parts if c not in teach]
     if focus is not None and (focus.key or "").lower() in _WASTE_MARKERS:
         plan.must_not_claim.append("goal_to_raise_or_lower_waste_marker")
     plan.components = [c for c in ORDER if c in set(parts)]
@@ -222,7 +239,7 @@ def build_answer_plan(context, message: str) -> AnswerPlan:
 def plan_prompt(plan: AnswerPlan) -> str:
     """The plan as an instruction block. Empty when the plan adds nothing the standing prompt lacks."""
     lines: list[str] = []
-    shaped = plan.intent in {PlanIntent.personal_interpretation, PlanIntent.cause, PlanIntent.action, PlanIntent.trend}
+    shaped = plan.intent in {PlanIntent.lookup, PlanIntent.personal_interpretation, PlanIntent.cause, PlanIntent.action, PlanIntent.trend}
     if shaped or (plan.follow_up and plan.already_explained):
         numbered = [f"{i}) {_PART_TEXT[c]}" for i, c in enumerate(plan.components, 1)]
         lines.append(
