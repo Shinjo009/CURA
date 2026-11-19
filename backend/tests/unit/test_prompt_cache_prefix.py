@@ -90,10 +90,12 @@ def test_provider_fields_are_provider_specific(monkeypatch):
     assert "prompt_cache_key" not in gemini
 
 
-def test_cache_fields_are_off_by_default():
+def test_cache_key_is_on_for_openai_and_the_gemini_breakpoint_is_off_by_default():
     prompt_cache.set_boundary("STATIC", "narrow")
     payload = prompt_cache.apply_cache_fields({"messages": [{"role": "system", "content": "STATIC x"}]}, "openai/gpt-5-mini")
-    assert "prompt_cache_key" not in payload
+    assert payload["prompt_cache_key"].startswith("cura-")
+    gemini = prompt_cache.apply_cache_fields({"messages": [{"role": "system", "content": "STATIC x"}]}, "google/gemini-3.8-flash")
+    assert "prompt_cache_key" not in gemini and isinstance(gemini["messages"][0]["content"], str)
 
 
 def test_observability_row_has_the_required_fields():

@@ -80,8 +80,8 @@ class Settings(BaseSettings):
     # "native": the same four steps called in order. Same answers either way. CURA_ORCHESTRATION=native is the kill switch.
     orchestration_engine: str = Field("langchain", validation_alias=AliasChoices("CURA_ORCHESTRATION", "orchestration_engine"))
     # Provider-native prompt caching (see app/llm/prompt_cache.py). Nothing is cached by CURA itself.
-    # Off until a live comparison shows a gain for that provider.
-    llm_prompt_cache_key: bool = False
+    # prompt_cache_key is on (live test: 95% reuse on repeat vs 71% without). The Gemini breakpoint stays off: Gemini is not on any tier.
+    llm_prompt_cache_key: bool = True
     llm_gemini_cache_control: bool = False
     # Estimates only, for the cost column in the cache log. The provider bill is logged beside them.
     llm_cache_read_factor: float = 0.25

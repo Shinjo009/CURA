@@ -12,7 +12,7 @@ CURA relies on provider caching through OpenRouter. It keeps no application leve
 ## Providers
 | Provider | Behavior | CURA setting |
 |---|---|---|
-| OpenAI (GPT-5 mini, GPT-5.6 luna) | Automatic for prompts of 1,024 tokens or more. Reads are cheaper. | Nothing needed. `LLM_PROMPT_CACHE_KEY=true` adds a shared, non identifying key (off until measured). |
+| OpenAI (GPT-5 mini, GPT-5.6 luna) | Automatic for prompts of 1,024 tokens or more. Reads are cheaper. | Nothing needed. `LLM_PROMPT_CACHE_KEY` (on by default) adds a shared, non identifying key. Live test: 95.3% of input tokens reused on a repeat, against 71.5% without it. |
 | Google Gemini | Implicit caching where supported, otherwise explicit `cache_control` on a content block. Only the last breakpoint counts. | `LLM_GEMINI_CACHE_CONTROL=true` (off until measured). |
 | Anthropic | Needs explicit breakpoints. Not in the routing. | Not implemented. |
 
