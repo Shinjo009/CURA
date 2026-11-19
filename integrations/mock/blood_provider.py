@@ -11,10 +11,18 @@ class MockBloodProvider:
     def __init__(self) -> None:
         self._rows = load_json("blood_reports.json")
 
-    def query(self, principal: AuthenticatedPrincipal, plan: QueryPlan) -> list[BloodReport]:
+    def load_for_cache(self, principal: AuthenticatedPrincipal, scope: str) -> list[BloodReport]:
+        """Every report this member owns, not shaped by any question, so the cache can be shared."""
         owned = [r for r in self._rows if r["subject_id"] == principal.subject_id]
         reports = [BloodReport.model_validate({k: v for k, v in r.items() if k != "subject_id"}) for r in owned]
         reports.sort(key=lambda r: r.report_date)
+        return reports
+
+    def query(self, principal: AuthenticatedPrincipal, plan: QueryPlan) -> list[BloodReport]:
+        return self.apply_plan(self.load_for_cache(principal, "history"), plan)
+
+    def apply_plan(self, reports: list[BloodReport], plan: QueryPlan) -> list[BloodReport]:
+        reports = list(reports)
         if plan.report_id:
             reports = [report for report in reports if report.report_id == plan.report_id]
         wanted_keys = retrieval_metric_keys(plan)

@@ -9,16 +9,13 @@ class MockQuestionnaireProvider:
     def __init__(self) -> None:
         self._rows = load_json("questionnaires.json")
 
-    def query(self, principal: AuthenticatedPrincipal, plan: QueryPlan) -> list[QuestionnaireInstance]:
+    def load_for_cache(self, principal: AuthenticatedPrincipal, scope: str) -> list[QuestionnaireInstance]:
+        """Every instance with every answer, not shaped by any question, so the cache can be shared."""
         subject = (principal.subject_id or "").strip()
-        wanted = keys_for_plan(plan.topic, plan.requested_metrics, plan.raw_message or "")
-        wanted_set = set(wanted)
-        keep_history = bool(plan.history or plan.compare or plan.time_operation in {"trend", "previous", "compare"})
         instances: list[QuestionnaireInstance] = []
         for row in self._rows:
             if row.get("subject_id") != subject:
                 continue
-            owned = []
             for raw in row.get("instances") or []:
                 answers = [
                     QuestionnaireAnswer(
@@ -34,9 +31,8 @@ class MockQuestionnaireProvider:
                         subject_id=subject,
                     )
                     for item in raw.get("answers") or []
-                    if item.get("question_key") in wanted_set
                 ]
-                owned.append(
+                instances.append(
                     QuestionnaireInstance(
                         assessment_instance_id=str(raw["assessment_instance_id"]),
                         subject_id=subject,
@@ -46,8 +42,17 @@ class MockQuestionnaireProvider:
                         answers=answers,
                     )
                 )
-            owned.sort(key=lambda item: (str(item.recorded_at or ""), item.assessment_instance_id))
-            if not keep_history:
-                owned = owned[-1:]
-            instances.extend(owned)
+        instances.sort(key=lambda item: (str(item.recorded_at or ""), item.assessment_instance_id))
         return instances
+
+    def query(self, principal: AuthenticatedPrincipal, plan: QueryPlan) -> list[QuestionnaireInstance]:
+        return self.apply_plan(self.load_for_cache(principal, "history"), plan)
+
+    def apply_plan(self, instances: list[QuestionnaireInstance], plan: QueryPlan) -> list[QuestionnaireInstance]:
+        wanted_set = set(keys_for_plan(plan.topic, plan.requested_metrics, plan.raw_message or ""))
+        keep_history = bool(plan.history or plan.compare or plan.time_operation in {"trend", "previous", "compare"})
+        shaped = [
+            instance.model_copy(update={"answers": [a for a in instance.answers if a.question_key in wanted_set]})
+            for instance in instances
+        ]
+        return shaped if keep_history else shaped[-1:]

@@ -8,10 +8,17 @@ class MockBioAIProvider:
     def __init__(self) -> None:
         self._rows = load_json("bio_ai_reports.json")
 
-    def query(self, principal: AuthenticatedPrincipal, plan: QueryPlan) -> list[BioAIReport]:
+    def load_for_cache(self, principal: AuthenticatedPrincipal, scope: str) -> list[BioAIReport]:
         owned = [r for r in self._rows if r["subject_id"] == principal.subject_id]
         reports = [BioAIReport.model_validate({k: v for k, v in r.items() if k != "subject_id"}) for r in owned]
         reports.sort(key=lambda r: (r.report_date, r.report_id))
+        return reports
+
+    def query(self, principal: AuthenticatedPrincipal, plan: QueryPlan) -> list[BioAIReport]:
+        return self.apply_plan(self.load_for_cache(principal, "history"), plan)
+
+    def apply_plan(self, reports: list[BioAIReport], plan: QueryPlan) -> list[BioAIReport]:
+        reports = list(reports)
         if plan.report_id:
             reports = [report for report in reports if report.report_id == plan.report_id]
         return reports
