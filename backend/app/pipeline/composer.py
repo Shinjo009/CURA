@@ -300,6 +300,15 @@ class ResponseComposer:
             llm_themes=list(llm_result.themes) if llm_result and llm_result.themes else None,
             llm_overall=llm_result.overall_summary if llm_result else None,
         )
+        from app.pipeline.prompt_modules import is_lifestyle_topic_question
+
+        if settings.cura_prompt_variant == "house" and is_lifestyle_topic_question(plan.raw_message):
+            # A habit question (sleep, stress, exercise) must not carry a table of unrelated lab results.
+            presentation.findings = []
+            presentation.raw_findings = []
+            presentation.themes = []
+            if presentation.headline in _CARD_TITLES:
+                presentation.headline = None
         if settings.cura_prompt_variant == "house" and plan.intent in _OVERVIEW_INTENTS and presentation.headline:
             # One result's name must not title a card that holds several results.
             if plan.intent.value.startswith("bio_ai"):

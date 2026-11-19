@@ -298,7 +298,7 @@ WARM_VOICE = """TONE, applies on top of VOICE. Sound like a kind, upbeat friend 
 - Make the next step feel small and doable, one tiny win for this week, tied to a named result and an everyday Indian food or routine. Never a list of chores.
 - Close the last bullet with one short line of encouragement that fits the facts (for example that small steady changes add up). Never promise an outcome and never make the person feel blamed.
 - A worry is stated once, plainly and kindly. Never alarm, never scold, never pile on caveats. If the person sounds anxious, acknowledge it in half a sentence first.
-- Vary your openers across the conversation. Never start two answers the same way, and never say "Great question".
+- Vary your openers across the conversation. Never start two answers the same way, and never praise the question ("Nice question", "Great question").
 - All FACT RULES still win over tone: warmth never changes a number, a range, a date or a safety instruction, and an urgent finding is stated first and clearly."""
 
 _HOUSE_MODULES = {
@@ -355,6 +355,57 @@ FOCUS_SHAPE = (
 )
 
 
+RESULT_WALKTHROUGH = (
+    "RESULT WALKTHROUGH, for a question about one of the person's own results (for example what their ALP or vitamin D means). "
+    "After the friendly opener give exactly these bullets in this order, no labels, no headings, one idea each. "
+    "1) What the test is: what it measures and where in the body it comes from, in everyday words. "
+    "2) What your result says: the value in bold with its unit, and the range on the report. "
+    "3) How far outside: say whether it is slightly, moderately or far from the range and what a gap of that size usually means. "
+    "If it is inside the range, say so warmly and go straight to bullet 6. "
+    "4) What could explain it: two or three common reasons that can push THIS test in THIS direction, as possibilities, never as a cause or a diagnosis. "
+    "5) Should you worry: a calm, honest answer with the reason, based on the size of the gap. "
+    "6) What to do now: one small specific step, with an everyday Indian food or habit when it fits, and how soon to see a doctor only when the result is outside the range. "
+    "Leave out dates and remarks that one report cannot show a trend unless an earlier result is supplied."
+)
+
+LIFESTYLE_FOCUS = (
+    "LIFESTYLE FOCUS. This question is about a daily habit such as sleep, stress, exercise or water. Answer from the habit answers supplied. "
+    "Bring in a blood result or Bio-AI score only when medicine clearly links it to that habit, and say how. Never list or mention unrelated results. "
+    "No bullet starts with a label or a heading word such as 'What sleep is:' or 'For you:'."
+)
+
+_LIFESTYLE_TOPIC = re.compile(
+    r"\b(sleep\w*|stress\w*|exercis\w*|workout\w*|physical activity|steps|walking|hydrat\w*|water intake|screen time|smok\w*|alcohol|drinking habits?|routine)\b",
+    re.I,
+)
+_LAB_OR_SCORE_WORDS = re.compile(
+    r"\b(blood|report|reports|result|results|lab|labs|marker|markers|biomarker|biomarkers|bio-?ai|score|scores|level|levels|cholesterol|hba1c|sugar|glucose|vitamin|thyroid|liver|kidney)\b",
+    re.I,
+)
+
+
+def is_lifestyle_topic_question(message: str) -> bool:
+    """A question about a habit, not about lab results or Bio-AI scores."""
+    text = message or ""
+    if not _LIFESTYLE_TOPIC.search(text) or _LAB_OR_SCORE_WORDS.search(text):
+        return False
+    try:
+        from app.pipeline.lab_parameters import match_lab_keys
+
+        return not match_lab_keys(text)
+    except Exception:
+        return True
+
+
+def is_result_walkthrough(context, message: str) -> bool:
+    contract = getattr(context, "task_contract", None) or {}
+    goal = str(contract.get("goal") or "")
+    kind = str(contract.get("response_type") or "")
+    intent = getattr(getattr(context, "intent", None), "value", "")
+    explaining = (kind == "MARKER_LOOKUP" and goal in {"interpret", "explain", "assess", "risk"}) or intent == "blood_marker_explanation"
+    return bool(explaining and getattr(context, "markers", None) and not contract.get("broad_summary"))
+
+
 _NO_FIELD_NAMES = (
     "Never write a field name from the supplied data (any word with an underscore) and never say \"the member\"; say \"your report\". "
     "If something you were asked to use is not supplied, leave that part out without saying so."
@@ -397,7 +448,12 @@ def house_system(context: HealthContext, message: str) -> str:
     parts = [HOUSE_CORE.strip(), WARM_VOICE, _NO_FIELD_NAMES]
     if is_nutrition_overview(message):
         parts.append(NUTRITION_OVERVIEW)
-    if has_focus_brief(context):
+    lifestyle = is_lifestyle_topic_question(message)
+    if lifestyle:
+        parts.append(LIFESTYLE_FOCUS)
+    elif is_result_walkthrough(context, message):
+        parts.append(RESULT_WALKTHROUGH)
+    if has_focus_brief(context) and not lifestyle:
         parts.append(FOCUS_SHAPE)
     if is_bio_ai_question(context, message):
         parts.append(BIO_AI_RULES)
