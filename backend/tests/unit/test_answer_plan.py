@@ -144,3 +144,24 @@ def test_why_follow_up_keeps_the_reasons_but_not_the_definition():
 def test_why_is_it_important_is_an_explanation_not_a_cause_question():
     tsh = _marker("tsh", "TSH", 2.0, 0.4, 4.0, "normal")
     assert build_answer_plan(_ctx([tsh]), "Why is my TSH important?").intent == PlanIntent.personal_interpretation
+
+
+def test_exact_point_count_is_passed_to_the_model():
+    plan = build_answer_plan(_ctx([_marker("glucose", "Glucose", 95.0, 70.0, 100.0, "normal")], kind=None), "Summarise my health in 3 points")
+    assert plan.requested_points == 3
+    assert "exactly 3 bullets" in plan_prompt(plan)
+    assert build_answer_plan(_ctx([]), "Explain it in two sentences").requested_points == 2
+
+
+def test_out_of_range_question_gets_a_list_plan_without_headings():
+    plan = build_answer_plan(_ctx([_marker("ldl", "LDL", 138.0, 0.0, 100.0, "high")], kind=None), "Which of my blood values are out of range?")
+    assert plan.intent == PlanIntent.out_of_range_list
+    assert "No headings" in plan_prompt(plan)
+
+
+def test_marked_lookup_keeps_the_advice_to_see_a_doctor_and_an_opener():
+    vit_d = _marker("vitamin_d", "Vitamin D", 12.6, 30.0, 100.0, "low")
+    plan = build_answer_plan(_ctx([vit_d], goal="lookup"), "What is my latest Vitamin D?")
+    assert Component.escalation in plan.components
+    text = plan_prompt(plan)
+    assert text.startswith("ANSWER PLAN. Begin with ONE short friendly sentence") and "worth showing to a doctor" in text

@@ -533,13 +533,14 @@ def render_diagnosis_restraint(context: HealthContext) -> str:
             "I can't diagnose a condition. Only a doctor can do that, usually with a few more tests. "
             + explain_missing_topic(context.requested_entity_codes)
         )
+    diabetes = next((r for r in context.bio_ai_risks if (r.code or "") in {"type_2_diabetes", "diabetes"}), None)
+    has_results = bool(explained) or bool(diabetes and diabetes.score is not None)
     parts = [
         "I can't diagnose a condition. Only a doctor can do that, usually with a few more tests. "
-        "Here is what your results show."
+        + ("Here is what your results show." if has_results else "Tell me which result or worry you have in mind, and I will walk you through what it shows.")
     ]
     if explained:
         parts.append(explained)
-    diabetes = next((r for r in context.bio_ai_risks if (r.code or "") in {"type_2_diabetes", "diabetes"}), None)
     if diabetes and diabetes.score is not None:
         parts.append(
             f"Your Bio-AI type 2 diabetes risk estimate is {format_bio_ai_score_value(diabetes.score)}"

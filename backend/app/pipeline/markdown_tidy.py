@@ -274,3 +274,32 @@ def drop_bullet_labels(text: str) -> str:
             line = m.group(1) + tail[:1].upper() + tail[1:]
         out.append(line)
     return "\n".join(out)
+
+
+_DASHES = re.compile(r"\s*[\u2014\u2013]\s*")
+
+
+def drop_dashes(text: str) -> str:
+    """No em or en dashes in an answer. A range reads 'to', a compound word keeps a hyphen, a pause is a comma."""
+    def _swap(match: re.Match) -> str:
+        before = match.string[max(0, match.start() - 1):match.start()]
+        after = match.string[match.end():match.end() + 1]
+        token = match.group(0)
+        if before.isdigit() and after.isdigit():
+            return " to "
+        if token == token.strip():  # glued, as in "D\u2013rich"
+            return "-"
+        return ", "
+
+    return _DASHES.sub(_swap, text or "")
+
+
+def clean_bullet_runs(text: str) -> str:
+    """Remove empty bullets and the blank line the model leaves between two bullets of one list."""
+    lines = [ln for ln in (text or "").split("\n") if ln.strip() not in {"-", "*", "\u2022"}]
+    out: list[str] = []
+    for i, line in enumerate(lines):
+        if not line.strip() and out and out[-1].lstrip().startswith("- ") and i + 1 < len(lines) and lines[i + 1].lstrip().startswith("- "):
+            continue
+        out.append(line)
+    return re.sub(r"\n{3,}", "\n\n", "\n".join(out)).strip()

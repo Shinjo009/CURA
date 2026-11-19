@@ -25,6 +25,7 @@ SCHEMA_VERSION = 1
 class PlanIntent(str, Enum):
     education = "education"
     lookup = "lookup"
+    out_of_range_list = "out_of_range_list"
     personal_interpretation = "personal_interpretation"
     cause = "cause"
     risk_explanation = "risk_explanation"
@@ -69,6 +70,7 @@ class AnswerPlan(BaseModel):
     already_explained: list[str] = Field(default_factory=list)
     proportion: Proportion = Proportion.unknown
     focus_marker: str | None = None
+    requested_points: int | None = None
     must_not_claim: list[str] = Field(default_factory=lambda: ["confirmed_diagnosis_without_diagnostic_evidence"])
 
 
@@ -80,6 +82,9 @@ ACTION_OR_FOOD = re.compile(
 _IMPORTANCE = re.compile(r"\b(?:why (?:is|are|does|do) .{0,40}(?:important|matter)|what is .{0,30} for)\b", re.I)
 _CAUSE = re.compile(r"\b(?:why|cause[sd]?|reason|what could explain|how come)\b", re.I)
 _CHANGE = re.compile(r"\b(?:chang\w*|improv\w*|worse\w*|better|trend\w*|since|previous\w*|earlier|last (?:report|time|result)|compared? (?:it |this |that )?(?:to|with) (?:last|previous|earlier|before)|progress\w*|over time|going (?:up|down))\b", re.I)
+_POINTS = re.compile(r"\b(?:in|into|as|with|using)\s+(\d|one|two|three|four|five)\s+(?:short\s+)?(?:points?|bullets?|lines?|sentences?)\b", re.I)
+_WORDS = {"one": 1, "two": 2, "three": 3, "four": 4, "five": 5}
+_OUT_OF_RANGE = re.compile(r"\b(?:out of range|outside (?:the |my )?(?:normal )?range|abnormal|which .{0,30}\b(?:high|low|off)\b)", re.I)
 _FOLLOW_UP_TURNS = {"FOLLOW_UP_QUESTION", "REFERENCE_RESOLUTION", "CLARIFICATION", "CONFIRMATION", "CORRECTION"}
 _WASTE_MARKERS = {"urea", "bun", "blood_urea_nitrogen", "creatinine", "uric_acid", "bilirubin"}
 
@@ -161,6 +166,10 @@ def build_answer_plan(context, message: str) -> AnswerPlan:
     wants_action = bool(ACTION_OR_FOOD.search(message or ""))
 
     plan = AnswerPlan(follow_up=follow_up, already_explained=explained, proportion=proportion)
+    points = _POINTS.search(message or "")
+    if points:
+        raw = points.group(1).lower()
+        plan.requested_points = int(raw) if raw.isdigit() else _WORDS.get(raw)
     plan.focus_marker = (focus.name or focus.key) if focus is not None else None
 
     if intent_value.startswith("bio_ai") or kind in {"PERSONAL_RISK_EXPLANATION", "BIO_AI_SCORE_LIST"}:
@@ -174,6 +183,13 @@ def build_answer_plan(context, message: str) -> AnswerPlan:
         plan.detail_level, plan.answer_length_target_words = "standard", 150
         plan.required_evidence = ["bio_ai_score", "score_scale"]
         plan.available_evidence = ["bio_ai_score"] if risks else []
+    elif markers and _OUT_OF_RANGE.search(message or "") and not follow_up:
+        plan.intent = PlanIntent.out_of_range_list
+        plan.personal_data_required = True
+        parts = [Component.personal_finding, Component.reference_comparison, Component.next_steps]
+        plan.detail_level, plan.answer_length_target_words = "concise", 140
+        plan.required_evidence = ["measured_biomarker", "laboratory_reference_interval"]
+        plan.available_evidence = list(plan.required_evidence)
     elif wants_action and (markers or follow_up):
         plan.intent = PlanIntent.action if not follow_up else PlanIntent.follow_up
         plan.personal_data_required = bool(markers)
@@ -194,7 +210,9 @@ def build_answer_plan(context, message: str) -> AnswerPlan:
         parts = [Component.personal_finding, Component.reference_comparison]
         if proportion not in {Proportion.within_range, Proportion.unknown}:
             parts.append(Component.next_steps)
-        plan.detail_level, plan.answer_length_target_words = "brief", 60
+        if proportion in {Proportion.moderate, Proportion.marked}:
+            parts.append(Component.escalation)
+        plan.detail_level, plan.answer_length_target_words = "brief", 70
         plan.required_evidence = ["measured_biomarker", "unit"]
         plan.available_evidence = ["measured_biomarker"]
     elif markers and kind == "MARKER_LOOKUP":
@@ -240,11 +258,22 @@ def plan_prompt(plan: AnswerPlan) -> str:
     """The plan as an instruction block. Empty when the plan adds nothing the standing prompt lacks."""
     lines: list[str] = []
     shaped = plan.intent in {PlanIntent.lookup, PlanIntent.personal_interpretation, PlanIntent.cause, PlanIntent.action, PlanIntent.trend}
-    if shaped or (plan.follow_up and plan.already_explained):
+    if plan.intent == PlanIntent.out_of_range_list:
+        lines.append(
+            "ANSWER PLAN. After the friendly opener, list only the results that are outside their range, one bullet each: the name, the value in bold with its unit, "
+            "the range on the report and how far outside it is. No headings and no empty bullets. End with one bullet on what to do first, "
+            f"and keep it to about {plan.answer_length_target_words} words in all."
+        )
+    elif shaped or (plan.follow_up and plan.already_explained):
         numbered = [f"{i}) {_PART_TEXT[c]}" for i, c in enumerate(plan.components, 1)]
         lines.append(
-            "ANSWER PLAN. After the friendly opener give only these bullets, in this order, no labels, no headings, one idea each, about "
+            "ANSWER PLAN. Begin with ONE short friendly sentence that is not a bullet, then give only these bullets, in this order, no labels, no headings, one idea each, about "
             f"{plan.answer_length_target_words} words in all: " + " ".join(numbered) + "."
+        )
+    if plan.requested_points:
+        lines.append(
+            f"The person asked for {plan.requested_points} points. Give exactly {plan.requested_points} bullets after the opener, no headings, one sentence each, "
+            "the most important things first."
         )
     if plan.follow_up and plan.already_explained:
         lines.append(
@@ -256,6 +285,8 @@ def plan_prompt(plan: AnswerPlan) -> str:
             "The result is only slightly outside its range. Say so plainly and calmly, say it is usually minor and that a routine recheck is enough, "
             "and do not build a plan around it."
         )
+    elif plan.proportion == Proportion.marked and plan.intent in {PlanIntent.lookup, PlanIntent.personal_interpretation, PlanIntent.cause}:
+        lines.append("The result is well outside its range. Say so plainly and kindly, do not call it minor, and say it is worth showing to a doctor.")
     elif plan.proportion == Proportion.within_range:
         lines.append("The result is inside its range. Say so warmly and keep it short.")
     if "goal_to_raise_or_lower_waste_marker" in plan.must_not_claim:

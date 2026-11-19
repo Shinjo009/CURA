@@ -58,3 +58,20 @@ def test_praise_opener_and_bullet_labels_are_removed_but_bold_labels_and_values_
     assert "- Add dal." in out
     assert "**What to do first:** walk daily." in out
     assert "- Urea: 16.7 mg/dL" in out
+
+
+def test_dashes_empty_bullets_and_blank_lines_between_bullets_are_cleaned():
+    from app.pipeline.markdown_tidy import clean_bullet_runs, drop_dashes
+
+    assert drop_dashes("Vitamin D\u2013rich foods, range 43\u2013115, and so \u2014 yes") == "Vitamin D-rich foods, range 43 to 115, and so, yes"
+    assert clean_bullet_runs("Intro\n\n-\n\n## Heart\n\n- a\n\n- b") == "Intro\n\n## Heart\n\n- a\n- b"
+
+
+def test_diagnosis_reply_never_promises_results_it_does_not_show():
+    from types import SimpleNamespace
+
+    from app.pipeline.renderer import render_diagnosis_restraint
+
+    ctx = SimpleNamespace(markers=[], requested_entity_codes=[], bio_ai_risks=[])
+    out = render_diagnosis_restraint(ctx)
+    assert "Here is what your results show" not in out and "Tell me which result" in out
