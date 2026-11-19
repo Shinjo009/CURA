@@ -106,6 +106,14 @@ class OpenRouterPolicy:
                 "Personal health interpretation is not approved for an external provider"
             )
 
+    def hosts_for(self, model_id: str) -> list[str]:
+        """Approved hosts for an open-weight model, from CURA_OPENROUTER_MODEL_HOSTS."""
+        for entry in (settings.openrouter_model_hosts or "").split(";"):
+            name, _, hosts = entry.partition("=")
+            if name.strip() == (model_id or "").strip():
+                return [h.strip() for h in hosts.split("|") if h.strip()]
+        return []
+
     def upstream_only(self, model_id: str) -> list[str]:
         slug = _UPSTREAM_SLUGS.get((provider_for_model(model_id) or "").lower())
         return [slug] if slug else []
@@ -117,6 +125,12 @@ class OpenRouterPolicy:
         # Do not pin provider.only to the model vendor. That pin selects endpoints the
         # account privacy policy rejects. allow_fallbacks stays off so the model cannot change.
         prefs: dict = {"allow_fallbacks": False}
+        hosts = self.hosts_for(model_id)
+        if hosts:
+            prefs["only"] = hosts
+        elif (provider_for_model(model_id) or "") == "deepseek" and personal_health:
+            self.log_privacy(model=model_id, approved=False, personal_health=True)
+            raise LLMUnavailableError("No approved host is configured for this open-weight model")
         if self.deny_data_collection:
             prefs["data_collection"] = "deny"
         if require_parameters:

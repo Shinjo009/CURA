@@ -62,7 +62,7 @@ def uses_reasoning_tokens(model: str | None) -> bool:
 # ("No endpoints found that support the requested parameters"). Starting with
 # json_object avoids a predictable HTTP 400. A model not listed here may still
 # fall back once if the provider rejects json_schema.
-_JSON_OBJECT_ONLY = ("gemini", "gpt-5-mini", "gpt-5.6")
+_JSON_OBJECT_ONLY = ("gemini", "gpt-5-mini", "gpt-5.6", "deepseek")
 
 
 def supports_json_schema(model: str | None) -> bool:

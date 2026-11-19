@@ -138,6 +138,9 @@ def provider_for_model(model_id: str | None) -> str | None:
         return "anthropic"
     if raw.startswith("typesafe/") or "jev" in raw:
         return "typesafe"
+    if raw.startswith("deepseek/"):
+        # Open weights hosted by many companies. It must be named in CURA_OPENROUTER_ALLOWED_PROVIDERS to be used.
+        return "deepseek"
     return "openrouter" if raw else None
 
 

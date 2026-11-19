@@ -137,6 +137,10 @@ class Settings(BaseSettings):
     cura_openrouter_deny_data_collection: bool = True
     cura_openrouter_allowed_models: str = ""
     cura_openrouter_allowed_providers: str = "openai,google,anthropic,typesafe"
+    # Open-weight models run on many hosts with different data handling. Name the approved hosts per model:
+    #   "deepseek/deepseek-v4.1-flash=DeepInfra|Together;other/model=HostA"
+    # A personal-health call to an open-weight model with no host listed here is refused (fails closed).
+    openrouter_model_hosts: str = ""
     cura_openrouter_prompt_injection_protection: bool = True
     cura_openrouter_dlp_enabled: bool = True
     cura_clinical_safety_enabled: bool = True
