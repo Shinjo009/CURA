@@ -185,12 +185,23 @@ def panel_label(cura_key: str) -> str | None:
     return None
 
 
+def _plain_group(row: dict) -> str | None:
+    """A body-system name the person understands. Lab package names ("Vitamins C-Suite") stay out of answers."""
+    from app.pipeline.report_explainer import _OTHER, _norm, _THEMES
+
+    text = _norm(str(row.get("key") or "")) + " " + _norm(str(row.get("name") or ""))
+    for theme in _THEMES:
+        if any(word in text for word in theme.words):
+            return theme.title
+    return None
+
+
 def group_measurements(measurements: list[dict]) -> list[dict]:
     """Group already selected rows. A marker is listed once, under its first panel."""
     groups: dict[str, list] = {}
     order: list[str] = []
     for row in measurements:
-        label = panel_label(str(row.get("key") or "")) or "Other results"
+        label = _plain_group(row) or "Other results"
         if label not in groups:
             groups[label] = []
             order.append(label)

@@ -40,3 +40,18 @@ def test_cross_source_question_keeps_blood_measurements():
     import inspect
     from app.pipeline import evidence_inventory
     assert "plan.needs_blood" in inspect.getsource(evidence_inventory.assemble_evidence)
+
+
+def test_glued_bullets_split_and_question_labels_go():
+    from app.pipeline.markdown_tidy import drop_bullet_labels, split_inline_bullets
+    out = split_inline_bullets("Nice question. - One idea here. - Another idea here.")
+    assert out.count("\n- ") == 2
+    assert drop_bullet_labels("- Worry?: It is still above the range.") == "- It is still above the range."
+    assert drop_bullet_labels("- Change: 142.0 mg/dL to 138.0 mg/dL").startswith("- 142.0")
+
+
+def test_groups_use_body_system_names_not_lab_packages():
+    from app.retrieval.relationship_map import group_measurements
+    rows = [{"key": "vitamin_d", "name": "Vitamin D"}, {"key": "ldl", "name": "LDL"}]
+    labels = [g["label"] for g in group_measurements(rows)]
+    assert labels == ["Vitamins", "Cholesterol and blood fats"]

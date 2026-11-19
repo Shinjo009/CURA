@@ -16,6 +16,7 @@ from app.pipeline.markdown_tidy import (
     drop_dashes,
     drop_doctor_for_healthy,
     drop_routine_doctor,
+    split_inline_bullets,
     drop_praise_opener,
     drop_repeated_limits,
     cap_report_sections,
@@ -115,7 +116,7 @@ def plain_answer(answer: str, path: str | None, context, *, whole_report: bool =
     # The safety-approved answer is the prose. Lookups and report listings stay in cards.
     cleaned = remove_em_dashes(sanitize_internal_ids(prefer_report_range(text, context))).strip()
     if settings.cura_prompt_variant == "house":
-        cleaned = friendly_text(tidy_markdown(clean_bullet_runs(drop_routine_doctor(drop_dashes(drop_bullet_labels(drop_praise_opener(cleaned)))))))
+        cleaned = friendly_text(tidy_markdown(clean_bullet_runs(split_inline_bullets(drop_routine_doctor(drop_dashes(drop_bullet_labels(drop_praise_opener(cleaned))))))))
         if whole_report:
             cleaned = cap_total_bullets(cap_report_sections(drop_empty_headings(drop_doctor_for_healthy(drop_repeated_limits(cleaned)))))
         else:

@@ -273,6 +273,7 @@ _PRAISE_OPENER = re.compile(
     r"(?:great|good|nice|excellent|fair|smart|interesting|important|lovely|wonderful)\s+(?:question|ask)\b[^\n]*",
     re.I,
 )
+_QUESTION_LABEL = re.compile(r"(?m)^(\s*[-*]\s+)(?:Change|Trend|Worry\??|Is it a worry\??|Next step|What it means|Result):\s+")
 _BULLET_LABEL = re.compile(r"(?m)^(\s*[-*]\s+)(?:[A-Z][A-Za-z']*)(?: [A-Za-z']+){0,3}:\s+(?=[^\s\d])")
 
 
@@ -294,7 +295,7 @@ def drop_bullet_labels(text: str) -> str:
 
     out = []
     for line in (text or "").split("\n"):
-        m = _BULLET_LABEL.match(line)
+        m = _QUESTION_LABEL.match(line) or _BULLET_LABEL.match(line)
         if m:
             tail = line[m.end():]
             line = m.group(1) + tail[:1].upper() + tail[1:]
@@ -318,6 +319,26 @@ def drop_dashes(text: str) -> str:
         return ", "
 
     return _DASHES.sub(_swap, text or "")
+
+
+_INLINE_BULLET = re.compile(r"(?<=[.!?])\s+[-*]\s+(?=[A-Z0-9*])")
+
+
+def split_inline_bullets(text: str) -> str:
+    """Bullets that arrived glued into one paragraph ("... energy. - Next point. - Another") go back on their own lines."""
+    out = []
+    for line in (text or "").split("\n"):
+        if len(_INLINE_BULLET.findall(line)) >= 2:
+            parts = _INLINE_BULLET.split(line)
+            head = parts[0].strip()
+            first_is_bullet = head.startswith(("-", "*"))
+            out.append(head if first_is_bullet else head)
+            if not first_is_bullet and head:
+                out.append("")
+            out.extend("- " + p.strip() for p in parts[1:] if p.strip())
+        else:
+            out.append(line)
+    return "\n".join(out)
 
 
 def clean_bullet_runs(text: str) -> str:

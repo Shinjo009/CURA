@@ -97,7 +97,7 @@ def test_groups_keep_values_and_do_not_duplicate():
     ]
     groups = group_measurements(rows)
     labels = [group["label"] for group in groups]
-    assert any("Lipid" in label or "Heart" in label or "lipid" in label.lower() for label in labels)
+    assert any("fats" in label.lower() or "Lipid" in label or "Heart" in label for label in labels)
     flat = [row["key"] for group in groups for row in group["measurements"]]
     assert flat.count("ldl") == 1
     assert groups[0]["measurements"][0]["value"] == 162 or any(

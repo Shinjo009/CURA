@@ -299,7 +299,14 @@ def assemble_evidence(plan: QueryPlan, context: HealthContext) -> EvidencePackag
     elif kind == "MARKER_LOOKUP":
         coverage = classify_marker_trends(message, context.markers, context.comparisons)
         if coverage["support"] == "unsupported" and not measurements:
-            blocked = "I don't have that measurement in the records I can access for your account."
+            from app.pipeline.lab_parameters import display_name_for
+
+            names = [display_name_for(k) or k.replace("_", " ") for k in requested_marker_keys(message)][:2]
+            what = " or ".join(names) if names else "that result"
+            blocked = (
+                f"I don't see {what} in your reports, so I can't say where it stands and I would rather not guess. "
+                "If it was tested somewhere else, upload that report and I will explain it for you."
+            )
         elif coverage["support"] == "partial":
             limitation = _partial_trend_limitation(coverage)
         elif coverage["support"] == "unsupported" and measurements:
