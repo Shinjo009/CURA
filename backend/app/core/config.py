@@ -76,6 +76,13 @@ class Settings(BaseSettings):
     # Blood and Bio-AI report answers use only the person's own results unless this is turned on.
     report_use_knowledge_base: bool = False
     llm_reasoning_effort: str = "low"
+    # Provider-native prompt caching (see app/llm/prompt_cache.py). Nothing is cached by CURA itself.
+    # Off until a live comparison shows a gain for that provider.
+    llm_prompt_cache_key: bool = False
+    llm_gemini_cache_control: bool = False
+    # Estimates only, for the cost column in the cache log. The provider bill is logged beside them.
+    llm_cache_read_factor: float = 0.25
+    llm_cache_write_factor: float = 1.0
     llm_reasoning_output_cap: int = 2000
     enable_llm: bool = False
     # Explanations of an uploaded document only. Does not turn on chat, routing, or fact extraction.
@@ -86,7 +93,7 @@ class Settings(BaseSettings):
     # The three answer tiers (one place). CURA_FAST_MODEL / CURA_STANDARD_MODEL /
     # CURA_DEEP_MODEL are accepted as well as the older ANSWER_MODEL_* names.
     answer_model_fast_reasoning: str = Field(
-        "google/gemini-3.8-flash", validation_alias=AliasChoices("CURA_FAST_MODEL", "ANSWER_MODEL_FAST_REASONING", "answer_model_fast_reasoning")
+        "openai/gpt-5.6-luna", validation_alias=AliasChoices("CURA_FAST_MODEL", "ANSWER_MODEL_FAST_REASONING", "answer_model_fast_reasoning")
     )
     answer_model_standard_medical: str = Field(
         "openai/gpt-5-mini", validation_alias=AliasChoices("CURA_STANDARD_MODEL", "ANSWER_MODEL_STANDARD_MEDICAL", "answer_model_standard_medical")
@@ -197,12 +204,12 @@ class Settings(BaseSettings):
     model_price_advanced_output_per_1m: float = 15.00
     # Placeholder list prices (USD per 1M tokens) for cost estimates; set the real
     # contracted prices through the environment.
-    model_price_fast_reasoning_input_per_1m: float = 0.10
-    model_price_fast_reasoning_output_per_1m: float = 0.40
+    model_price_fast_reasoning_input_per_1m: float = 0.20
+    model_price_fast_reasoning_output_per_1m: float = 1.20
     model_price_standard_medical_input_per_1m: float = 0.25
     model_price_standard_medical_output_per_1m: float = 2.00
-    model_price_deep_medical_input_per_1m: float = 1.25
-    model_price_deep_medical_output_per_1m: float = 10.00
+    model_price_deep_medical_input_per_1m: float = 0.20
+    model_price_deep_medical_output_per_1m: float = 1.20
 
     # SuperShyft read-only Postgres (never used for Cura conversation tables)
     supershyft_database_url: str = ""

@@ -97,7 +97,7 @@ def _assert_tier(messages, expected: AnswerModelTier, *, reasons_any=None):
 def test_registry_maps_capability_tiers_to_configured_models():
     registry = model_registry()
     assert "DETERMINISTIC" not in registry
-    assert registry["FAST_REASONING"] == settings.answer_model_fast_reasoning == "google/gemini-3.8-flash"
+    assert registry["FAST_REASONING"] == settings.answer_model_fast_reasoning == "openai/gpt-5.6-luna"
     assert registry["STANDARD_MEDICAL"] == settings.answer_model_standard_medical == "openai/gpt-5-mini"
     assert registry["DEEP_MEDICAL_REASONING"] == settings.answer_model_deep_medical == "openai/gpt-5.6-luna"
     assert model_id_for_tier("DETERMINISTIC") == ""
