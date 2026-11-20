@@ -14,6 +14,8 @@ from __future__ import annotations
 import dataclasses
 
 import re
+
+from app.pipeline.gap_words import how_far
 from dataclasses import dataclass, field
 
 from app.contracts.common import IntentType, MarkerFlag
@@ -196,6 +198,7 @@ def _marker_fact(marker) -> dict:
         "reference_high": marker.reference_high,
         "measured_at": str(marker.measured_at) if marker.measured_at else None,
         "source": "measured blood result",
+        "how_far": how_far(marker.value, marker.reference_low, marker.reference_high),
     }
     return {k: v for k, v in fact.items() if v is not None}
 

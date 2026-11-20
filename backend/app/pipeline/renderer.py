@@ -105,8 +105,8 @@ def render_missing_blood_marker(context: HealthContext) -> str:
             scope = caption or scope
         if label and item.related_available:
             return (
-                f"I don't see {label} in {scope}. It does list {item.related_available}, which is a "
-                "a related kidney marker, but it is a different measurement, so I won't swap one for the other. "
+                f"I don't see {label} in {scope}. It does list {item.related_available}, which is "
+                "a related marker, but it is a different measurement, so I won't swap one for the other. "
                 "If you have a report that includes it, upload it and I will walk you through it."
             )
         if label:

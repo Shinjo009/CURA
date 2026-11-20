@@ -1071,11 +1071,30 @@ def _distance_outside_range(item) -> float:
     return 0.0
 
 
+def _plain_field_names(text: str) -> str:
+    """A lab key written as a field name (thyroid_function, fasting_blood_glucose) becomes its everyday name."""
+    if "_" not in text:
+        return text
+    from app.pipeline.lab_parameters import FAMILY_QUERY_KEYS, display_name_for, is_lab_key
+
+    def swap(match: re.Match) -> str:
+        key = match.group(0).lower()
+        if key in FAMILY_QUERY_KEYS or is_lab_key(key):
+            return display_name_for(key).lower() if key not in FAMILY_QUERY_KEYS else key.replace("_", " ")
+        return match.group(0)
+
+    return re.sub(r"\b[a-z][a-z0-9]*(?:_[a-z0-9]+)+\b", swap, text)
+
+
 def sanitize_internal_ids(text: str) -> str:
     out = _REPORT_PAREN.sub("", text or "")
     out = re.sub(r"(?i)^\s*general information:\s*", "", out)
     out = _REPORT_CLAUSE.sub("the retrieved report", out)
     out = _INTERNAL_ID.sub("", out)
+    out = re.sub(r"(?im)[ \t]*\bSource:\s*(?:your\s+)?(?:blood_report|bio_ai_report|bio_ai)\b\.?", "", out)
+    out = re.sub(r"(?i)\b(?:from|in|per)\s+(?:your\s+)?(?:blood_report|bio_ai_report|bio_ai)\b", "from your report", out)
+    out = re.sub(r"(?i)\b(?:blood_report|bio_ai_report)\b", "your report", out)
+    out = _plain_field_names(out)
     out = re.sub(r"\b(?:within_range_by_body_system|report_counts|measured_results|body_system|laboratory_status)\b", "your report", out)
     out = re.sub(r"(?i)\bthe member's\b", "your", out)
     # Spaces and tabs only: line breaks carry the Markdown layout (headings, bullets).

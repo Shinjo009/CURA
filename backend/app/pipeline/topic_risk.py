@@ -27,9 +27,27 @@ HIGH_RISK_TOPICS: dict[str, re.Pattern[str]] = {
 }
 
 
+_INSULIN_THERAPY = re.compile(
+    r"\b(?:take|taking|inject\w*|start|starting|stop|stopping|skip\w*|miss\w*|dose|doses|dosage|units?|pen|pump|"
+    r"lantus|mixtard|basal|bolus|shot|shots|syringe|needle)\b",
+    re.I,
+)
+
+
+def _insulin_is_a_test(text: str) -> bool:
+    """"Compare my sugar and insulin" asks about a blood result, not about the medicine."""
+    if "insulin" not in text or _INSULIN_THERAPY.search(text):
+        return False
+    rest = re.sub(r"\binsulin\b", " ", text)
+    return not HIGH_RISK_TOPICS["medication"].search(rest)
+
+
 def high_risk_topics(message: str) -> list[str]:
     text = normalize_text(message)
-    return [name for name, pattern in HIGH_RISK_TOPICS.items() if pattern.search(text)]
+    topics = [name for name, pattern in HIGH_RISK_TOPICS.items() if pattern.search(text)]
+    if "medication" in topics and _insulin_is_a_test(text):
+        topics.remove("medication")
+    return topics
 
 
 def is_high_risk_topic(message: str) -> bool:

@@ -127,11 +127,15 @@ def _entity_coverage(answer: str, plan: QueryPlan, context: HealthContext) -> Qu
         # a missing one must not be appended to a good answer.
         named_by_user = {str(c).lower() for c in [*(semantic.get("markers") or []), *(semantic.get("bio_ai") or [])]}
         present = {(m.key or "").lower() for m in context.markers}
+        from app.pipeline.lab_parameters import FAMILY_QUERY_KEYS, related_keys_ordered
+
         glucose_family = {"glucose", "fasting_blood_glucose", "postprandial_glucose"}
         coverage_codes = [
             c for c in coverage_codes
             if str(c).lower() in named_by_user
             and not (str(c).lower() in glucose_family and present & glucose_family)
+            # "my kidney" or "my thyroid" is covered by the results of that group the report holds.
+            and not (str(c).lower() in FAMILY_QUERY_KEYS and present & set(related_keys_ordered(str(c).lower())))
             # "metabolic risk" resolves to the report-level score; its absence is not news.
             and str(c).lower() not in {"metabolic_score", "metabolic_age"}
         ]

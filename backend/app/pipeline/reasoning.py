@@ -360,7 +360,14 @@ class ReasoningService:
             and context.status == "ambiguous"
             and not plan.needs_user_uploaded
         ):
-            return ReasoningResult(answer=render_bio_ai_ambiguity(context), llm_mode="structured_bio_ai")
+            from app.pipeline.answer_consistency import blood_half_for_ambiguity
+
+            blood_first = blood_half_for_ambiguity(context) if plan.needs_blood else ""
+            question = render_bio_ai_ambiguity(context)
+            if blood_first:
+                lead = question if question.startswith("I ") else question[0].lower() + question[1:]
+                question = f"{blood_first}\n\nFor the Bio-AI side, {lead}"
+            return ReasoningResult(answer=question, llm_mode="structured_bio_ai")
         if (
             lookup
             and plan.intent == IntentType.bio_ai_score

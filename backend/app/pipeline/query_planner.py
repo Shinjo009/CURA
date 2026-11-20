@@ -245,7 +245,22 @@ def build_query_plan(
         if plan.needs_blood or plan.needs_bio_ai:
             plan.source = QuerySource.mixed
             plan.needs_supershyft = True
-    return enforce_general_only_request(plan, message)
+    return _own_result_for_test_question(enforce_general_only_request(plan, message), message)
+
+
+_NEED_A_TEST = re.compile(r"\b(?:do i need|should i (?:get|do|have|take)|need an?)\b[^?]{0,30}\btests?\b", re.I)
+
+
+def _own_result_for_test_question(plan: QueryPlan, message: str) -> QueryPlan:
+    """"Do I need a thyroid test?" is answered better when the person's own thyroid result is on the table."""
+    from app.pipeline.lab_parameters import FAMILY_QUERY_KEYS, is_lab_key
+
+    topic = plan.topic or ""
+    if plan.needs_blood or not _NEED_A_TEST.search(message or "") or not (topic in FAMILY_QUERY_KEYS or is_lab_key(topic)):
+        return plan
+    return plan.model_copy(update={"needs_blood": True, "needs_personal_data": True})
+
+
 def _apply_context_ref(plan: QueryPlan, ref: ContextRef) -> QueryPlan:
     update: dict = {"report_id": ref.report_id, "explicit_source_ref": True}
     if ref.type == "blood_marker":

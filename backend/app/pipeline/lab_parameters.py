@@ -886,7 +886,8 @@ def retrieval_keys(key: str | None) -> list[str]:
         return []
     if key in DERIVED_ENTITY_KEYS:
         return []
-    if key in FAMILY_QUERY_KEYS or family_for(key) == "cholesterol":
+    # A generic "sugar" or "glucose" is answered by whichever glucose results the report holds, each under its own name.
+    if key in FAMILY_QUERY_KEYS or family_for(key) == "cholesterol" or key == "glucose":
         return related_keys_ordered(key)
     return [key]
 

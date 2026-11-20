@@ -108,6 +108,16 @@ MEDICATION_MISUSE = (
     re.compile(rf"\b(?:take|taking|have)\b.{{0,40}}\binstead of\b", re.I),
     re.compile(rf"\b{_MED_NOUN}\b.{{0,40}}\b(?:with|and|together with|along with)\b.{{0,20}}\b{_MED_NOUN}\b.{{0,20}}\btogether\b", re.I),
     re.compile(rf"\bcan i (?:take|have|mix|combine)\b.{{0,30}}\b{_MED_NOUN}\b.{{0,30}}\b(?:with|and)\b.{{0,20}}\b{_MED_NOUN}\b", re.I),
+    # "Is paracetamol safe on an empty stomach?" is a question about using a medicine. It gets the same careful reply every time.
+    re.compile(
+        rf"\b(?:is|are|can|should|safe|ok|okay)\b[^?.!]{{0,40}}\b(?:{_DRUG_ALT})\b[^?.!]{{0,40}}"
+        r"\b(?:safe|empty stomach|on an empty|with food|after food|before food|with milk|with alcohol|every day|daily|long term)\b",
+        re.I,
+    ),
+    re.compile(
+        rf"\b(?:{_DRUG_ALT})\b[^?.!]{{0,30}}\b(?:safe|empty stomach|with food|after food|before food|with alcohol|long term)\b",
+        re.I,
+    ),
     re.compile(r"(tablet|dawai|dawa|goli|गोली|दवा|दवाई).{0,20}(double|दोगुनी|band kar|बंद|chhod|छोड़)", re.I),
     re.compile(r"\b(bp ki tablet|bp tablet).{0,16}(double|badha)", re.I),
     re.compile(r"(?:औषध|ਦਵਾਈ|દવા|ওষুধ).{0,20}(?:बंद|थांबव|ਬੰਦ|બંધ|বন্ধ)", re.I),

@@ -103,6 +103,15 @@ def _outside(marker) -> bool:
     return False
 
 
+def _gap_field(marker) -> dict:
+    from app.pipeline.gap_words import how_far
+
+    word = how_far(
+        getattr(marker, "value", None), getattr(marker, "reference_low", None), getattr(marker, "reference_high", None)
+    )
+    return {"how_far": word} if word else {}
+
+
 def _measurement(marker) -> dict:
     flag = getattr(marker, "flag", None)
     measured = getattr(marker, "measured_at", None)
@@ -119,6 +128,7 @@ def _measurement(marker) -> dict:
         "report_date": str(measured) if measured else None,
         "source": "blood_report",
         "status": "AVAILABLE" if getattr(marker, "value", None) is not None else "NOT_PRESENT",
+        **_gap_field(marker),
     }
 
 
@@ -161,12 +171,34 @@ def _source_status(plan: QueryPlan, context: HealthContext, source: str) -> Evid
     return EvidenceStatus.not_retrieved
 
 
+def _expand_family_keys(keys: list[str], markers: list | None) -> list[str]:
+    """A question about "my kidney" or "my sugar" names a group of results, not one row.
+
+    Each group name becomes the members the report actually holds. A group with none of its members
+    held stays as it is, so the answer can still say it is missing.
+    """
+    from app.pipeline.lab_parameters import FAMILY_QUERY_KEYS, related_keys_ordered
+
+    held = {_key(getattr(m, "key", None)) or _key(getattr(m, "name", None)) for m in markers or []}
+    out: list[str] = []
+    for key in keys:
+        if key in FAMILY_QUERY_KEYS:
+            present = [member for member in related_keys_ordered(key) if member in held]
+            out.extend(present or [key])
+        elif key == "glucose" and "glucose" not in held:
+            stand_in = next((c for c in ("fasting_blood_glucose", "postprandial_glucose") if c in held), None)
+            out.append(stand_in or key)
+        else:
+            out.append(key)
+    return list(dict.fromkeys(out))
+
+
 def _select_measurements(kind: str, message: str, markers: list, *, broad: bool = False) -> list:
     text = (message or "").lower()
     chosen = list(markers or [])
     if kind == "BIO_AI_SCORE_LIST":
         return []
-    named = set(requested_marker_keys(message))
+    named = set(_expand_family_keys(requested_marker_keys(message), markers))
     if named and not broad and kind not in {"ABNORMAL_LIST", "PRIORITIZED_CONCERNS", "SYMPTOM_CONTEXT"}:
         chosen = [
             item
@@ -176,7 +208,7 @@ def _select_measurements(kind: str, message: str, markers: list, *, broad: bool 
         chosen = _with_related(message, chosen, markers)
         return chosen[:8]
     if kind == "MARKER_LOOKUP":
-        keys = set(requested_marker_keys(message))
+        keys = set(_expand_family_keys(requested_marker_keys(message), markers))
         chosen = [
             item
             for item in chosen
@@ -312,6 +344,9 @@ def assemble_evidence(plan: QueryPlan, context: HealthContext) -> EvidencePackag
         elif coverage["support"] == "unsupported" and measurements:
             limitation = _partial_trend_limitation(coverage)
     coverage = classify_marker_trends(message, context.markers, context.comparisons)
+    if not _wants_history(plan, message):
+        # "Only one date" is news only when the question is about change over time.
+        coverage = {**coverage, "single_date": []}
     comparisons = _comparison_rows(coverage)
     if comparisons and limitation is None and any(not row["supported"] for row in comparisons):
         limitation = _partial_trend_limitation(coverage)
@@ -356,7 +391,7 @@ def _complete_required_facts(
     unavailable: list[str] = []
     present = {row.get("fact_id") for row in measurements}
     required: list[dict] = []
-    named = set(requested_marker_keys(message))
+    named = set(_expand_family_keys(requested_marker_keys(message), context.markers))
     for row in context.comparisons or [] if _wants_history(plan, message) else []:
         topic = getattr(row, "topic", None)
         if named and _key(topic) not in named:
@@ -412,7 +447,10 @@ def _complete_required_facts(
 def _wants_history(plan: QueryPlan, message: str | None) -> bool:
     goal = (plan.task_contract or {}).get("goal")
     if goal == "compare":
-        return True
+        # "Compare my sugar and insulin" sets two tests side by side. It is a history question only with a time cue.
+        if re.search(r"\b(?:previous|last time|earlier|before|since|over time|trend|improv\w*|worse\w*|chang\w*)\b", message or "", re.I):
+            return True
+        return not re.search(r"\b(?:and|vs|versus|with|against)\b", message or "", re.I)
     return bool(re.search(r"\b(changed|change|since|previous|trend|compare)\b", message or "", re.I))
 
 
@@ -586,7 +624,7 @@ def omitted_supported_facts(message: str | None, markers: list | None, answer: s
             current = latest.get(key)
             if current is None or str(getattr(marker, "measured_at", "") or "") >= str(getattr(current, "measured_at", "") or ""):
                 latest[key] = marker
-        named = set(requested_marker_keys(message))
+        named = set(_expand_family_keys(requested_marker_keys(message), markers))
         latest = {key: marker for key, marker in latest.items() if key in named} if named else {}
         if 0 < len(latest) <= 2:
             for marker in latest.values():
@@ -712,7 +750,7 @@ def classify_marker_trends(message: str | None, markers: list | None, comparison
     A numeric change is returned only when the same marker has two different dates and the same unit.
     """
     markers = _with_comparison_rows(markers, comparisons)
-    keys = requested_marker_keys(message)
+    keys = _expand_family_keys(requested_marker_keys(message), markers)
     if not keys and re.search(r"\b(improved|worsened|since last|since my last|compared with last)\b", message or "", re.I):
         keys = list(dict.fromkeys(
             _key(getattr(marker, "key", None)) or _key(getattr(marker, "name", None))
