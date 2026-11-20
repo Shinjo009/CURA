@@ -88,11 +88,11 @@ def test_house_follow_up_instruction_asks_for_four_kinds_of_question(house):
 
 
 def test_house_report_parts_come_in_the_required_order():
-    order = ["SHAPE 1A", "One opening bullet", "First bullet, the numbers", "Second bullet, the meaning", "## What to do next", "SHAPE 1B, a Bio-AI report"]
+    order = ["SHAPE 1A", "One opening bullet", "First bullet, what is going on", "Second bullet, the meaning", "## What to do next", "SHAPE 1B, a Bio-AI report"]
     positions = [HOUSE_CORE.index(part) for part in order]
     assert positions == sorted(positions)
     assert "Teach the body system first, the biomarker second, the medical term third" in HOUSE_CORE
-    assert "report_counts" in HOUSE_CORE and "within_range_by_body_system" in HOUSE_CORE
+    assert "within_range_by_body_system" in HOUSE_CORE
     assert "**What the numbers show:**" not in HOUSE_CORE and "**What it means:**" not in HOUSE_CORE
 
 

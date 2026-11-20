@@ -294,3 +294,13 @@ def test_written_follow_up_list_is_removed_because_chips_show_it():
     bold = "Answer here.\n\n**Follow-up questions**\n1. One?\n2. Two?"
     assert drop_written_follow_ups(bold) == "Answer here."
     assert drop_written_follow_ups("No list here.") == "No list here."
+
+
+def test_card_duplicating_text_is_cleaned():
+    from app.pipeline.answer_consistency import drop_good_news_opener, drop_rule_lines, trim_card_numbers
+
+    assert drop_good_news_opener("- Good news: your liver looks fine.") == "- Your liver looks fine."
+    assert drop_good_news_opener("Great news, your iron is steady.") == "Your iron is steady."
+    assert drop_rule_lines("a\n-\n---\nb") == "a\nb"
+    assert "range" not in trim_card_numbers("Vitamin D is low (range 30 to 100 ng/mL) today.")
+    assert trim_card_numbers("**Vitamin D: 12 ng/mL** is low") == "**Vitamin D** is low"

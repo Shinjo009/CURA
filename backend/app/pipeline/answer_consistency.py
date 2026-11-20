@@ -169,3 +169,41 @@ def drop_written_follow_ups(text: str) -> str:
         out.append(lines[i])
         i += 1
     return "\n".join(out).rstrip()
+
+
+_GOOD_NEWS = re.compile(
+    r"^(?P<lead>\s*(?:[-*\u2022]\s+)?)(?:\*\*)?(?:(?:good|great|nice|positive|reassuring|welcome)\s+news(?:\s+is)?(?:\s+that)?|good\s+to\s+see(?:\s+that)?)\s*[:.!,]?\s*(?:\*\*)?\s*",
+    re.I,
+)
+
+
+def drop_good_news_opener(text: str) -> str:
+    """Remove a leading "Good news:" style phrase and keep the rest of the sentence."""
+    out = []
+    for line in (text or "").split("\n"):
+        m = _GOOD_NEWS.match(line)
+        if m:
+            rest = line[m.end():].strip()
+            if not rest:
+                continue
+            line = m.group("lead") + rest[0].upper() + rest[1:]
+        out.append(line)
+    return "\n".join(out)
+
+
+_RULE_LINE = re.compile(r"^\s*(?:[-*_]{1,3}|—+|–+)\s*$")
+
+
+def drop_rule_lines(text: str) -> str:
+    """Drop stray lines that hold only a dash or a separator."""
+    return "\n".join(l for l in (text or "").split("\n") if not _RULE_LINE.match(l))
+
+
+_RANGE_NOTE = re.compile(r"\s*\((?:[^()]*\b(?:range|normal|reference|optimal)\b[^()]*)\)", re.I)
+_BOLD_VALUE = re.compile(r"\*\*([A-Za-z][A-Za-z0-9 ,/%\-]{1,40}?):\s*[<>]?\d[\d.,]*\s*[^*]{0,20}\*\*")
+
+
+def trim_card_numbers(text: str) -> str:
+    """The result cards already show values and ranges, so remove range notes and bold value labels."""
+    text = _RANGE_NOTE.sub("", text or "")
+    return _BOLD_VALUE.sub(r"**\1**", text)

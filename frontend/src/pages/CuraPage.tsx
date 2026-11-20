@@ -55,8 +55,10 @@ export function CuraPage() {
 
   const [overviewKind, setOverviewKind] = useState<"blood" | "bio_ai" | null>(null);
   const [openGroupId, setOpenGroupId] = useState<string | null>(null);
-  // Asking from the overview starts the conversation, which replaces the overview.
+  // Remember which overview a chat came from, so Back returns there before going home.
+  const [returnTo, setReturnTo] = useState<"blood" | "bio_ai" | null>(null);
   function askFromOverview(text: string, contextRef: ContextRef) {
+    setReturnTo(overviewKind);
     setOverviewKind(null);
     setOpenGroupId(null);
     void sendWithContext(text, [], contextRef);
@@ -67,7 +69,11 @@ export function CuraPage() {
     overviewKind && !started
       ? () => (openGroupId ? setOpenGroupId(null) : setOverviewKind(null))
       : started
-        ? () => startNew()
+        ? () => {
+            const back = returnTo;
+            startNew();
+            if (back) setOverviewKind(back);
+          }
         : undefined;
 
   const overview = useOverview();
@@ -102,6 +108,7 @@ export function CuraPage() {
 
   function startNew() {
     newConversation();
+    setReturnTo(null);
     setOverviewKind(null);
     setOpenGroupId(null);
     setSelectedDocumentIds([]);

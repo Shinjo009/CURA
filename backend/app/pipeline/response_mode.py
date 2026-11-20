@@ -12,7 +12,10 @@ from app.core.config import settings
 from app.llm.structured import looks_like_structured_json, public_answer_text
 from app.pipeline.answer_consistency import (
     collapse_referrals,
+    drop_good_news_opener,
+    drop_rule_lines,
     drop_written_follow_ups,
+    trim_card_numbers,
     drop_label_echo,
     drop_stock_closer,
     fix_bio_ai_counts,
@@ -126,7 +129,7 @@ def plain_answer(answer: str, path: str | None, context, *, whole_report: bool =
     cleaned = remove_em_dashes(sanitize_internal_ids(prefer_report_range(text, context))).strip()
     if settings.cura_prompt_variant == "house":
         cleaned = drop_hype_and_blame(soften_robotic_phrases(cleaned))
-        cleaned = drop_written_follow_ups(collapse_referrals(drop_stock_closer(drop_label_echo(fix_bio_ai_counts(cleaned, context)))))
+        cleaned = trim_card_numbers(drop_rule_lines(drop_good_news_opener(drop_written_follow_ups(collapse_referrals(drop_stock_closer(drop_label_echo(fix_bio_ai_counts(cleaned, context))))))))
         cleaned = friendly_text(tidy_markdown(clean_bullet_runs(split_inline_bullets(drop_routine_doctor(drop_dashes(drop_bullet_labels(drop_praise_opener(cleaned))))))))
         if whole_report:
             cleaned = cap_total_bullets(cap_report_sections(drop_empty_headings(drop_doctor_for_healthy(drop_repeated_limits(cleaned)))))
