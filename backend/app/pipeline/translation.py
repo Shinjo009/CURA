@@ -41,6 +41,27 @@ def target_language(message: str, language: str | None = None, language_mode: st
     return chosen if chosen in enabled and chosen in LANGUAGE_NAMES else "en"
 
 
+_ENGLISH_ASK = re.compile(r"\b(?:in|reply in|answer in|speak in|switch to) english\b|\benglish (?:me|mein|mai|please)\b", re.I)
+
+
+def sticky_target_language(
+    message: str, prior: str | None, language: str | None = None, language_mode: str | None = None
+) -> str:
+    """The reply language, kept steady across a conversation.
+
+    A language the person wrote in stays for their next very short message ("and LDL?", "why?"), so a
+    one word follow up does not flip a Hindi conversation back to English. Any real English message, or
+    a request for English, is a switch. An explicit language setting always wins.
+    """
+    chosen = target_language(message, language, language_mode)
+    if (language_mode or "auto") == "manual" or chosen != "en" or not prior or prior == "en":
+        return chosen
+    if _ENGLISH_ASK.search(message or "") or len((message or "").split()) > 3:
+        return "en"
+    enabled = {item.strip().lower() for item in (settings.answer_languages or "en").split(",") if item.strip()}
+    return prior if prior in enabled and prior in LANGUAGE_NAMES else "en"
+
+
 def numbers_match(source: str, translated: str) -> bool:
     def bag(text: str) -> Counter:
         return Counter(n.replace(",", ".") for n in _NUMBER.findall(to_ascii_digits(text)))

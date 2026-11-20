@@ -812,13 +812,20 @@ def _adaptive_response_brief(context: HealthContext) -> str:
     style = ""
     if context.personalization and context.personalization.communication_preference:
         style = context.personalization.communication_preference.value
+    from app.pipeline.tone_signals import tone_brief
+
     lines = []
     spec = context.task_contract or {}
     goal = spec.get("goal") or ""
+    tone = tone_brief(context)
     if _house():
-        if explained:
+        if tone:
+            lines.append(tone)
+        if explained and not getattr(context, "rewrite_previous_answer", None):
             lines.append(f"Already explained: {explained}. Do not define these again.")
         return ("RESPONSE BRIEF: " + " ".join(lines) + "\n") if lines else ""
+    if tone:
+        lines.append(tone)
     if goal == "explain" and spec.get("personal_context") != "required":
         lines.append("Use 1 or 2 bullets. Do not use this person's results.")
     elif goal in {"lookup", "interpret"} and not spec.get("broad_summary"):
@@ -835,7 +842,7 @@ def _adaptive_response_brief(context: HealthContext) -> str:
         )
     if conversation_goal == "HEALTH_REVIEW":
         lines.append("Group findings into a few themes. Do not list every biomarker.")
-    if explained:
+    if explained and not getattr(context, "rewrite_previous_answer", None):
         lines.append(f"Already explained: {explained}. Do not define these again.")
     return ("RESPONSE BRIEF: " + " ".join(lines) + "\n") if lines else ""
 

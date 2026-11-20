@@ -277,6 +277,72 @@ _QUESTION_LABEL = re.compile(r"(?m)^(\s*[-*]\s+)(?:Change|Trend|Worry\??|Is it a
 _BULLET_LABEL = re.compile(r"(?m)^(\s*[-*]\s+)(?:[A-Z][A-Za-z']*)(?: [A-Za-z']+){0,3}:\s+(?=[^\s\d])")
 
 
+_ROBOTIC_LEAD = re.compile(
+    r"(?:(?<=^)|(?<=[.!?]\s)|(?<=\n)|(?<=\*\s)|(?<=-\s))\s*(?:Based on|According to) (?:the )?(?:retrieved|available|provided|supplied)"
+    r"(?: medical)? (?:biomarkers?|data|medical context|context|information|records?|results?)\s*,?\s*(?P<c>[A-Za-z])",
+    re.I,
+)
+_RECOMMENDED = re.compile(
+    r"\bIt is recommended that (?:the patient|you|the individual) (?:should |may |can )?"
+    r"(?=(?:consider|try|avoid|limit|increase|reduce|eat|drink|get|keep|follow|take|include|stay|exercise|monitor|recheck|repeat|discuss)\b)",
+    re.I,
+)
+_FURTHER_EVALUATION = re.compile(
+    r"[^.!?\n]*\b(?:consult|see|speak (?:to|with)|talk to|contact) (?:your |a )?(?:healthcare provider|healthcare professional|doctor|physician)"
+    r"[^.!?\n]*\bfor (?:a )?further (?:evaluation|assessment|guidance)\b[^.!?\n]*[.!?]?\s*",
+    re.I,
+)
+_HYPE_SENTENCE = re.compile(
+    r"^\W*(?:congratulations|congrats|well done|great job|good job|awesome|fantastic|amazing|kudos|way to go|bravo)\b",
+    re.I,
+)
+_BLAME = re.compile(
+    r"\b(?:you (?:have )?failed|your fault|you should have|you neglected|you(?:'ve| have) been (?:careless|lazy)|you(?:'re| are) to blame)\b",
+    re.I,
+)
+
+
+def soften_robotic_phrases(text: str) -> str:
+    """Report-speak becomes plain talk, and the generic referral line is kept at most once."""
+    if not text:
+        return text
+
+    def lead(match: re.Match) -> str:
+        whole = match.group(0)
+        return whole[: len(whole) - len(whole.lstrip())] + match.group("c").upper()
+
+    out = _ROBOTIC_LEAD.sub(lead, text)
+    out = _RECOMMENDED.sub("You can ", out)
+    seen = False
+
+    def once(match: re.Match) -> str:
+        nonlocal seen
+        if not seen:
+            seen = True
+            return match.group(0)
+        return ""
+
+    return _FURTHER_EVALUATION.sub(once, out)
+
+
+def drop_hype_and_blame(text: str) -> str:
+    """Medical results are not a game. Cheering interjections and blame wording are dropped, sentence by sentence."""
+    if not text:
+        return text
+    lines: list[str] = []
+    for line in text.split("\n"):
+        parts = re.split(r"(?<=[.!?])\s+", line)
+        kept = [part for part in parts if not (_HYPE_SENTENCE.search(part) or _BLAME.search(part))]
+        if len(kept) == len(parts):
+            lines.append(line)
+            continue
+        joined = " ".join(kept).strip()
+        marker = re.match(r"^(\s*[-*]\s+)", line)
+        if joined and joined not in ("-", "*") and (not marker or len(joined.split()) > 2):
+            lines.append(joined if not marker or joined.startswith(marker.group(1).strip()) else marker.group(1) + joined)
+    return "\n".join(lines)
+
+
 def drop_praise_opener(text: str) -> str:
     """'Great question about ...' is not an answer. The first line goes when it only praises the question."""
     if not text:

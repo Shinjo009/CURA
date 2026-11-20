@@ -55,6 +55,14 @@ class FollowUpMemory:
                 return msg.content
         return None
 
+    def last_assistant_message(self, conversation: Conversation | None) -> str | None:
+        if conversation is None:
+            return None
+        for msg in reversed(list(conversation.messages or [])):
+            if msg.role == "assistant" and msg.content:
+                return msg.content
+        return None
+
     def user_messages(self, conversation: Conversation | None, limit: int = 8) -> list[str]:
         """Earlier questions in this conversation, oldest first."""
         if conversation is None:

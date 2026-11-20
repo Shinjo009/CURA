@@ -172,6 +172,9 @@ class HealthContext(BaseModel):
     response_depth: str | None = None
     explained_entities: list[str] = Field(default_factory=list)
     user_tone: str | None = None
+    # Set only when the person asks for the previous answer again in a different way.
+    rewrite_previous_answer: str | None = None
+    rewrite_angle: str | None = None
     facts_already_explained: list[str] = Field(default_factory=list)
     resolved_user_message: str | None = None
     response_plan_mode: str | None = None

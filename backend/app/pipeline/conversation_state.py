@@ -338,6 +338,9 @@ class ConversationStateResolver:
             facts_already_explained=list(prior.facts_already_explained or [])[:12],
             biomarkers_already_discussed=list(prior.biomarkers_already_discussed or [])[:12],
             topic_summary=prior.topic_summary,
+            explanations_tried=list(prior.explanations_tried or [])[:6],
+            frustration_count=prior.frustration_count,
+            reply_language=prior.reply_language,
             last_surfaced_catalog_id=prior.last_surfaced_catalog_id,
             last_surfaced_catalog_name=prior.last_surfaced_catalog_name,
         )
@@ -434,6 +437,9 @@ def persistable_state(
             *(stated_measurements or []),
         ]))[:12],
         topic_summary=topic_summary or resolved.topic_summary,
+        explanations_tried=[] if switched else list(resolved.explanations_tried or [])[:6],
+        frustration_count=0 if switched else resolved.frustration_count,
+        reply_language=resolved.reply_language,
     )
 
 

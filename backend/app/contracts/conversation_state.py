@@ -64,6 +64,11 @@ class ConversationState(BaseModel):
     current_goal: str | None = None
     previous_goal: str | None = None
     user_tone: str = "neutral"
+    # Explanation angles already used for the current topic, so "explain it differently" never repeats one.
+    explanations_tried: list[str] = Field(default_factory=list)
+    frustration_count: int = 0
+    # Last non English reply language of this conversation. Session scoped, same retention as the conversation.
+    reply_language: str | None = None
     facts_already_explained: list[str] = Field(default_factory=list)
     biomarkers_already_discussed: list[str] = Field(default_factory=list)
     open_threads: list[str] = Field(default_factory=list)

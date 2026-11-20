@@ -133,7 +133,7 @@ from app.pipeline.claim_check import supporting_passages
 from app.pipeline.questionnaire_relevance import should_enrich_with_questionnaire
 from app.retrieval.hybrid import HybridMedicalKnowledgeProvider
 from app.retrieval.medical import BIO_AI_EXPLAINER, passage_label
-from app.pipeline.translation import target_language, translate_answer
+from app.pipeline.translation import sticky_target_language, target_language, translate_answer
 from app.pipeline.safety_messages import emergency_contacts, see_doctor_soon_message
 from app.pipeline.safety import (
     SAFETY_ESCALATION_INTENT,
@@ -498,7 +498,13 @@ class ChatService:
         # Biomarker names written in an Indic script ("एलडीएल", "विटामिन डी") → the names routing matches.
         # Only planning sees this; storage, language detection and safety keep the user's own text.
         routing_message = canonicalize_biomarker_terms(payload.message)
-        style_request = bool(_STYLE_REQUEST.match(payload.message or ""))
+        from app.pipeline.conversation_state import _mentioned
+        from app.pipeline.tone_signals import detect_tone
+
+        tone = detect_tone(payload.message, mentions_topic=bool(_mentioned(payload.message)[0]))
+        style_request = bool(_STYLE_REQUEST.match(payload.message or "")) or (
+            tone.wants_rewrite and bool(self.memory.last_user_message(conv) if conv is not None else None)
+        )
         if style_request:
             # "Give me the short version" / "explain it in detail": the same question in a
             # different style. Plan the previous question; the model sees the actual request.
@@ -1415,6 +1421,16 @@ class ChatService:
         eval_turn["medical"] = medical_hits
         eval_turn["context"] = context
         context.conversation_turn = conv_state.turn_type.value if conv_state else None
+        context.user_tone = tone.tone
+        rewrite_angle = None
+        if tone.wants_rewrite:
+            from app.pipeline.tone_signals import pick_angle
+
+            previous_answer = self.memory.last_assistant_message(conv)
+            if previous_answer:
+                context.rewrite_previous_answer = re.sub(r"\s+", " ", previous_answer.replace('"', "'")).strip()[:1400]
+                rewrite_angle = pick_angle(conv_state.explanations_tried)
+                context.rewrite_angle = rewrite_angle
         context.semantic_plan = semantic.model_dump(mode="json") | {
             "markers": semantic.markers,
             "bio_ai": semantic.bio_ai,
@@ -1634,6 +1650,9 @@ class ChatService:
         from app.pipeline.followup_generator import is_cross_source
 
         suggestions = [item for item in suggestions if not is_cross_source(getattr(item, "text", "") or "")]
+        from app.pipeline.tone_signals import trim_follow_ups
+
+        suggestions = trim_follow_ups(suggestions, tone.tone, bool(rewrite_angle))
         if presentation is not None:
             presentation.suggestion_chips = [item.text for item in suggestions if getattr(item, "text", None)]
             if presentation.summary and presentation.summary.strip() != (answer or "").strip():
@@ -1656,7 +1675,9 @@ class ChatService:
         if safety_caution:
             answer = f"{safety_caution}\n\n{answer}"
         # Checked English answer -> member's language, only if every number survives.
-        reply_language = target_language(payload.message, payload.language, payload.language_mode)
+        reply_language = sticky_target_language(
+            payload.message, conv_state.reply_language, payload.language, payload.language_mode
+        )
         with perf.stage("translation"):
             answer, response_language, translation_flags = translate_answer(answer, reply_language)
         flags.extend(translation_flags)
@@ -1753,6 +1774,18 @@ class ChatService:
             stated_measurements=stated_measurement_keys(answer, context.markers),
             topic_summary=experience.topic_summary.text if experience.topic_summary else None,
         )
+        tried = list(conv_state.explanations_tried or [])
+        if rewrite_angle:
+            tried = list(dict.fromkeys([*tried, rewrite_angle]))
+        from app.pipeline.tone_signals import FRUSTRATED
+
+        upset = rewrite_angle or tone.tone == FRUSTRATED
+        next_state = next_state.model_copy(update={
+            "user_tone": tone.tone,
+            "explanations_tried": [] if conv_state.turn_type.value in {"NEW_QUESTION", "TOPIC_SWITCH"} and not rewrite_angle else tried[-6:],
+            "frustration_count": (conv_state.frustration_count + 1) if upset else 0,
+            "reply_language": reply_language if reply_language != "en" else None,
+        })
         self.repo.update_conversation_state(
             conv,
             next_state.model_dump_json(),
