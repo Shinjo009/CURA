@@ -1,6 +1,45 @@
 {
   "components": {
     "schemas": {
+      "AllergySubsection": {
+        "properties": {
+          "abnormal_count": {
+            "title": "Abnormal Count",
+            "type": "integer"
+          },
+          "available_count": {
+            "title": "Available Count",
+            "type": "integer"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "result_ids": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Result Ids",
+            "type": "array"
+          },
+          "source_groups": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Source Groups",
+            "type": "array"
+          }
+        },
+        "required": [
+          "name",
+          "source_groups",
+          "result_ids",
+          "available_count",
+          "abnormal_count"
+        ],
+        "title": "AllergySubsection",
+        "type": "object"
+      },
       "ApprovedRecommendation": {
         "properties": {
           "category": {
@@ -199,6 +238,285 @@
         "title": "BioAIRisk",
         "type": "object"
       },
+      "BiomarkerResult": {
+        "properties": {
+          "canonical_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Canonical Id"
+          },
+          "change": {
+            "anyOf": [
+              {
+                "enum": [
+                  "increased",
+                  "decreased",
+                  "unchanged"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Change"
+          },
+          "conflicting_values": {
+            "items": {
+              "type": "number"
+            },
+            "title": "Conflicting Values",
+            "type": "array"
+          },
+          "cura_key": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cura Key"
+          },
+          "display_name": {
+            "title": "Display Name",
+            "type": "string"
+          },
+          "duplicates_collapsed": {
+            "default": 0,
+            "title": "Duplicates Collapsed",
+            "type": "integer"
+          },
+          "history": {
+            "items": {
+              "$ref": "#/components/schemas/HistoryPoint"
+            },
+            "title": "History",
+            "type": "array"
+          },
+          "history_note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "History Note"
+          },
+          "is_derived": {
+            "default": false,
+            "title": "Is Derived",
+            "type": "boolean"
+          },
+          "mapping_method": {
+            "default": "unmapped",
+            "title": "Mapping Method",
+            "type": "string"
+          },
+          "measured_on": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Measured On"
+          },
+          "needs_mapping_review": {
+            "default": false,
+            "title": "Needs Mapping Review",
+            "type": "boolean"
+          },
+          "note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
+          },
+          "original_name": {
+            "title": "Original Name",
+            "type": "string"
+          },
+          "previous_on": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Previous On"
+          },
+          "previous_value": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Previous Value"
+          },
+          "reference_high": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reference High"
+          },
+          "reference_low": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reference Low"
+          },
+          "report_flag": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Report Flag"
+          },
+          "report_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Report Id"
+          },
+          "result_id": {
+            "title": "Result Id",
+            "type": "string"
+          },
+          "secondary_system_ids": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Secondary System Ids",
+            "type": "array"
+          },
+          "source_group": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Group"
+          },
+          "status": {
+            "enum": [
+              "normal",
+              "low",
+              "high",
+              "critical",
+              "no_range",
+              "no_value"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "status_source": {
+            "default": "none",
+            "enum": [
+              "report_flag",
+              "reference_range",
+              "none"
+            ],
+            "title": "Status Source",
+            "type": "string"
+          },
+          "system_id": {
+            "title": "System Id",
+            "type": "string"
+          },
+          "trend": {
+            "anyOf": [
+              {
+                "enum": [
+                  "toward_range",
+                  "away_from_range",
+                  "steady",
+                  "in_range"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Trend"
+          },
+          "unit": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Unit"
+          },
+          "value": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Value"
+          }
+        },
+        "required": [
+          "result_id",
+          "original_name",
+          "display_name",
+          "system_id",
+          "status"
+        ],
+        "title": "BiomarkerResult",
+        "type": "object"
+      },
       "BlockItem": {
         "properties": {
           "evidence": {
@@ -363,6 +681,78 @@
           "name"
         ],
         "title": "BloodMarker",
+        "type": "object"
+      },
+      "BodySystemOverview": {
+        "properties": {
+          "allergy": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SystemSummary"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "available": {
+            "default": false,
+            "title": "Available",
+            "type": "boolean"
+          },
+          "available_reports": {
+            "items": {
+              "$ref": "#/components/schemas/ReportRef"
+            },
+            "title": "Available Reports",
+            "type": "array"
+          },
+          "registry_version": {
+            "title": "Registry Version",
+            "type": "string"
+          },
+          "report": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ReportRef"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "results": {
+            "items": {
+              "$ref": "#/components/schemas/BiomarkerResult"
+            },
+            "title": "Results",
+            "type": "array"
+          },
+          "state": {
+            "default": "no_report",
+            "enum": [
+              "ready",
+              "no_report",
+              "no_results"
+            ],
+            "title": "State",
+            "type": "string"
+          },
+          "systems": {
+            "items": {
+              "$ref": "#/components/schemas/SystemSummary"
+            },
+            "title": "Systems",
+            "type": "array"
+          },
+          "totals": {
+            "$ref": "#/components/schemas/ReportTotals"
+          }
+        },
+        "required": [
+          "registry_version"
+        ],
+        "title": "BodySystemOverview",
         "type": "object"
       },
       "Body_transcribe_api_v1_voice_post": {
@@ -680,6 +1070,17 @@
               }
             ],
             "title": "Estimated Cost Usd"
+          },
+          "fallback_reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fallback Reason"
           },
           "fallback_used": {
             "anyOf": [
@@ -1339,18 +1740,6 @@
           "meta": {
             "$ref": "#/components/schemas/ChatMeta"
           },
-          "nutrition": {
-            "anyOf": [
-              {
-                "additionalProperties": true,
-                "type": "object"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Nutrition"
-          },
           "presentation": {
             "anyOf": [
               {
@@ -1486,6 +1875,17 @@
             ],
             "title": "Current Report Id"
           },
+          "current_unit": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Current Unit"
+          },
           "current_value": {
             "anyOf": [
               {
@@ -1541,6 +1941,17 @@
               }
             ],
             "title": "Previous Report Id"
+          },
+          "previous_unit": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Previous Unit"
           },
           "previous_value": {
             "anyOf": [
@@ -1606,6 +2017,18 @@
               }
             ],
             "title": "Document Id"
+          },
+          "entry_point": {
+            "anyOf": [
+              {
+                "const": "blood_report_overview",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Entry Point"
           },
           "marker_code": {
             "anyOf": [
@@ -2614,6 +3037,34 @@
         "title": "GoalSource",
         "type": "string"
       },
+      "GroupCoverage": {
+        "properties": {
+          "observed_count": {
+            "title": "Observed Count",
+            "type": "integer"
+          },
+          "partial": {
+            "title": "Partial",
+            "type": "boolean"
+          },
+          "registry_count": {
+            "title": "Registry Count",
+            "type": "integer"
+          },
+          "source_group": {
+            "title": "Source Group",
+            "type": "string"
+          }
+        },
+        "required": [
+          "source_group",
+          "observed_count",
+          "registry_count",
+          "partial"
+        ],
+        "title": "GroupCoverage",
+        "type": "object"
+      },
       "HTTPValidationError": {
         "properties": {
           "detail": {
@@ -2866,6 +3317,29 @@
         "title": "HealthTheme",
         "type": "object"
       },
+      "HistoryPoint": {
+        "properties": {
+          "date": {
+            "title": "Date",
+            "type": "string"
+          },
+          "status": {
+            "default": "unknown",
+            "title": "Status",
+            "type": "string"
+          },
+          "value": {
+            "title": "Value",
+            "type": "number"
+          }
+        },
+        "required": [
+          "date",
+          "value"
+        ],
+        "title": "HistoryPoint",
+        "type": "object"
+      },
       "InsightCandidate": {
         "description": "Computed change candidate. Never sent unsolicited in chat.",
         "properties": {
@@ -2972,6 +3446,75 @@
           "summary"
         ],
         "title": "InsightOverview",
+        "type": "object"
+      },
+      "KeyFinding": {
+        "properties": {
+          "how_far": {
+            "anyOf": [
+              {
+                "enum": [
+                  "slightly",
+                  "moderately",
+                  "clearly"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "How Far"
+          },
+          "label": {
+            "title": "Label",
+            "type": "string"
+          },
+          "result_id": {
+            "title": "Result Id",
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "normal",
+              "low",
+              "high",
+              "critical",
+              "no_range",
+              "no_value"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "unit": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Unit"
+          },
+          "value": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Value"
+          }
+        },
+        "required": [
+          "result_id",
+          "label",
+          "status"
+        ],
+        "title": "KeyFinding",
         "type": "object"
       },
       "KnownLifestyle": {
@@ -3106,63 +3649,6 @@
           }
         },
         "title": "LifestyleSummary",
-        "type": "object"
-      },
-      "LogRequest": {
-        "properties": {
-          "acknowledge_allergy": {
-            "default": false,
-            "title": "Acknowledge Allergy",
-            "type": "boolean"
-          },
-          "description": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Description"
-          },
-          "eaten_on": {
-            "anyOf": [
-              {
-                "format": "date",
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Eaten On"
-          },
-          "food_id": {
-            "title": "Food Id",
-            "type": "string"
-          },
-          "occasion": {
-            "title": "Occasion",
-            "type": "string"
-          },
-          "quantity": {
-            "exclusiveMinimum": 0.0,
-            "title": "Quantity",
-            "type": "number"
-          },
-          "unit": {
-            "title": "Unit",
-            "type": "string"
-          }
-        },
-        "required": [
-          "food_id",
-          "quantity",
-          "unit",
-          "occasion"
-        ],
-        "title": "LogRequest",
         "type": "object"
       },
       "LongitudinalClass": {
@@ -4265,30 +4751,6 @@
         "title": "PresentedFinding",
         "type": "object"
       },
-      "PreviewRequest": {
-        "properties": {
-          "food_id": {
-            "title": "Food Id",
-            "type": "string"
-          },
-          "quantity": {
-            "exclusiveMinimum": 0.0,
-            "title": "Quantity",
-            "type": "number"
-          },
-          "unit": {
-            "title": "Unit",
-            "type": "string"
-          }
-        },
-        "required": [
-          "food_id",
-          "quantity",
-          "unit"
-        ],
-        "title": "PreviewRequest",
-        "type": "object"
-      },
       "ProvenanceSource": {
         "properties": {
           "name": {
@@ -4646,6 +5108,74 @@
         "title": "ReportOverview",
         "type": "object"
       },
+      "ReportRef": {
+        "properties": {
+          "report_date": {
+            "title": "Report Date",
+            "type": "string"
+          },
+          "report_id": {
+            "title": "Report Id",
+            "type": "string"
+          },
+          "source_line": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Line"
+          }
+        },
+        "required": [
+          "report_id",
+          "report_date"
+        ],
+        "title": "ReportRef",
+        "type": "object"
+      },
+      "ReportTotals": {
+        "properties": {
+          "abnormal": {
+            "default": 0,
+            "title": "Abnormal",
+            "type": "integer"
+          },
+          "allergy": {
+            "default": 0,
+            "title": "Allergy",
+            "type": "integer"
+          },
+          "conflicting_duplicates": {
+            "default": 0,
+            "title": "Conflicting Duplicates",
+            "type": "integer"
+          },
+          "duplicates_collapsed": {
+            "default": 0,
+            "title": "Duplicates Collapsed",
+            "type": "integer"
+          },
+          "status_breakdown": {
+            "$ref": "#/components/schemas/StatusBreakdown"
+          },
+          "unique_results": {
+            "default": 0,
+            "title": "Unique Results",
+            "type": "integer"
+          },
+          "unmapped": {
+            "default": 0,
+            "title": "Unmapped",
+            "type": "integer"
+          }
+        },
+        "title": "ReportTotals",
+        "type": "object"
+      },
       "ResolvedValue": {
         "description": "A value the backend read from the member's record (never from model text).",
         "properties": {
@@ -4944,6 +5474,441 @@
         "title": "RewindRequest",
         "type": "object"
       },
+      "RiskGroupSummary": {
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "key_findings": {
+            "items": {
+              "$ref": "#/components/schemas/RiskKeyFinding"
+            },
+            "title": "Key Findings",
+            "type": "array"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "needs_mapping_review": {
+            "default": false,
+            "title": "Needs Mapping Review",
+            "type": "boolean"
+          },
+          "raised_count": {
+            "title": "Raised Count",
+            "type": "integer"
+          },
+          "risk_codes": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Risk Codes",
+            "type": "array"
+          },
+          "risk_count": {
+            "title": "Risk Count",
+            "type": "integer"
+          },
+          "status_breakdown": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "title": "Status Breakdown",
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "risk_count",
+          "raised_count"
+        ],
+        "title": "RiskGroupSummary",
+        "type": "object"
+      },
+      "RiskHistoryPoint": {
+        "properties": {
+          "date": {
+            "title": "Date",
+            "type": "string"
+          },
+          "score": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Score"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Status"
+          }
+        },
+        "required": [
+          "date"
+        ],
+        "title": "RiskHistoryPoint",
+        "type": "object"
+      },
+      "RiskKeyFinding": {
+        "properties": {
+          "code": {
+            "title": "Code",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "score": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Score"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Status"
+          }
+        },
+        "required": [
+          "code",
+          "name"
+        ],
+        "title": "RiskKeyFinding",
+        "type": "object"
+      },
+      "RiskOverview": {
+        "properties": {
+          "available": {
+            "default": false,
+            "title": "Available",
+            "type": "boolean"
+          },
+          "available_reports": {
+            "items": {
+              "$ref": "#/components/schemas/ReportRef"
+            },
+            "title": "Available Reports",
+            "type": "array"
+          },
+          "disclaimer": {
+            "title": "Disclaimer",
+            "type": "string"
+          },
+          "groups": {
+            "items": {
+              "$ref": "#/components/schemas/RiskGroupSummary"
+            },
+            "title": "Groups",
+            "type": "array"
+          },
+          "registry_version": {
+            "title": "Registry Version",
+            "type": "string"
+          },
+          "report": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/RiskReportRef"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "risks": {
+            "items": {
+              "$ref": "#/components/schemas/RiskResult"
+            },
+            "title": "Risks",
+            "type": "array"
+          },
+          "same_day_alternatives": {
+            "default": false,
+            "title": "Same Day Alternatives",
+            "type": "boolean"
+          },
+          "state": {
+            "default": "no_report",
+            "enum": [
+              "ready",
+              "no_report",
+              "no_results"
+            ],
+            "title": "State",
+            "type": "string"
+          },
+          "totals": {
+            "$ref": "#/components/schemas/RiskTotals"
+          }
+        },
+        "required": [
+          "registry_version",
+          "disclaimer"
+        ],
+        "title": "RiskOverview",
+        "type": "object"
+      },
+      "RiskReportRef": {
+        "properties": {
+          "metabolic_age": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Metabolic Age"
+          },
+          "metabolic_score": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Metabolic Score"
+          },
+          "report_date": {
+            "title": "Report Date",
+            "type": "string"
+          },
+          "report_id": {
+            "title": "Report Id",
+            "type": "string"
+          },
+          "source_line": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Line"
+          }
+        },
+        "required": [
+          "report_id",
+          "report_date"
+        ],
+        "title": "RiskReportRef",
+        "type": "object"
+      },
+      "RiskResult": {
+        "properties": {
+          "change": {
+            "anyOf": [
+              {
+                "enum": [
+                  "increased",
+                  "decreased",
+                  "unchanged"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Change"
+          },
+          "code": {
+            "title": "Code",
+            "type": "string"
+          },
+          "contributing_factors": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Contributing Factors",
+            "type": "array"
+          },
+          "duplicates_collapsed": {
+            "default": 0,
+            "title": "Duplicates Collapsed",
+            "type": "integer"
+          },
+          "group_id": {
+            "title": "Group Id",
+            "type": "string"
+          },
+          "history": {
+            "items": {
+              "$ref": "#/components/schemas/RiskHistoryPoint"
+            },
+            "title": "History",
+            "type": "array"
+          },
+          "kind": {
+            "const": "predicted_risk",
+            "default": "predicted_risk",
+            "title": "Kind",
+            "type": "string"
+          },
+          "level": {
+            "default": "unknown",
+            "enum": [
+              "raised",
+              "not_raised",
+              "unknown"
+            ],
+            "title": "Level",
+            "type": "string"
+          },
+          "lifestyle_contribution": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lifestyle Contribution"
+          },
+          "measured_on": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Measured On"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "percentile": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Percentile"
+          },
+          "previous_on": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Previous On"
+          },
+          "previous_score": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Previous Score"
+          },
+          "report_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Report Id"
+          },
+          "score": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Score"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Status"
+          }
+        },
+        "required": [
+          "code",
+          "name",
+          "group_id"
+        ],
+        "title": "RiskResult",
+        "type": "object"
+      },
+      "RiskTotals": {
+        "properties": {
+          "duplicates_collapsed": {
+            "default": 0,
+            "title": "Duplicates Collapsed",
+            "type": "integer"
+          },
+          "raised_count": {
+            "default": 0,
+            "title": "Raised Count",
+            "type": "integer"
+          },
+          "risk_count": {
+            "default": 0,
+            "title": "Risk Count",
+            "type": "integer"
+          }
+        },
+        "title": "RiskTotals",
+        "type": "object"
+      },
       "ScoreOverview": {
         "properties": {
           "name": {
@@ -5137,6 +6102,42 @@
           }
         },
         "title": "StarterQuestionSet",
+        "type": "object"
+      },
+      "StatusBreakdown": {
+        "properties": {
+          "critical": {
+            "default": 0,
+            "title": "Critical",
+            "type": "integer"
+          },
+          "high": {
+            "default": 0,
+            "title": "High",
+            "type": "integer"
+          },
+          "low": {
+            "default": 0,
+            "title": "Low",
+            "type": "integer"
+          },
+          "no_range": {
+            "default": 0,
+            "title": "No Range",
+            "type": "integer"
+          },
+          "no_value": {
+            "default": 0,
+            "title": "No Value",
+            "type": "integer"
+          },
+          "normal": {
+            "default": 0,
+            "title": "Normal",
+            "type": "integer"
+          }
+        },
+        "title": "StatusBreakdown",
         "type": "object"
       },
       "StreamPolicy": {
@@ -5435,9 +6436,17 @@
         "title": "SummaryStyle",
         "type": "string"
       },
-      "TargetRequest": {
+      "SystemSummary": {
         "properties": {
-          "activity": {
+          "abnormal_count": {
+            "title": "Abnormal Count",
+            "type": "integer"
+          },
+          "available_count": {
+            "title": "Available Count",
+            "type": "integer"
+          },
+          "caveat": {
             "anyOf": [
               {
                 "type": "string"
@@ -5446,148 +6455,104 @@
                 "type": "null"
               }
             ],
-            "title": "Activity"
+            "title": "Caveat"
           },
-          "age_years": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Age Years"
-          },
-          "allergies": {
+          "group_coverage": {
             "items": {
-              "type": "string"
+              "$ref": "#/components/schemas/GroupCoverage"
             },
-            "title": "Allergies",
+            "title": "Group Coverage",
             "type": "array"
           },
-          "custom_calories": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Custom Calories"
-          },
-          "eating_disorder": {
-            "default": false,
-            "title": "Eating Disorder",
-            "type": "boolean"
-          },
-          "goal_code": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Goal Code"
-          },
-          "height_cm": {
-            "anyOf": [
-              {
-                "type": "number"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Height Cm"
-          },
-          "medical_complex": {
-            "default": false,
-            "title": "Medical Complex",
-            "type": "boolean"
-          },
-          "pregnant": {
-            "default": false,
-            "title": "Pregnant",
-            "type": "boolean"
-          },
-          "sex": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Sex"
-          },
-          "weight_kg": {
-            "anyOf": [
-              {
-                "type": "number"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Weight Kg"
-          }
-        },
-        "title": "TargetRequest",
-        "type": "object"
-      },
-      "TemplateItem": {
-        "properties": {
-          "food_id": {
-            "title": "Food Id",
+          "id": {
+            "title": "Id",
             "type": "string"
           },
-          "quantity": {
-            "exclusiveMinimum": 0.0,
-            "title": "Quantity",
-            "type": "number"
-          },
-          "unit": {
-            "title": "Unit",
-            "type": "string"
-          }
-        },
-        "required": [
-          "food_id",
-          "quantity",
-          "unit"
-        ],
-        "title": "TemplateItem",
-        "type": "object"
-      },
-      "TemplateRequest": {
-        "properties": {
-          "items": {
+          "key_findings": {
             "items": {
-              "$ref": "#/components/schemas/TemplateItem"
+              "$ref": "#/components/schemas/KeyFinding"
             },
-            "title": "Items",
+            "title": "Key Findings",
             "type": "array"
+          },
+          "latest_measured_on": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Latest Measured On"
           },
           "name": {
             "title": "Name",
             "type": "string"
           },
-          "occasion": {
-            "title": "Occasion",
+          "needs_mapping_review": {
+            "default": false,
+            "title": "Needs Mapping Review",
+            "type": "boolean"
+          },
+          "related_abnormal_count": {
+            "default": 0,
+            "title": "Related Abnormal Count",
+            "type": "integer"
+          },
+          "related_result_ids": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Related Result Ids",
+            "type": "array"
+          },
+          "result_ids": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Result Ids",
+            "type": "array"
+          },
+          "scope": {
+            "default": "primary",
+            "enum": [
+              "primary",
+              "related_only"
+            ],
+            "title": "Scope",
             "type": "string"
+          },
+          "state": {
+            "enum": [
+              "attention",
+              "all_in_range",
+              "partly_assessed",
+              "no_values"
+            ],
+            "title": "State",
+            "type": "string"
+          },
+          "status_breakdown": {
+            "$ref": "#/components/schemas/StatusBreakdown"
+          },
+          "subsections": {
+            "items": {
+              "$ref": "#/components/schemas/AllergySubsection"
+            },
+            "title": "Subsections",
+            "type": "array"
           }
         },
         "required": [
+          "id",
           "name",
-          "occasion",
-          "items"
+          "available_count",
+          "abnormal_count",
+          "status_breakdown",
+          "state"
         ],
-        "title": "TemplateRequest",
+        "title": "SystemSummary",
         "type": "object"
       },
       "TestingOption": {
@@ -5977,46 +6942,6 @@
           }
         },
         "title": "TurnExperience",
-        "type": "object"
-      },
-      "UpdateRequest": {
-        "properties": {
-          "occasion": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Occasion"
-          },
-          "quantity": {
-            "anyOf": [
-              {
-                "exclusiveMinimum": 0.0,
-                "type": "number"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Quantity"
-          },
-          "unit": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Unit"
-          }
-        },
-        "title": "UpdateRequest",
         "type": "object"
       },
       "UserProvenance": {
@@ -6880,6 +7805,102 @@
         "summary": "Me"
       }
     },
+    "/api/v1/me/bio-ai-risks": {
+      "get": {
+        "description": "Predicted risks the member's Bio-AI report returned, grouped for display. No model call.",
+        "operationId": "bio_ai_risks_api_v1_me_bio_ai_risks_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "report_id",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 128,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Report Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RiskOverview"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Bio Ai Risks"
+      }
+    },
+    "/api/v1/me/body-systems": {
+      "get": {
+        "description": "Blood report grouped by body system, from the member's structured results. No model call.",
+        "operationId": "body_systems_api_v1_me_body_systems_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "report_id",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 128,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Report Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BodySystemOverview"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Body Systems"
+      }
+    },
     "/api/v1/me/goals": {
       "get": {
         "operationId": "get_goals_api_v1_me_goals_get",
@@ -6951,658 +7972,6 @@
           }
         },
         "summary": "Health Overview"
-      }
-    },
-    "/api/v1/nutrition/days/{eaten_on}": {
-      "get": {
-        "operationId": "get_day_api_v1_nutrition_days__eaten_on__get",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "eaten_on",
-            "required": true,
-            "schema": {
-              "format": "date",
-              "title": "Eaten On",
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "additionalProperties": true,
-                  "title": "Response Get Day Api V1 Nutrition Days  Eaten On  Get",
-                  "type": "object"
-                }
-              }
-            },
-            "description": "Successful Response"
-          },
-          "422": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            },
-            "description": "Validation Error"
-          }
-        },
-        "summary": "Get Day",
-        "tags": [
-          "nutrition"
-        ]
-      }
-    },
-    "/api/v1/nutrition/entries": {
-      "post": {
-        "operationId": "log_entry_api_v1_nutrition_entries_post",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/LogRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "additionalProperties": true,
-                  "title": "Response Log Entry Api V1 Nutrition Entries Post",
-                  "type": "object"
-                }
-              }
-            },
-            "description": "Successful Response"
-          },
-          "422": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            },
-            "description": "Validation Error"
-          }
-        },
-        "summary": "Log Entry",
-        "tags": [
-          "nutrition"
-        ]
-      }
-    },
-    "/api/v1/nutrition/entries/{entry_id}": {
-      "delete": {
-        "operationId": "delete_entry_api_v1_nutrition_entries__entry_id__delete",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "entry_id",
-            "required": true,
-            "schema": {
-              "title": "Entry Id",
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "additionalProperties": true,
-                  "title": "Response Delete Entry Api V1 Nutrition Entries  Entry Id  Delete",
-                  "type": "object"
-                }
-              }
-            },
-            "description": "Successful Response"
-          },
-          "422": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            },
-            "description": "Validation Error"
-          }
-        },
-        "summary": "Delete Entry",
-        "tags": [
-          "nutrition"
-        ]
-      },
-      "patch": {
-        "operationId": "update_entry_api_v1_nutrition_entries__entry_id__patch",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "entry_id",
-            "required": true,
-            "schema": {
-              "title": "Entry Id",
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "additionalProperties": true,
-                  "title": "Response Update Entry Api V1 Nutrition Entries  Entry Id  Patch",
-                  "type": "object"
-                }
-              }
-            },
-            "description": "Successful Response"
-          },
-          "422": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            },
-            "description": "Validation Error"
-          }
-        },
-        "summary": "Update Entry",
-        "tags": [
-          "nutrition"
-        ]
-      }
-    },
-    "/api/v1/nutrition/entries/{entry_id}/confirm": {
-      "post": {
-        "operationId": "confirm_entry_api_v1_nutrition_entries__entry_id__confirm_post",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "entry_id",
-            "required": true,
-            "schema": {
-              "title": "Entry Id",
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "additionalProperties": true,
-                  "title": "Response Confirm Entry Api V1 Nutrition Entries  Entry Id  Confirm Post",
-                  "type": "object"
-                }
-              }
-            },
-            "description": "Successful Response"
-          },
-          "422": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            },
-            "description": "Validation Error"
-          }
-        },
-        "summary": "Confirm Entry",
-        "tags": [
-          "nutrition"
-        ]
-      }
-    },
-    "/api/v1/nutrition/foods/{food_id}": {
-      "get": {
-        "operationId": "food_detail_api_v1_nutrition_foods__food_id__get",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "food_id",
-            "required": true,
-            "schema": {
-              "title": "Food Id",
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "additionalProperties": true,
-                  "title": "Response Food Detail Api V1 Nutrition Foods  Food Id  Get",
-                  "type": "object"
-                }
-              }
-            },
-            "description": "Successful Response"
-          },
-          "422": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            },
-            "description": "Validation Error"
-          }
-        },
-        "summary": "Food Detail",
-        "tags": [
-          "nutrition"
-        ]
-      }
-    },
-    "/api/v1/nutrition/history": {
-      "get": {
-        "operationId": "history_api_v1_nutrition_history_get",
-        "parameters": [
-          {
-            "in": "query",
-            "name": "days",
-            "required": false,
-            "schema": {
-              "default": 7,
-              "maximum": 90,
-              "minimum": 1,
-              "title": "Days",
-              "type": "integer"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "additionalProperties": true,
-                  "title": "Response History Api V1 Nutrition History Get",
-                  "type": "object"
-                }
-              }
-            },
-            "description": "Successful Response"
-          },
-          "422": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            },
-            "description": "Validation Error"
-          }
-        },
-        "summary": "History",
-        "tags": [
-          "nutrition"
-        ]
-      }
-    },
-    "/api/v1/nutrition/preview": {
-      "post": {
-        "operationId": "preview_api_v1_nutrition_preview_post",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/PreviewRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "additionalProperties": true,
-                  "title": "Response Preview Api V1 Nutrition Preview Post",
-                  "type": "object"
-                }
-              }
-            },
-            "description": "Successful Response"
-          },
-          "422": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            },
-            "description": "Validation Error"
-          }
-        },
-        "summary": "Preview",
-        "tags": [
-          "nutrition"
-        ]
-      }
-    },
-    "/api/v1/nutrition/search": {
-      "get": {
-        "operationId": "search_foods_api_v1_nutrition_search_get",
-        "parameters": [
-          {
-            "in": "query",
-            "name": "q",
-            "required": true,
-            "schema": {
-              "minLength": 1,
-              "title": "Q",
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "limit",
-            "required": false,
-            "schema": {
-              "default": 8,
-              "maximum": 25,
-              "minimum": 1,
-              "title": "Limit",
-              "type": "integer"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "additionalProperties": true,
-                  "title": "Response Search Foods Api V1 Nutrition Search Get",
-                  "type": "object"
-                }
-              }
-            },
-            "description": "Successful Response"
-          },
-          "422": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            },
-            "description": "Validation Error"
-          }
-        },
-        "summary": "Search Foods",
-        "tags": [
-          "nutrition"
-        ]
-      }
-    },
-    "/api/v1/nutrition/targets": {
-      "get": {
-        "operationId": "get_targets_api_v1_nutrition_targets_get",
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "additionalProperties": true,
-                  "title": "Response Get Targets Api V1 Nutrition Targets Get",
-                  "type": "object"
-                }
-              }
-            },
-            "description": "Successful Response"
-          }
-        },
-        "summary": "Get Targets",
-        "tags": [
-          "nutrition"
-        ]
-      },
-      "put": {
-        "operationId": "put_targets_api_v1_nutrition_targets_put",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/TargetRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "additionalProperties": true,
-                  "title": "Response Put Targets Api V1 Nutrition Targets Put",
-                  "type": "object"
-                }
-              }
-            },
-            "description": "Successful Response"
-          },
-          "422": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            },
-            "description": "Validation Error"
-          }
-        },
-        "summary": "Put Targets",
-        "tags": [
-          "nutrition"
-        ]
-      }
-    },
-    "/api/v1/nutrition/templates": {
-      "get": {
-        "operationId": "list_templates_api_v1_nutrition_templates_get",
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "additionalProperties": true,
-                  "title": "Response List Templates Api V1 Nutrition Templates Get",
-                  "type": "object"
-                }
-              }
-            },
-            "description": "Successful Response"
-          }
-        },
-        "summary": "List Templates",
-        "tags": [
-          "nutrition"
-        ]
-      },
-      "post": {
-        "operationId": "create_template_api_v1_nutrition_templates_post",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/TemplateRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "additionalProperties": true,
-                  "title": "Response Create Template Api V1 Nutrition Templates Post",
-                  "type": "object"
-                }
-              }
-            },
-            "description": "Successful Response"
-          },
-          "422": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            },
-            "description": "Validation Error"
-          }
-        },
-        "summary": "Create Template",
-        "tags": [
-          "nutrition"
-        ]
-      }
-    },
-    "/api/v1/nutrition/templates/{template_id}": {
-      "delete": {
-        "operationId": "delete_template_api_v1_nutrition_templates__template_id__delete",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "template_id",
-            "required": true,
-            "schema": {
-              "title": "Template Id",
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "additionalProperties": true,
-                  "title": "Response Delete Template Api V1 Nutrition Templates  Template Id  Delete",
-                  "type": "object"
-                }
-              }
-            },
-            "description": "Successful Response"
-          },
-          "422": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            },
-            "description": "Validation Error"
-          }
-        },
-        "summary": "Delete Template",
-        "tags": [
-          "nutrition"
-        ]
-      }
-    },
-    "/api/v1/nutrition/templates/{template_id}/log": {
-      "post": {
-        "operationId": "log_template_api_v1_nutrition_templates__template_id__log_post",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "template_id",
-            "required": true,
-            "schema": {
-              "title": "Template Id",
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "eaten_on",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "format": "date",
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Eaten On"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "additionalProperties": true,
-                  "title": "Response Log Template Api V1 Nutrition Templates  Template Id  Log Post",
-                  "type": "object"
-                }
-              }
-            },
-            "description": "Successful Response"
-          },
-          "422": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            },
-            "description": "Validation Error"
-          }
-        },
-        "summary": "Log Template",
-        "tags": [
-          "nutrition"
-        ]
       }
     },
     "/api/v1/voice": {

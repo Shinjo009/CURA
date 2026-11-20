@@ -306,6 +306,46 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/me/bio-ai-risks": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Bio Ai Risks
+         * @description Predicted risks the member's Bio-AI report returned, grouped for display. No model call.
+         */
+        get: operations["bio_ai_risks_api_v1_me_bio_ai_risks_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/me/body-systems": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Body Systems
+         * @description Blood report grouped by body system, from the member's structured results. No model call.
+         */
+        get: operations["body_systems_api_v1_me_body_systems_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/me/goals": {
         parameters: {
             query?: never;
@@ -338,213 +378,6 @@ export interface paths {
         get: operations["health_overview_api_v1_me_overview_get"];
         put?: never;
         post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/nutrition/days/{eaten_on}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Get Day */
-        get: operations["get_day_api_v1_nutrition_days__eaten_on__get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/nutrition/entries": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Log Entry */
-        post: operations["log_entry_api_v1_nutrition_entries_post"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/nutrition/entries/{entry_id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        /** Delete Entry */
-        delete: operations["delete_entry_api_v1_nutrition_entries__entry_id__delete"];
-        options?: never;
-        head?: never;
-        /** Update Entry */
-        patch: operations["update_entry_api_v1_nutrition_entries__entry_id__patch"];
-        trace?: never;
-    };
-    "/api/v1/nutrition/entries/{entry_id}/confirm": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Confirm Entry */
-        post: operations["confirm_entry_api_v1_nutrition_entries__entry_id__confirm_post"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/nutrition/foods/{food_id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Food Detail */
-        get: operations["food_detail_api_v1_nutrition_foods__food_id__get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/nutrition/history": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** History */
-        get: operations["history_api_v1_nutrition_history_get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/nutrition/preview": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Preview */
-        post: operations["preview_api_v1_nutrition_preview_post"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/nutrition/search": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Search Foods */
-        get: operations["search_foods_api_v1_nutrition_search_get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/nutrition/targets": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Get Targets */
-        get: operations["get_targets_api_v1_nutrition_targets_get"];
-        /** Put Targets */
-        put: operations["put_targets_api_v1_nutrition_targets_put"];
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/nutrition/templates": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** List Templates */
-        get: operations["list_templates_api_v1_nutrition_templates_get"];
-        put?: never;
-        /** Create Template */
-        post: operations["create_template_api_v1_nutrition_templates_post"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/nutrition/templates/{template_id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        /** Delete Template */
-        delete: operations["delete_template_api_v1_nutrition_templates__template_id__delete"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/nutrition/templates/{template_id}/log": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Log Template */
-        post: operations["log_template_api_v1_nutrition_templates__template_id__log_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -691,6 +524,19 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        /** AllergySubsection */
+        AllergySubsection: {
+            /** Abnormal Count */
+            abnormal_count: number;
+            /** Available Count */
+            available_count: number;
+            /** Name */
+            name: string;
+            /** Result Ids */
+            result_ids: string[];
+            /** Source Groups */
+            source_groups: string[];
+        };
         /** ApprovedRecommendation */
         ApprovedRecommendation: {
             /**
@@ -750,6 +596,86 @@ export interface components {
             /** Status */
             status?: string | null;
         };
+        /** BiomarkerResult */
+        BiomarkerResult: {
+            /** Canonical Id */
+            canonical_id?: string | null;
+            /** Change */
+            change?: ("increased" | "decreased" | "unchanged") | null;
+            /** Conflicting Values */
+            conflicting_values?: number[];
+            /** Cura Key */
+            cura_key?: string | null;
+            /** Display Name */
+            display_name: string;
+            /**
+             * Duplicates Collapsed
+             * @default 0
+             */
+            duplicates_collapsed: number;
+            /** History */
+            history?: components["schemas"]["HistoryPoint"][];
+            /** History Note */
+            history_note?: string | null;
+            /**
+             * Is Derived
+             * @default false
+             */
+            is_derived: boolean;
+            /**
+             * Mapping Method
+             * @default unmapped
+             */
+            mapping_method: string;
+            /** Measured On */
+            measured_on?: string | null;
+            /**
+             * Needs Mapping Review
+             * @default false
+             */
+            needs_mapping_review: boolean;
+            /** Note */
+            note?: string | null;
+            /** Original Name */
+            original_name: string;
+            /** Previous On */
+            previous_on?: string | null;
+            /** Previous Value */
+            previous_value?: number | null;
+            /** Reference High */
+            reference_high?: number | null;
+            /** Reference Low */
+            reference_low?: number | null;
+            /** Report Flag */
+            report_flag?: string | null;
+            /** Report Id */
+            report_id?: string | null;
+            /** Result Id */
+            result_id: string;
+            /** Secondary System Ids */
+            secondary_system_ids?: string[];
+            /** Source Group */
+            source_group?: string | null;
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "normal" | "low" | "high" | "critical" | "no_range" | "no_value";
+            /**
+             * Status Source
+             * @default none
+             * @enum {string}
+             */
+            status_source: "report_flag" | "reference_range" | "none";
+            /** System Id */
+            system_id: string;
+            /** Trend */
+            trend?: ("toward_range" | "away_from_range" | "steady" | "in_range") | null;
+            /** Unit */
+            unit?: string | null;
+            /** Value */
+            value?: number | null;
+        };
         /** BlockItem */
         BlockItem: {
             /** Evidence */
@@ -791,6 +717,31 @@ export interface components {
             unit?: string | null;
             /** Value */
             value?: number | null;
+        };
+        /** BodySystemOverview */
+        BodySystemOverview: {
+            allergy?: components["schemas"]["SystemSummary"] | null;
+            /**
+             * Available
+             * @default false
+             */
+            available: boolean;
+            /** Available Reports */
+            available_reports?: components["schemas"]["ReportRef"][];
+            /** Registry Version */
+            registry_version: string;
+            report?: components["schemas"]["ReportRef"] | null;
+            /** Results */
+            results?: components["schemas"]["BiomarkerResult"][];
+            /**
+             * State
+             * @default no_report
+             * @enum {string}
+             */
+            state: "ready" | "no_report" | "no_results";
+            /** Systems */
+            systems?: components["schemas"]["SystemSummary"][];
+            totals?: components["schemas"]["ReportTotals"];
         };
         /** Body_transcribe_api_v1_voice_post */
         Body_transcribe_api_v1_voice_post: {
@@ -896,6 +847,8 @@ export interface components {
             escalation?: string | null;
             /** Estimated Cost Usd */
             estimated_cost_usd?: number | null;
+            /** Fallback Reason */
+            fallback_reason?: string | null;
             /** Fallback Used */
             fallback_used?: boolean | null;
             /** Grounding Flags */
@@ -1073,10 +1026,6 @@ export interface components {
             /** Follow Ups */
             follow_ups?: components["schemas"]["FollowUpSuggestion"][];
             meta?: components["schemas"]["ChatMeta"];
-            /** Nutrition */
-            nutrition?: {
-                [key: string]: unknown;
-            } | null;
             presentation?: components["schemas"]["StructuredResponse"] | null;
             provenance?: components["schemas"]["UserProvenance"];
             /** Recommendations */
@@ -1110,6 +1059,8 @@ export interface components {
             current_date?: string | null;
             /** Current Report Id */
             current_report_id?: string | null;
+            /** Current Unit */
+            current_unit?: string | null;
             /** Current Value */
             current_value?: number | null;
             /** Direction */
@@ -1120,6 +1071,8 @@ export interface components {
             previous_date?: string | null;
             /** Previous Report Id */
             previous_report_id?: string | null;
+            /** Previous Unit */
+            previous_unit?: string | null;
             /** Previous Value */
             previous_value?: number | null;
             /** Topic */
@@ -1138,6 +1091,8 @@ export interface components {
         ContextRef: {
             /** Document Id */
             document_id?: string | null;
+            /** Entry Point */
+            entry_point?: "blood_report_overview" | null;
             /** Marker Code */
             marker_code?: string | null;
             /** Report Id */
@@ -1460,6 +1415,17 @@ export interface components {
          * @enum {string}
          */
         GoalSource: "user_goal" | "questionnaire" | "conversation" | "profile";
+        /** GroupCoverage */
+        GroupCoverage: {
+            /** Observed Count */
+            observed_count: number;
+            /** Partial */
+            partial: boolean;
+            /** Registry Count */
+            registry_count: number;
+            /** Source Group */
+            source_group: string;
+        };
         /** HTTPValidationError */
         HTTPValidationError: {
             /** Detail */
@@ -1544,6 +1510,18 @@ export interface components {
             /** Title */
             title: string;
         };
+        /** HistoryPoint */
+        HistoryPoint: {
+            /** Date */
+            date: string;
+            /**
+             * Status
+             * @default unknown
+             */
+            status: string;
+            /** Value */
+            value: number;
+        };
         /**
          * InsightCandidate
          * @description Computed change candidate. Never sent unsolicited in chat.
@@ -1588,6 +1566,24 @@ export interface components {
             /** Title */
             title: string;
         };
+        /** KeyFinding */
+        KeyFinding: {
+            /** How Far */
+            how_far?: ("slightly" | "moderately" | "clearly") | null;
+            /** Label */
+            label: string;
+            /** Result Id */
+            result_id: string;
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "normal" | "low" | "high" | "critical" | "no_range" | "no_value";
+            /** Unit */
+            unit?: string | null;
+            /** Value */
+            value?: number | null;
+        };
         /** KnownLifestyle */
         KnownLifestyle: {
             /** Activity */
@@ -1617,26 +1613,6 @@ export interface components {
             activity_level?: components["schemas"]["ProvenancedFact"] | null;
             dietary_pattern?: components["schemas"]["ProvenancedFact"] | null;
             sleep_pattern?: components["schemas"]["ProvenancedFact"] | null;
-        };
-        /** LogRequest */
-        LogRequest: {
-            /**
-             * Acknowledge Allergy
-             * @default false
-             */
-            acknowledge_allergy: boolean;
-            /** Description */
-            description?: string | null;
-            /** Eaten On */
-            eaten_on?: string | null;
-            /** Food Id */
-            food_id: string;
-            /** Occasion */
-            occasion: string;
-            /** Quantity */
-            quantity: number;
-            /** Unit */
-            unit: string;
         };
         /**
          * LongitudinalClass
@@ -1979,15 +1955,6 @@ export interface components {
             /** Value */
             value?: string | null;
         };
-        /** PreviewRequest */
-        PreviewRequest: {
-            /** Food Id */
-            food_id: string;
-            /** Quantity */
-            quantity: number;
-            /** Unit */
-            unit: string;
-        };
         /** ProvenanceSource */
         ProvenanceSource: {
             /** Name */
@@ -2077,6 +2044,49 @@ export interface components {
             /** Title */
             title: string;
         };
+        /** ReportRef */
+        ReportRef: {
+            /** Report Date */
+            report_date: string;
+            /** Report Id */
+            report_id: string;
+            /** Source Line */
+            source_line?: string | null;
+        };
+        /** ReportTotals */
+        ReportTotals: {
+            /**
+             * Abnormal
+             * @default 0
+             */
+            abnormal: number;
+            /**
+             * Allergy
+             * @default 0
+             */
+            allergy: number;
+            /**
+             * Conflicting Duplicates
+             * @default 0
+             */
+            conflicting_duplicates: number;
+            /**
+             * Duplicates Collapsed
+             * @default 0
+             */
+            duplicates_collapsed: number;
+            status_breakdown?: components["schemas"]["StatusBreakdown"];
+            /**
+             * Unique Results
+             * @default 0
+             */
+            unique_results: number;
+            /**
+             * Unmapped
+             * @default 0
+             */
+            unmapped: number;
+        };
         /**
          * ResolvedValue
          * @description A value the backend read from the member's record (never from model text).
@@ -2159,6 +2169,160 @@ export interface components {
             /** Keep */
             keep: number;
         };
+        /** RiskGroupSummary */
+        RiskGroupSummary: {
+            /** Id */
+            id: string;
+            /** Key Findings */
+            key_findings?: components["schemas"]["RiskKeyFinding"][];
+            /** Name */
+            name: string;
+            /**
+             * Needs Mapping Review
+             * @default false
+             */
+            needs_mapping_review: boolean;
+            /** Raised Count */
+            raised_count: number;
+            /** Risk Codes */
+            risk_codes?: string[];
+            /** Risk Count */
+            risk_count: number;
+            /** Status Breakdown */
+            status_breakdown?: {
+                [key: string]: number;
+            };
+        };
+        /** RiskHistoryPoint */
+        RiskHistoryPoint: {
+            /** Date */
+            date: string;
+            /** Score */
+            score?: number | null;
+            /** Status */
+            status?: string | null;
+        };
+        /** RiskKeyFinding */
+        RiskKeyFinding: {
+            /** Code */
+            code: string;
+            /** Name */
+            name: string;
+            /** Score */
+            score?: number | null;
+            /** Status */
+            status?: string | null;
+        };
+        /** RiskOverview */
+        RiskOverview: {
+            /**
+             * Available
+             * @default false
+             */
+            available: boolean;
+            /** Available Reports */
+            available_reports?: components["schemas"]["ReportRef"][];
+            /** Disclaimer */
+            disclaimer: string;
+            /** Groups */
+            groups?: components["schemas"]["RiskGroupSummary"][];
+            /** Registry Version */
+            registry_version: string;
+            report?: components["schemas"]["RiskReportRef"] | null;
+            /** Risks */
+            risks?: components["schemas"]["RiskResult"][];
+            /**
+             * Same Day Alternatives
+             * @default false
+             */
+            same_day_alternatives: boolean;
+            /**
+             * State
+             * @default no_report
+             * @enum {string}
+             */
+            state: "ready" | "no_report" | "no_results";
+            totals?: components["schemas"]["RiskTotals"];
+        };
+        /** RiskReportRef */
+        RiskReportRef: {
+            /** Metabolic Age */
+            metabolic_age?: number | null;
+            /** Metabolic Score */
+            metabolic_score?: number | null;
+            /** Report Date */
+            report_date: string;
+            /** Report Id */
+            report_id: string;
+            /** Source Line */
+            source_line?: string | null;
+        };
+        /** RiskResult */
+        RiskResult: {
+            /** Change */
+            change?: ("increased" | "decreased" | "unchanged") | null;
+            /** Code */
+            code: string;
+            /** Contributing Factors */
+            contributing_factors?: string[];
+            /**
+             * Duplicates Collapsed
+             * @default 0
+             */
+            duplicates_collapsed: number;
+            /** Group Id */
+            group_id: string;
+            /** History */
+            history?: components["schemas"]["RiskHistoryPoint"][];
+            /**
+             * Kind
+             * @default predicted_risk
+             * @constant
+             */
+            kind: "predicted_risk";
+            /**
+             * Level
+             * @default unknown
+             * @enum {string}
+             */
+            level: "raised" | "not_raised" | "unknown";
+            /** Lifestyle Contribution */
+            lifestyle_contribution?: number | null;
+            /** Measured On */
+            measured_on?: string | null;
+            /** Name */
+            name: string;
+            /** Percentile */
+            percentile?: number | null;
+            /** Previous On */
+            previous_on?: string | null;
+            /** Previous Score */
+            previous_score?: number | null;
+            /** Report Id */
+            report_id?: string | null;
+            /** Score */
+            score?: number | null;
+            /** Status */
+            status?: string | null;
+        };
+        /** RiskTotals */
+        RiskTotals: {
+            /**
+             * Duplicates Collapsed
+             * @default 0
+             */
+            duplicates_collapsed: number;
+            /**
+             * Raised Count
+             * @default 0
+             */
+            raised_count: number;
+            /**
+             * Risk Count
+             * @default 0
+             */
+            risk_count: number;
+        };
         /** ScoreOverview */
         ScoreOverview: {
             /** Name */
@@ -2229,6 +2393,39 @@ export interface components {
              * @default false
              */
             personal_unavailable: boolean;
+        };
+        /** StatusBreakdown */
+        StatusBreakdown: {
+            /**
+             * Critical
+             * @default 0
+             */
+            critical: number;
+            /**
+             * High
+             * @default 0
+             */
+            high: number;
+            /**
+             * Low
+             * @default 0
+             */
+            low: number;
+            /**
+             * No Range
+             * @default 0
+             */
+            no_range: number;
+            /**
+             * No Value
+             * @default 0
+             */
+            no_value: number;
+            /**
+             * Normal
+             * @default 0
+             */
+            normal: number;
         };
         /**
          * StreamPolicy
@@ -2321,57 +2518,52 @@ export interface components {
          * @enum {string}
          */
         SummaryStyle: "RAW_HEALTH_SNAPSHOT" | "NARRATIVE_HEALTH_SUMMARY";
-        /** TargetRequest */
-        TargetRequest: {
-            /** Activity */
-            activity?: string | null;
-            /** Age Years */
-            age_years?: number | null;
-            /** Allergies */
-            allergies?: string[];
-            /** Custom Calories */
-            custom_calories?: number | null;
-            /**
-             * Eating Disorder
-             * @default false
-             */
-            eating_disorder: boolean;
-            /** Goal Code */
-            goal_code?: string | null;
-            /** Height Cm */
-            height_cm?: number | null;
-            /**
-             * Medical Complex
-             * @default false
-             */
-            medical_complex: boolean;
-            /**
-             * Pregnant
-             * @default false
-             */
-            pregnant: boolean;
-            /** Sex */
-            sex?: string | null;
-            /** Weight Kg */
-            weight_kg?: number | null;
-        };
-        /** TemplateItem */
-        TemplateItem: {
-            /** Food Id */
-            food_id: string;
-            /** Quantity */
-            quantity: number;
-            /** Unit */
-            unit: string;
-        };
-        /** TemplateRequest */
-        TemplateRequest: {
-            /** Items */
-            items: components["schemas"]["TemplateItem"][];
+        /** SystemSummary */
+        SystemSummary: {
+            /** Abnormal Count */
+            abnormal_count: number;
+            /** Available Count */
+            available_count: number;
+            /** Caveat */
+            caveat?: string | null;
+            /** Group Coverage */
+            group_coverage?: components["schemas"]["GroupCoverage"][];
+            /** Id */
+            id: string;
+            /** Key Findings */
+            key_findings?: components["schemas"]["KeyFinding"][];
+            /** Latest Measured On */
+            latest_measured_on?: string | null;
             /** Name */
             name: string;
-            /** Occasion */
-            occasion: string;
+            /**
+             * Needs Mapping Review
+             * @default false
+             */
+            needs_mapping_review: boolean;
+            /**
+             * Related Abnormal Count
+             * @default 0
+             */
+            related_abnormal_count: number;
+            /** Related Result Ids */
+            related_result_ids?: string[];
+            /** Result Ids */
+            result_ids?: string[];
+            /**
+             * Scope
+             * @default primary
+             * @enum {string}
+             */
+            scope: "primary" | "related_only";
+            /**
+             * State
+             * @enum {string}
+             */
+            state: "attention" | "all_in_range" | "partly_assessed" | "no_values";
+            status_breakdown: components["schemas"]["StatusBreakdown"];
+            /** Subsections */
+            subsections?: components["schemas"]["AllergySubsection"][];
         };
         /**
          * TestingOption
@@ -2524,15 +2716,6 @@ export interface components {
             stream_policy: components["schemas"]["StreamPolicy"];
             /** Uncertainties */
             uncertainties?: string[];
-        };
-        /** UpdateRequest */
-        UpdateRequest: {
-            /** Occasion */
-            occasion?: string | null;
-            /** Quantity */
-            quantity?: number | null;
-            /** Unit */
-            unit?: string | null;
         };
         /** UserProvenance */
         UserProvenance: {
@@ -3198,6 +3381,68 @@ export interface operations {
             };
         };
     };
+    bio_ai_risks_api_v1_me_bio_ai_risks_get: {
+        parameters: {
+            query?: {
+                report_id?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RiskOverview"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    body_systems_api_v1_me_body_systems_get: {
+        parameters: {
+            query?: {
+                report_id?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BodySystemOverview"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     get_goals_api_v1_me_goals_get: {
         parameters: {
             query?: never;
@@ -3267,494 +3512,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["HealthOverview"];
-                };
-            };
-        };
-    };
-    get_day_api_v1_nutrition_days__eaten_on__get: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                eaten_on: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        [key: string]: unknown;
-                    };
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    log_entry_api_v1_nutrition_entries_post: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["LogRequest"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        [key: string]: unknown;
-                    };
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    delete_entry_api_v1_nutrition_entries__entry_id__delete: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                entry_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        [key: string]: unknown;
-                    };
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    update_entry_api_v1_nutrition_entries__entry_id__patch: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                entry_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UpdateRequest"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        [key: string]: unknown;
-                    };
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    confirm_entry_api_v1_nutrition_entries__entry_id__confirm_post: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                entry_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        [key: string]: unknown;
-                    };
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    food_detail_api_v1_nutrition_foods__food_id__get: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                food_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        [key: string]: unknown;
-                    };
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    history_api_v1_nutrition_history_get: {
-        parameters: {
-            query?: {
-                days?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        [key: string]: unknown;
-                    };
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    preview_api_v1_nutrition_preview_post: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["PreviewRequest"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        [key: string]: unknown;
-                    };
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    search_foods_api_v1_nutrition_search_get: {
-        parameters: {
-            query: {
-                q: string;
-                limit?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        [key: string]: unknown;
-                    };
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    get_targets_api_v1_nutrition_targets_get: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        [key: string]: unknown;
-                    };
-                };
-            };
-        };
-    };
-    put_targets_api_v1_nutrition_targets_put: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["TargetRequest"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        [key: string]: unknown;
-                    };
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    list_templates_api_v1_nutrition_templates_get: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        [key: string]: unknown;
-                    };
-                };
-            };
-        };
-    };
-    create_template_api_v1_nutrition_templates_post: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["TemplateRequest"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        [key: string]: unknown;
-                    };
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    delete_template_api_v1_nutrition_templates__template_id__delete: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                template_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        [key: string]: unknown;
-                    };
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    log_template_api_v1_nutrition_templates__template_id__log_post: {
-        parameters: {
-            query?: {
-                eaten_on?: string | null;
-            };
-            header?: never;
-            path: {
-                template_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        [key: string]: unknown;
-                    };
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };

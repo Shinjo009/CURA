@@ -1,0 +1,70 @@
+{
+ "registry_version": "1.0",
+ "effective_date": "2026-11-20",
+ "note": "Groups the predicted risks that a Bio-AI report returns. Predictions are not measured results and not diagnoses. A risk absent from the report is never shown.",
+ "groups": [
+  {
+   "id": "heart_circulation",
+   "name": "Heart & Circulation",
+   "codes": [
+    "cardiac_health",
+    "dyslipidemia",
+    "hypertension"
+   ]
+  },
+  {
+   "id": "liver_health",
+   "name": "Liver Health",
+   "codes": [
+    "nafld"
+   ]
+  },
+  {
+   "id": "blood_sugar_metabolism",
+   "name": "Blood Sugar & Metabolism",
+   "codes": [
+    "type_2_diabetes",
+    "obesity"
+   ]
+  },
+  {
+   "id": "thyroid_health",
+   "name": "Thyroid Health",
+   "codes": [
+    "thyroid"
+   ]
+  },
+  {
+   "id": "hormonal_health",
+   "name": "Hormonal Health",
+   "codes": [
+    "pcos"
+   ]
+  },
+  {
+   "id": "immunity_inflammation",
+   "name": "Immunity & Inflammation",
+   "codes": [
+    "oxidative_stress"
+   ]
+  }
+ ],
+ "raised_statuses": [
+  "critical",
+  "very high",
+  "high",
+  "elevated",
+  "moderate",
+  "medium"
+ ],
+ "status_order": [
+  "critical",
+  "very high",
+  "high",
+  "elevated",
+  "moderate",
+  "medium",
+  "mild",
+  "low"
+ ]
+}

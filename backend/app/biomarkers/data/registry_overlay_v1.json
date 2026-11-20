@@ -1,0 +1,274 @@
+{
+ "registry_version": "1.0",
+ "effective_date": "2026-11-20",
+ "status": "proposed: system assignments and canonical ids are CURA design decisions, not laboratory-defined classifications",
+ "spelling": {
+  "cholestrol": "cholesterol",
+  "platelate": "platelet",
+  "estrase": "esterase",
+  "leucocyte": "leukocyte",
+  "haemoglobin": "hemoglobin"
+ },
+ "key_bridge": {
+  "hemoglobin": "hemoglobin_hb",
+  "mcv": "mcv",
+  "mch": "mch",
+  "mchc": "mchc",
+  "rbc": "red_blood_cells",
+  "wbc": "wbc",
+  "platelets": "platelet_count",
+  "hematocrit": "pcv_hematocrit",
+  "absolute_basophils_count": "absolute_basophils_count",
+  "absolute_eosinophil_count": "absolute_eosinophils_count",
+  "absolute_neutrophil_count": "absolute_neutrophil_count",
+  "fasting_blood_glucose": "fasting_sugar",
+  "glucose": "fasting_sugar",
+  "hba1c": "hba1c",
+  "fasting_insulin": "fasting_insulin",
+  "magnesium": "magnesium",
+  "iron": "iron_serum",
+  "tibc": "tibc",
+  "cholesterol": "cholesterol_total",
+  "ldl": "ldl_cholesterol_calculated",
+  "hdl": "hdl_cholesterol_direct",
+  "non_hdl": "non_hdl_cholesterol",
+  "triglycerides": "triglycerides",
+  "vldl": "vldl_cholesterol",
+  "phosphorus": "phosphorus_inorganic",
+  "homocysteine": "homocysteine",
+  "creatinine": "creatinine",
+  "egfr": "egfr",
+  "urea": "urea",
+  "bun": "bun_urea_nitrogen",
+  "uric_acid": "uric_acid",
+  "sodium": "sodium",
+  "chloride": "chlorides",
+  "potassium": "potassium",
+  "tsh": "tsh",
+  "t3": "t3",
+  "t4": "t4",
+  "vitamin_d": "vitamin_d_total_25_hydroxy",
+  "vitamin_b12": "vitamin_b12",
+  "esr": "esr",
+  "globulin": "globulin",
+  "alkaline_phosphatase": "alkaline_phosphatase",
+  "alt": "sgpt_alt",
+  "ast": "sgot_ast",
+  "bilirubin": "bilirubin_total",
+  "albumin": "albumin",
+  "ggt": "ggtp",
+  "proteins_serum": "proteins_serum"
+ },
+ "bridge_notes": {
+  "glucose": "Fasting state is not stated on the source label."
+ },
+ "aliases": {
+  "hemoglobin_hb": [
+   "hemoglobin",
+   "haemoglobin",
+   "hb"
+  ],
+  "sgpt_alt": [
+   "sgpt",
+   "alt",
+   "alanine aminotransferase"
+  ],
+  "sgot_ast": [
+   "sgot",
+   "ast",
+   "aspartate aminotransferase"
+  ],
+  "ggtp": [
+   "ggt",
+   "gamma gt",
+   "gamma glutamyl transferase"
+  ],
+  "vitamin_d_total_25_hydroxy": [
+   "vitamin d",
+   "25 oh vitamin d",
+   "vitamin d 25 hydroxy"
+  ],
+  "hdl_cholesterol_direct": [
+   "hdl cholesterol",
+   "hdl"
+  ],
+  "ldl_cholesterol_calculated": [
+   "ldl cholesterol",
+   "ldl"
+  ],
+  "cholesterol_total": [
+   "total cholesterol",
+   "cholesterol"
+  ],
+  "fasting_sugar": [
+   "fasting blood sugar",
+   "fasting blood glucose",
+   "fasting glucose",
+   "fbs"
+  ],
+  "platelet_count": [
+   "platelet count",
+   "platelets"
+  ],
+  "wbc": [
+   "total leukocyte count",
+   "tlc",
+   "white blood cells"
+  ],
+  "pcv_hematocrit": [
+   "pcv",
+   "hematocrit",
+   "packed cell volume"
+  ],
+  "hs_crp": [
+   "hs crp",
+   "high sensitivity crp",
+   "hscrp"
+  ],
+  "ubic": [
+   "uibc"
+  ],
+  "bilirubin_total": [
+   "total bilirubin"
+  ],
+  "bilirubin_direct": [
+   "direct bilirubin"
+  ],
+  "bilirubin_indirect": [
+   "indirect bilirubin"
+  ],
+  "chlorides": [
+   "chloride"
+  ],
+  "red_blood_cells": [
+   "red blood cell count",
+   "rbc count"
+  ],
+  "bun_urea_nitrogen": [
+   "bun",
+   "blood urea nitrogen"
+  ],
+  "egfr": [
+   "estimated gfr"
+  ],
+  "total_testosterone": [
+   "testosterone total",
+   "testosterone"
+  ],
+  "lipo_a_lipoprotein_a": [
+   "lipoprotein a",
+   "lp a"
+  ],
+  "apo_b_apolipoprotein_b": [
+   "apolipoprotein b",
+   "apo b"
+  ]
+ },
+ "ambiguous_bare_labels": [
+  "rbc",
+  "sugar"
+ ],
+ "derived": [
+  "mentzer_index_mcv_rcc",
+  "gk_index",
+  "rdwi",
+  "chol_hdl_ratio",
+  "ldl_hdl_cholesterol",
+  "hdl_ldl_cholesterol_ratio",
+  "sgot_sgpt_ratio",
+  "a_g_ratio",
+  "bun_creatinine_ratio",
+  "urea_creatinine_ratio"
+ ],
+ "review_notes": {
+  "ubic": "Label kept as supplied; confirm whether UIBC is intended.",
+  "urine_nitrate": "Label kept as supplied; confirm whether the assay is nitrite.",
+  "afp_alpha_feto_protein_amniotic_fluid": "Verify specimen and test definition before presenting as a serum tumor marker.",
+  "calcium": "May be the same analyte as Calcium Total; kept separate until assay and specimen equivalence is confirmed.",
+  "calcium_total": "May be the same analyte as Calcium; kept separate until assay and specimen equivalence is confirmed.",
+  "esr": "Comparable to ESR Automated but not merged.",
+  "esr_automated": "Comparable to ESR but not merged.",
+  "t3": "Free versus total fraction not specified; reference ranges depend on the assay.",
+  "t4": "Free versus total fraction not specified; reference ranges depend on the assay.",
+  "mentzer_index_mcv_rcc": "Formula definition not verified; never recomputed.",
+  "gk_index": "Formula definition not verified; never recomputed.",
+  "rdwi": "Formula definition not verified; never recomputed."
+ },
+ "allergy_groups": [
+  {
+   "subsection": "Food",
+   "group": "Allergy Veg",
+   "listed_count": 40
+  },
+  {
+   "subsection": "Food",
+   "group": "Allergy Non-Veg",
+   "listed_count": 17
+  },
+  {
+   "subsection": "Food",
+   "group": "Allergy Dairy",
+   "listed_count": 12
+  },
+  {
+   "subsection": "Food",
+   "group": "Allergy Seeds/Nuts/Legumes",
+   "listed_count": 21
+  },
+  {
+   "subsection": "Food",
+   "group": "Allergy Spices",
+   "listed_count": 19
+  },
+  {
+   "subsection": "Environmental",
+   "group": "Allergy Dust Mites",
+   "listed_count": 13
+  },
+  {
+   "subsection": "Environmental",
+   "group": "Allergy Grass",
+   "listed_count": 8
+  },
+  {
+   "subsection": "Environmental",
+   "group": "Allergy Moulds & Yeast",
+   "listed_count": 10
+  },
+  {
+   "subsection": "Environmental",
+   "group": "Allergy Weed & Tree",
+   "listed_count": 11
+  },
+  {
+   "subsection": "Animals & insects",
+   "group": "Allergy Pets",
+   "listed_count": 21
+  },
+  {
+   "subsection": "Animals & insects",
+   "group": "Allergy Insects",
+   "listed_count": 6
+  },
+  {
+   "subsection": "Medication",
+   "group": "Allergy Drugs",
+   "listed_count": 24
+  },
+  {
+   "subsection": "Occupational / parasites",
+   "group": "Allergy Occupational",
+   "listed_count": 6
+  },
+  {
+   "subsection": "Occupational / parasites",
+   "group": "Allergy Parasites",
+   "listed_count": 3
+  },
+  {
+   "subsection": "Immune marker",
+   "group": "Allergy IgE",
+   "listed_count": 1
+  }
+ ]
+}

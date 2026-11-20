@@ -9,12 +9,15 @@ export function WelcomeExperience({
   meLoading,
   suggestions = [],
   onSend,
+  onOpenOverview,
   inputRef,
 }: {
   me: MeResponse | null;
   meLoading: boolean;
   suggestions?: Array<{ id: string; text: string }>;
   onSend: (text: string, documentIds?: string[], contextRef?: ContextRef) => void;
+  /** Opens the visual overview. Without it the buttons start a chat, as before. */
+  onOpenOverview?: (kind: "blood" | "bio_ai") => void;
   inputRef: RefObject<HTMLInputElement>;
 }) {
   const greeting = meLoading ? "Hi 👋" : me?.greeting || "Hi there 👋";
@@ -35,11 +38,13 @@ export function WelcomeExperience({
           <button
             type="button"
             onClick={() =>
-              onSend("What does my lab report say about my health?", [], {
-                type: "blood_report",
-                source: "supershyft",
-                entry_point: "blood_report_overview",
-              })
+              onOpenOverview
+                ? onOpenOverview("blood")
+                : onSend("What does my lab report say about my health?", [], {
+                    type: "blood_report",
+                    source: "supershyft",
+                    entry_point: "blood_report_overview",
+                  })
             }
           >
             🩸 <strong>{t("ui.WelcomeExperience.my_blood_report", "My Blood Report")}</strong>
@@ -50,10 +55,12 @@ export function WelcomeExperience({
           <button
             type="button"
             onClick={() =>
-              onSend("Help me understand my latest Bio-AI report and its findings.", [], {
-                type: "bio_ai_report",
-                source: "supershyft",
-              })
+              onOpenOverview
+                ? onOpenOverview("bio_ai")
+                : onSend("Help me understand my latest Bio-AI report and its findings.", [], {
+                    type: "bio_ai_report",
+                    source: "supershyft",
+                  })
             }
           >
             🧬 <strong>{t("ui.WelcomeExperience.my_bio_ai_report", "My Bio-AI Report")}</strong>

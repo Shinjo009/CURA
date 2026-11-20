@@ -10,6 +10,8 @@ import { ProgressStepper } from "../components/ProgressStepper";
 import { MessageList } from "../components/MessageList";
 import { ConversationSidebar } from "../components/ConversationSidebar";
 import { WelcomeExperience } from "../components/WelcomeExperience";
+import { BodySystemOverviewView } from "../components/overview/BodySystemOverviewView";
+import { RiskOverviewView } from "../components/overview/RiskOverviewView";
 import type { ContextRef } from "../types/chat";
 import { useOverview } from "../hooks/useOverview";
 import { MarkerPanel } from "../components/marker/MarkerPanel";
@@ -51,6 +53,13 @@ export function CuraPage() {
     return send(text, ids, contextRef);
   }
 
+  const [overviewKind, setOverviewKind] = useState<"blood" | "bio_ai" | null>(null);
+  // Asking from the overview starts the conversation, which replaces the overview.
+  function askFromOverview(text: string, contextRef: ContextRef) {
+    setOverviewKind(null);
+    void sendWithContext(text, [], contextRef);
+  }
+
   const overview = useOverview();
   const [markerKey, setMarkerKey] = useState<string | null>(null);
   const markers = overview.data?.markers || [];
@@ -83,6 +92,7 @@ export function CuraPage() {
 
   function startNew() {
     newConversation();
+    setOverviewKind(null);
     setSelectedDocumentIds([]);
     setDrawerOpen(false);
   }
@@ -116,8 +126,17 @@ export function CuraPage() {
     >
       <CuraHeader onOpenSidebar={() => setDrawerOpen(true)} />
       <div className="main-scroll" ref={scrollRef}>
-        {!started && (
-          <WelcomeExperience me={me} meLoading={meLoading} suggestions={suggestions} onSend={sendWithContext} inputRef={inputRef} />
+        {!started && overviewKind === "blood" && <BodySystemOverviewView onAsk={askFromOverview} onClose={() => setOverviewKind(null)} />}
+        {!started && overviewKind === "bio_ai" && <RiskOverviewView onAsk={askFromOverview} onClose={() => setOverviewKind(null)} />}
+        {!started && !overviewKind && (
+          <WelcomeExperience
+            me={me}
+            meLoading={meLoading}
+            suggestions={suggestions}
+            onSend={sendWithContext}
+            onOpenOverview={setOverviewKind}
+            inputRef={inputRef}
+          />
         )}
         <DocumentPanel
           refreshKey={docTick}

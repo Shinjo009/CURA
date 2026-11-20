@@ -2,6 +2,7 @@ import { explicitLocale, t } from "../i18n";
 import type { AnswerPreview, ChatResponse, ContextRef, ExperienceBlock } from "../types/chat";
 import type { MeResponse } from "../types/me";
 import type { HealthOverview } from "../types/overview";
+import type { BodySystemOverview, RiskOverview } from "../types/bodySystems";
 
 const API = (import.meta.env.VITE_CURA_API_URL || "").replace(/\/$/, "");
 const USER = import.meta.env.VITE_CURA_USER_ID || "";
@@ -115,6 +116,20 @@ export async function getOverview(): Promise<HealthOverview> {
   const res = await fetch(`${API}/api/v1/me/overview`, { headers: authHeaders() });
   if (!res.ok) throw new Error("Your health overview isn't available right now.");
   return (await res.json()) as HealthOverview;
+}
+
+export async function getBodySystems(reportId?: string | null): Promise<BodySystemOverview> {
+  const query = reportId ? `?report_id=${encodeURIComponent(reportId)}` : "";
+  const res = await fetch(`${API}/api/v1/me/body-systems${query}`, { headers: authHeaders() });
+  if (!res.ok) throw new Error("Your blood report overview isn't available right now.");
+  return (await res.json()) as BodySystemOverview;
+}
+
+export async function getRiskOverview(reportId?: string | null): Promise<RiskOverview> {
+  const query = reportId ? `?report_id=${encodeURIComponent(reportId)}` : "";
+  const res = await fetch(`${API}/api/v1/me/bio-ai-risks${query}`, { headers: authHeaders() });
+  if (!res.ok) throw new Error("Your Bio-AI report overview isn't available right now.");
+  return (await res.json()) as RiskOverview;
 }
 
 export async function transcribeVoice(

@@ -5,6 +5,8 @@ export const queryKeys = {
   conversations: ["conversations"] as const,
   documents: ["documents"] as const,
   overview: ["overview"] as const,
+  bodySystems: (reportId: string | null) => ["body-systems", reportId] as const,
+  riskOverview: (reportId: string | null) => ["bio-ai-risks", reportId] as const,
 };
 
 export function createQueryClient(): QueryClient {

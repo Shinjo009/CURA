@@ -1,0 +1,123 @@
+﻿source_group,source_test_name,primary_body_system,proposed_canonical_id,secondary_body_systems
+Lipid Profile,Cholesterol Total,Heart & Circulation,cholesterol_total,—
+Lipid Profile,HDL Cholestrol Direct,Heart & Circulation,hdl_cholesterol_direct,—
+Lipid Profile,Triglycerides,Heart & Circulation,triglycerides,—
+Lipid Profile,Non-HDL Cholestrol,Heart & Circulation,non_hdl_cholesterol,—
+Lipid Profile,CHOL/HDL Ratio,Heart & Circulation,chol_hdl_ratio,—
+Lipid Profile,LDL Cholestrol Calculated,Heart & Circulation,ldl_cholesterol_calculated,—
+Lipid Profile,VLDL Cholestrol,Heart & Circulation,vldl_cholesterol,—
+Lipid Profile,LDL/HDL Cholestrol,Heart & Circulation,ldl_hdl_cholesterol,—
+Lipid Profile,HDL/LDL Cholestrol Ratio,Heart & Circulation,hdl_ldl_cholesterol_ratio,—
+Heart Health C-Suite,Lipo A - Lipoprotein(a),Heart & Circulation,lipo_a_lipoprotein_a,—
+Heart Health C-Suite,Apo B - Apolipoprotein B,Heart & Circulation,apo_b_apolipoprotein_b,—
+Liver Profile,Albumin,Liver Health,albumin,Vitamins & Nutrition
+Liver Profile,Alkaline Phosphatase,Liver Health,alkaline_phosphatase,—
+Liver Profile,Bilirubin Direct,Liver Health,bilirubin_direct,—
+Liver Profile,Bilirubin Total,Liver Health,bilirubin_total,—
+Liver Profile,GGTP,Liver Health,ggtp,—
+Liver Profile,Proteins Serum,Liver Health,proteins_serum,Vitamins & Nutrition
+Liver Profile,SGOT (AST),Liver Health,sgot_ast,—
+Liver Profile,SGPT (ALT),Liver Health,sgpt_alt,—
+Liver Profile,Bilirubin Indirect,Liver Health,bilirubin_indirect,—
+Liver Profile,Globulin,Liver Health,globulin,—
+Liver Profile,A/G Ratio,Liver Health,a_g_ratio,—
+Liver Profile,SGOT/SGPT Ratio,Liver Health,sgot_sgpt_ratio,—
+Kidney Function with K,BUN Urea Nitrogen,Kidney & Urinary,bun_urea_nitrogen,—
+Kidney Function with K,Calcium Total,Kidney & Urinary,calcium_total,Bone & Mineral Health
+Kidney Function with K,Chlorides,Kidney & Urinary,chlorides,—
+Kidney Function with K,Creatinine,Kidney & Urinary,creatinine,—
+Kidney Function with K,Sodium,Kidney & Urinary,sodium,—
+Kidney Function with K,Urea,Kidney & Urinary,urea,—
+Kidney Function with K,Uric Acid,Kidney & Urinary,uric_acid,—
+Kidney Function with K,BUN/Creatinine Ratio,Kidney & Urinary,bun_creatinine_ratio,—
+Kidney Function with K,Urea/Creatinine Ratio,Kidney & Urinary,urea_creatinine_ratio,—
+Kidney Function with K,eGFR,Kidney & Urinary,egfr,—
+Kidney Function with K,Phosphorus Inorganic,Kidney & Urinary,phosphorus_inorganic,Bone & Mineral Health
+Kidney Function with K,Potassium,Kidney & Urinary,potassium,—
+Urine Routine and Microscopy,pH Urine,Kidney & Urinary,urine_ph_urine,—
+Urine Routine and Microscopy,Urobilinogen,Kidney & Urinary,urine_urobilinogen,Liver Health
+Urine Routine and Microscopy,Colour,Kidney & Urinary,urine_colour,—
+Urine Routine and Microscopy,Transparency,Kidney & Urinary,urine_transparency,—
+Urine Routine and Microscopy,Sugar,Kidney & Urinary,urine_sugar,Blood Sugar & Metabolism
+Urine Routine and Microscopy,Blood(Urine),Kidney & Urinary,urine_blood_urine,—
+Urine Routine and Microscopy,RBC,Kidney & Urinary,urine_rbc,—
+Urine Routine and Microscopy,Pus Cells,Kidney & Urinary,urine_pus_cells,—
+Urine Routine and Microscopy,Epithelial Cells,Kidney & Urinary,urine_epithelial_cells,—
+Urine Routine and Microscopy,Crystals,Kidney & Urinary,urine_crystals,—
+Urine Routine and Microscopy,Cast,Kidney & Urinary,urine_cast,—
+Urine Routine and Microscopy,Bacteria,Kidney & Urinary,urine_bacteria,—
+Urine Routine and Microscopy,Yeast Cells,Kidney & Urinary,urine_yeast_cells,—
+Urine Routine and Microscopy,Nitrate,Kidney & Urinary,urine_nitrate,—
+Urine Routine and Microscopy,Urine Ketone,Kidney & Urinary,urine_urine_ketone,Blood Sugar & Metabolism
+Urine Routine and Microscopy,Urine Protein,Kidney & Urinary,urine_urine_protein,—
+Urine Routine and Microscopy,Leucocyte Estrase,Kidney & Urinary,urine_leukocyte_esterase,—
+Urine Routine and Microscopy,Bile Pigments,Kidney & Urinary,urine_bile_pigments,Liver Health
+Urine Routine and Microscopy,Specific Gravity,Kidney & Urinary,urine_specific_gravity,—
+Urine Routine and Microscopy,Volume-Urine,Kidney & Urinary,urine_volume_urine,—
+Urine Routine and Microscopy,Others-Urine,Kidney & Urinary,urine_others_urine,—
+Complete Hemogram,Absolute Basophils Count,Blood & Iron,absolute_basophils_count,Immunity & Inflammation
+Complete Hemogram,Absolute Eosinophils Count,Blood & Iron,absolute_eosinophils_count,Immunity & Inflammation
+Complete Hemogram,Absolute Lymphocyte Count,Blood & Iron,absolute_lymphocyte_count,Immunity & Inflammation
+Complete Hemogram,Absolute Monocyte Count,Blood & Iron,absolute_monocyte_count,Immunity & Inflammation
+Complete Hemogram,Absolute Neutrophil Count,Blood & Iron,absolute_neutrophil_count,Immunity & Inflammation
+Complete Hemogram,ESR Automated,Blood & Iron,esr_automated,Immunity & Inflammation
+Complete Hemogram,Hemoglobin Hb,Blood & Iron,hemoglobin_hb,—
+Complete Hemogram,MCH,Blood & Iron,mch,—
+Complete Hemogram,MCHC,Blood & Iron,mchc,—
+Complete Hemogram,MCV,Blood & Iron,mcv,—
+Complete Hemogram,MPV Mean Platelate Count,Blood & Iron,mpv_mean_platelet_count,—
+Complete Hemogram,PCV/Hematocrit,Blood & Iron,pcv_hematocrit,—
+Complete Hemogram,Platelate Count,Blood & Iron,platelet_count,—
+Complete Hemogram,WBC,Blood & Iron,wbc,Immunity & Inflammation
+Complete Hemogram,RDW,Blood & Iron,rdw,—
+Complete Hemogram,Neutrophils,Blood & Iron,neutrophils,Immunity & Inflammation
+Complete Hemogram,Eosinophils,Blood & Iron,eosinophils,Immunity & Inflammation
+Complete Hemogram,Lymphocytes,Blood & Iron,lymphocytes,Immunity & Inflammation
+Complete Hemogram,Monocytes,Blood & Iron,monocytes,Immunity & Inflammation
+Complete Hemogram,Basophils,Blood & Iron,basophils,Immunity & Inflammation
+Complete Hemogram,RDW-CV,Blood & Iron,rdw_cv,—
+Complete Hemogram,MENTZER INDEX MCV/RCC,Blood & Iron,mentzer_index_mcv_rcc,—
+Complete Hemogram,Red blood cells,Blood & Iron,red_blood_cells,—
+Complete Hemogram,GK Index,Blood & Iron,gk_index,—
+Complete Hemogram,RDWI,Blood & Iron,rdwi,—
+Iron Studies,Iron Serum,Blood & Iron,iron_serum,—
+Iron Studies,TIBC,Blood & Iron,tibc,—
+Iron Studies,UBIC,Blood & Iron,ubic,—
+Iron Studies,Transferrin Saturation,Blood & Iron,transferrin_saturation,—
+Diabetes Profile Pro+,Fasting Sugar,Blood Sugar & Metabolism,fasting_sugar,—
+Diabetes Profile Pro+,HbA1c,Blood Sugar & Metabolism,hba1c,—
+Diabetes Profile Pro+,Fasting Insulin,Blood Sugar & Metabolism,fasting_insulin,—
+Vitamins C-Suite,Vitamin B12,Vitamins & Nutrition,vitamin_b12,Blood & Iron
+Vitamins C-Suite,Vitamin D Total-25 Hydroxy,Vitamins & Nutrition,vitamin_d_total_25_hydroxy,Bone & Mineral Health
+Vitamins C-Suite,Vitamin C,Vitamins & Nutrition,vitamin_c,—
+Sleep,Magnesium,Vitamins & Nutrition,magnesium,Bone & Mineral Health; Sleep & Recovery
+Sleep,Zinc,Vitamins & Nutrition,zinc,Sleep & Recovery
+Thyroid Profile,T3,Thyroid Health,t3,—
+Thyroid Profile,T4,Thyroid Health,t4,—
+Thyroid Profile,TSH,Thyroid Health,tsh,—
+Hormones C-suite Male,Total Testosterone,Hormonal Health,total_testosterone,—
+Hormones C-suite Male,DHEAS,Hormonal Health,dheas,—
+Hormones C-suite Male,IGF-1,Hormonal Health,igf_1,—
+Hormones C-suite Male,Cortisol,Hormonal Health,cortisol,Sleep & Recovery
+Hormones C-suite Male,PTH,Hormonal Health,pth,Bone & Mineral Health
+Hormones C-suite Female,Total Testosterone,Hormonal Health,total_testosterone,—
+Hormones C-suite Female,LH,Hormonal Health,lh,—
+Hormones C-suite Female,FSH,Hormonal Health,fsh,—
+Hormones C-suite Female,Cortisol,Hormonal Health,cortisol,Sleep & Recovery
+Hormones C-suite Female,Prolactin,Hormonal Health,prolactin,—
+Hormones C-suite Female,DHEAS,Hormonal Health,dheas,—
+Hormones C-suite Female,IGF-1,Hormonal Health,igf_1,—
+Hormones C-suite Female,PTH,Hormonal Health,pth,Bone & Mineral Health
+Bone health,Calcium,Bone & Mineral Health,calcium,—
+Inflammatory,Homocysteine,Immunity & Inflammation,homocysteine,Heart & Circulation
+Inflammatory,hs-CRP,Immunity & Inflammation,hs_crp,Heart & Circulation
+Inflammatory,ESR,Immunity & Inflammation,esr,—
+Cancer Male C-suite,PSA,Cancer-Related Markers,psa,—
+Cancer Male C-suite,CEA,Cancer-Related Markers,cea,—
+Cancer Male C-suite,AFP (Alpha Feto protein - Amniotic fluid ),Cancer-Related Markers,afp_alpha_feto_protein_amniotic_fluid,—
+Cancer Male C-suite,CA 19-9,Cancer-Related Markers,ca_19_9,—
+Cancer Female C-suite,CA 125,Cancer-Related Markers,ca_125,—
+Cancer Female C-suite,CA 15.3,Cancer-Related Markers,ca_15_3,—
+Cancer Female C-suite,CA 19-9,Cancer-Related Markers,ca_19_9,—
+Cancer Female C-suite,CEA,Cancer-Related Markers,cea,—
+Cancer Female C-suite,AFP (Alpha Feto protein - Amniotic fluid ),Cancer-Related Markers,afp_alpha_feto_protein_amniotic_fluid,—
