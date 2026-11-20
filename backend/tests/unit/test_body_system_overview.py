@@ -417,3 +417,9 @@ def test_systems_needing_attention_are_listed_first_without_changing_the_set():
     flags = [s.abnormal_count > 0 for s in primaries]
     assert flags == sorted(flags, reverse=True)
     assert ov.systems[-1].scope == "related_only"
+
+
+def test_every_card_says_in_plain_words_what_the_system_covers():
+    ov = build_body_system_overview([comprehensive()])
+    assert all(system.about for system in ov.systems)
+    assert "dash" not in "".join(system.about for system in ov.systems)

@@ -14,13 +14,16 @@ import { t } from "../../i18n";
  */
 export function BodySystemOverviewView({
   onAsk,
-  onClose,
+  openId,
+  onOpenChange,
 }: {
   onAsk: (text: string, contextRef: ContextRef) => void;
-  onClose: () => void;
+  /** The opened system, held by the page so the header Back button can step out of it. */
+  openId: string | null;
+  onOpenChange: (id: string | null) => void;
 }) {
   const [reportId, setReportId] = useState<string | null>(null);
-  const [openId, setOpenId] = useState<string | null>(null);
+  const setOpenId = onOpenChange;
   const query = useBodySystems(reportId);
   const data = query.data;
   const results = useMemo(() => new Map((data?.results ?? []).map((r) => [r.result_id, r])), [data]);
@@ -62,7 +65,6 @@ export function BodySystemOverviewView({
           results={pick(open.result_ids)}
           related={pick(open.related_result_ids)}
           reportId={data.report?.report_id}
-          onBack={() => setOpenId(null)}
           onAsk={onAsk}
         />
       </div>
@@ -83,9 +85,6 @@ export function BodySystemOverviewView({
             </p>
           ) : null}
         </div>
-        <button type="button" className="overview-close" onClick={onClose}>
-          {t("ui.overview.close", "Close")}
-        </button>
       </div>
       <ReportPicker reports={data.available_reports ?? []} selectedId={data.report?.report_id} onSelect={(id) => { setOpenId(null); setReportId(id); }} />
       {data.state !== "ready" || systems.length === 0 ? (

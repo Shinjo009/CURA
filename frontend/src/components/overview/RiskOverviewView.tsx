@@ -77,9 +77,17 @@ function groupLine(group: RiskGroupSummary): string {
 }
 
 /** Predicted risks the Bio-AI report returned. Never mixed with measured blood results. */
-export function RiskOverviewView({ onAsk, onClose }: { onAsk: (text: string, contextRef: ContextRef) => void; onClose: () => void }) {
+export function RiskOverviewView({
+  onAsk,
+  openId,
+  onOpenChange,
+}: {
+  onAsk: (text: string, contextRef: ContextRef) => void;
+  openId: string | null;
+  onOpenChange: (id: string | null) => void;
+}) {
   const [reportId, setReportId] = useState<string | null>(null);
-  const [openId, setOpenId] = useState<string | null>(null);
+  const setOpenId = onOpenChange;
   const query = useRiskOverview(reportId);
   const data = query.data;
   const explainAll = () => onAsk(FULL_BIO_AI_ASK.text, { ...FULL_BIO_AI_ASK.contextRef, report_id: data?.report?.report_id ?? null });
@@ -116,12 +124,10 @@ export function RiskOverviewView({ onAsk, onClose }: { onAsk: (text: string, con
     return (
       <div className="overview">
         <section className="system-detail" aria-labelledby="risk-detail-title">
-          <button type="button" className="overview-back" onClick={() => setOpenId(null)}>
-            ← {t("ui.overview.all_risk_groups", "All risk areas")}
-          </button>
           <h2 id="risk-detail-title" tabIndex={-1} ref={(el) => el?.focus()}>
             {open.name}
           </h2>
+          {open.about ? <p className="system-about">{open.about}</p> : null}
           <p className="muted">{groupLine(open)}</p>
           <p className="overview-note" role="note">
             {data.disclaimer}
@@ -150,9 +156,6 @@ export function RiskOverviewView({ onAsk, onClose }: { onAsk: (text: string, con
             </p>
           ) : null}
         </div>
-        <button type="button" className="overview-close" onClick={onClose}>
-          {t("ui.overview.close", "Close")}
-        </button>
       </div>
       <p className="overview-note" role="note">
         {data.disclaimer}
@@ -175,6 +178,7 @@ export function RiskOverviewView({ onAsk, onClose }: { onAsk: (text: string, con
                 onClick={() => setOpenId(group.id)}
               >
                 <span className="system-card-name">{group.name}</span>
+                {group.about ? <span className="system-card-about">{group.about}</span> : null}
                 <span className="system-card-line">{groupLine(group)}</span>
                 <span className="system-card-tag">{t("ui.overview.predicted_risk", "Predicted risk")}</span>
                 {(group.key_findings ?? []).length > 0 ? (

@@ -16,6 +16,7 @@ from dataclasses import dataclass, field
 from app.biomarkers.registry import load_registry, normalize_label
 from app.biomarkers.resolver import Resolution, resolve_marker
 from app.biomarkers.systems import (
+    ALLERGY_ABOUT,
     ALLERGY_ID,
     ALLERGY_NAME,
     OTHER,
@@ -341,6 +342,7 @@ def _summary(
         id=system.id,
         name=system.name,
         scope="related_only" if system.related_only else "primary",
+        about=system.about,
         caveat=system.caveat,
         available_count=len(counting),
         abnormal_count=counts.low + counts.high + counts.critical,
@@ -379,6 +381,7 @@ def _allergy_section(results: list[BiomarkerResult]) -> SystemSummary | None:
     return SystemSummary(
         id=ALLERGY_ID,
         name=ALLERGY_NAME,
+        about=ALLERGY_ABOUT,
         caveat="Allergy results show sensitisation on a test. They are not a diagnosis of an allergy.",
         available_count=len(results),
         abnormal_count=counts.low + counts.high + counts.critical,

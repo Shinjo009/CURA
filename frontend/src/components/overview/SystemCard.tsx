@@ -18,6 +18,7 @@ export function SystemCard({ system, onOpen }: { system: SystemSummary; onOpen: 
         onClick={() => onOpen(system.id)}
       >
         <span className="system-card-name">{system.name}</span>
+        {system.about ? <span className="system-card-about">{system.about}</span> : null}
         <span className="system-card-line">{line}</span>
         {related ? <span className="system-card-tag">{t("ui.overview.related_results", "Related results")}</span> : null}
         <StatusBreakdownBar counts={system.status_breakdown} name={system.name} />

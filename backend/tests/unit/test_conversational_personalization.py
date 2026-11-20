@@ -284,3 +284,13 @@ def test_a_worried_question_still_answers_with_the_real_value():
     reply = chat("I'm worried, is my HbA1c high? Does that mean I have diabetes?")
     assert reply.get("answer")
     assert "you have diabetes" not in reply["answer"].lower() or "not" in reply["answer"].lower()
+
+
+def test_written_follow_up_list_is_removed_because_chips_show_it():
+    from app.pipeline.answer_consistency import drop_written_follow_ups
+
+    text = "Your report points to one area.\n\n- Keep walking daily.\n\nFollow-up questions:\n\n- Which foods help?\n- What should I ask a doctor?\n"
+    assert drop_written_follow_ups(text) == "Your report points to one area.\n\n- Keep walking daily."
+    bold = "Answer here.\n\n**Follow-up questions**\n1. One?\n2. Two?"
+    assert drop_written_follow_ups(bold) == "Answer here."
+    assert drop_written_follow_ups("No list here.") == "No list here."

@@ -145,3 +145,27 @@ def blood_half_for_ambiguity(context, limit: int = 3) -> str:
         rng = f"{lo} to {hi}{unit}" if lo is not None and hi is not None else (f"under {hi}{unit}" if hi is not None else f"over {lo}{unit}")
         lines.append(f"- **{marker.name}: {marker.value:g}{unit}** is {word} {direction} the range on your report ({rng}).")
     return "From your blood report, these stand out most:\n" + "\n".join(lines)
+
+
+_FOLLOW_UP_HEADING = re.compile(
+    r"^\s*(?:#{1,6}\s*)?(?:\*\*)?\s*(?:follow[- ]?up questions?|questions? (?:you (?:can|could|might) ask|to ask)|you (?:can|could) (?:also )?ask)\s*:?\s*(?:\*\*)?\s*:?\s*$",
+    re.I,
+)
+_LIST_LINE = re.compile(r"^\s*(?:[-*\u2022]|\d+[.)])\s+\S")
+
+
+def drop_written_follow_ups(text: str) -> str:
+    """Suggested questions are shown as tappable chips, so a written list in the answer repeats them."""
+    lines = (text or "").split("\n")
+    out: list[str] = []
+    i = 0
+    while i < len(lines):
+        if _FOLLOW_UP_HEADING.match(lines[i]):
+            j = i + 1
+            while j < len(lines) and (not lines[j].strip() or _LIST_LINE.match(lines[j])):
+                j += 1
+            i = j
+            continue
+        out.append(lines[i])
+        i += 1
+    return "\n".join(out).rstrip()

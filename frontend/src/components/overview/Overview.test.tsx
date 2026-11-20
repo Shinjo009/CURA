@@ -1,5 +1,5 @@
 import axe from "axe-core";
-import { createRef } from "react";
+import { createRef, useState } from "react";
 import { cleanup, fireEvent, screen, waitFor, within } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { renderWithQuery as render } from "../../test/render";
@@ -55,6 +55,26 @@ function overview(over: Partial<BodySystemOverview> = {}): BodySystemOverview {
   } as BodySystemOverview;
 }
 
+// The page owns the opened card so the header Back button can step out of it. This stands in for it.
+function Blood({ onAsk }: { onAsk: (text: string, ref: never) => void }) {
+  const [openId, setOpenId] = useState<string | null>(null);
+  return (
+    <>
+      <button type="button" onClick={() => setOpenId(null)}>Back</button>
+      <BodySystemOverviewView onAsk={onAsk as never} openId={openId} onOpenChange={setOpenId} />
+    </>
+  );
+}
+function Risk({ onAsk }: { onAsk: (text: string, ref: never) => void }) {
+  const [openId, setOpenId] = useState<string | null>(null);
+  return (
+    <>
+      <button type="button" onClick={() => setOpenId(null)}>Back</button>
+      <RiskOverviewView onAsk={onAsk as never} openId={openId} onOpenChange={setOpenId} />
+    </>
+  );
+}
+
 async function violations(container: Element) {
   const found = await axe.run(container, { rules: { "color-contrast": { enabled: false }, region: { enabled: false } } });
   return found.violations.map((v) => `${v.id}: ${v.nodes.map((n) => n.target.join(" ")).join(", ")}`);
@@ -69,7 +89,7 @@ afterEach(() => cleanup());
 describe("BodySystemOverviewView", () => {
   it("shows one card per system the report holds and nothing else", async () => {
     getBodySystems.mockResolvedValue(overview());
-    render(<BodySystemOverviewView onAsk={vi.fn()} onClose={vi.fn()} />);
+    render(<Blood onAsk={vi.fn()} />);
     const list = await screen.findByRole("list", { name: /body systems with results/i });
     expect(within(list).getAllByRole("button")).toHaveLength(3);
     expect(screen.queryByText("Thyroid Health")).toBeNull();
@@ -81,7 +101,7 @@ describe("BodySystemOverviewView", () => {
   it("opens a system, lists the result needing attention first, and asks with the marker as context", async () => {
     getBodySystems.mockResolvedValue(overview());
     const onAsk = vi.fn();
-    render(<BodySystemOverviewView onAsk={onAsk} onClose={vi.fn()} />);
+    render(<Blood onAsk={onAsk} />);
     fireEvent.click(await screen.findByRole("button", { name: /Heart & Circulation/ }));
     const rows = screen.getAllByRole("listitem");
     expect(rows[0].textContent).toContain("LDL Cholesterol Calculated");
@@ -100,19 +120,25 @@ describe("BodySystemOverviewView", () => {
   it("asks about a whole system with the report and its results named", async () => {
     getBodySystems.mockResolvedValue(overview());
     const onAsk = vi.fn();
-    render(<BodySystemOverviewView onAsk={onAsk} onClose={vi.fn()} />);
+    render(<Blood onAsk={onAsk} />);
     fireEvent.click(await screen.findByRole("button", { name: /Heart & Circulation/ }));
     fireEvent.click(screen.getByRole("button", { name: "Explain these results" }));
     const [text, ref] = onAsk.mock.calls[0];
-    expect(text).toContain("Heart & Circulation");
-    expect(text).toContain("LDL Cholesterol Calculated");
+    expect(text).toBe("Explain my Heart & Circulation results in simple words, especially LDL Cholesterol Calculated.");
+    expect(text).not.toMatch(/\d/);
     expect(ref).toEqual(expect.objectContaining({ type: "blood_report", report_id: "r1" }));
     expect(ref.entry_point).toBeUndefined();
   });
 
+  it("tells the member in plain words what each system covers", async () => {
+    getBodySystems.mockResolvedValue(overview({ systems: [system({ about: "How your body handles the cholesterol and fats that affect your heart." })] }));
+    render(<Blood onAsk={vi.fn()} />);
+    expect(await screen.findByText(/cholesterol and fats that affect your heart/)).toBeTruthy();
+  });
+
   it("shows the caveat and related results for a related-only system without counting them twice", async () => {
     getBodySystems.mockResolvedValue(overview());
-    render(<BodySystemOverviewView onAsk={vi.fn()} onClose={vi.fn()} />);
+    render(<Blood onAsk={vi.fn()} />);
     fireEvent.click(await screen.findByRole("button", { name: /Sleep & Recovery/ }));
     expect(screen.getByText(/do not measure how well you sleep/)).toBeTruthy();
     expect(screen.getByText("Magnesium")).toBeTruthy();
@@ -120,15 +146,15 @@ describe("BodySystemOverviewView", () => {
 
   it("goes back to the cards", async () => {
     getBodySystems.mockResolvedValue(overview());
-    render(<BodySystemOverviewView onAsk={vi.fn()} onClose={vi.fn()} />);
+    render(<Blood onAsk={vi.fn()} />);
     fireEvent.click(await screen.findByRole("button", { name: /Liver Health/ }));
-    fireEvent.click(screen.getByRole("button", { name: /All body systems/ }));
+    fireEvent.click(screen.getByRole("button", { name: "Back" }));
     expect(await screen.findByRole("list", { name: /body systems with results/i })).toBeTruthy();
   });
 
   it("offers a report picker only when there is more than one report and reloads on change", async () => {
     getBodySystems.mockResolvedValue(overview({ available_reports: [{ report_id: "r2", report_date: "2026-08-18" }, { report_id: "r1", report_date: "2026-01-05" }] }));
-    render(<BodySystemOverviewView onAsk={vi.fn()} onClose={vi.fn()} />);
+    render(<Blood onAsk={vi.fn()} />);
     const select = await screen.findByRole("combobox", { name: "Report" });
     fireEvent.change(select, { target: { value: "r1" } });
     await waitFor(() => expect(getBodySystems).toHaveBeenLastCalledWith("r1"));
@@ -136,14 +162,14 @@ describe("BodySystemOverviewView", () => {
 
   it("does not show a picker for a single report", async () => {
     getBodySystems.mockResolvedValue(overview());
-    render(<BodySystemOverviewView onAsk={vi.fn()} onClose={vi.fn()} />);
+    render(<Blood onAsk={vi.fn()} />);
     await screen.findByRole("list", { name: /body systems/i });
     expect(screen.queryByRole("combobox")).toBeNull();
   });
 
   it("says plainly when a report has no results and shows no cards", async () => {
     getBodySystems.mockResolvedValue(overview({ state: "no_results", systems: [], results: [] }));
-    render(<BodySystemOverviewView onAsk={vi.fn()} onClose={vi.fn()} />);
+    render(<Blood onAsk={vi.fn()} />);
     expect(await screen.findByText(/no results on this report/i)).toBeTruthy();
     expect(screen.queryByRole("list", { name: /body systems/i })).toBeNull();
   });
@@ -151,14 +177,14 @@ describe("BodySystemOverviewView", () => {
   it("falls back to the chat explanation when the overview cannot load", async () => {
     getBodySystems.mockRejectedValue(new Error("down"));
     const onAsk = vi.fn();
-    render(<BodySystemOverviewView onAsk={onAsk} onClose={vi.fn()} />);
+    render(<Blood onAsk={onAsk} />);
     fireEvent.click(await screen.findByRole("button", { name: /Explain my blood report in chat/ }));
     expect(onAsk).toHaveBeenCalledWith(expect.any(String), expect.objectContaining({ entry_point: "blood_report_overview" }));
   });
 
   it("has no accessibility violations on the cards or the opened detail", async () => {
     getBodySystems.mockResolvedValue(overview());
-    const { container } = render(<BodySystemOverviewView onAsk={vi.fn()} onClose={vi.fn()} />);
+    const { container } = render(<Blood onAsk={vi.fn()} />);
     await screen.findByRole("list", { name: /body systems/i });
     expect(await violations(container)).toEqual([]);
     fireEvent.click(screen.getByRole("button", { name: /Heart & Circulation/ }));
@@ -184,7 +210,7 @@ function risks(over: Partial<RiskOverview> = {}): RiskOverview {
 describe("RiskOverviewView", () => {
   it("shows only returned risk areas, labelled as predictions, never as diagnoses", async () => {
     getRiskOverview.mockResolvedValue(risks());
-    render(<RiskOverviewView onAsk={vi.fn()} onClose={vi.fn()} />);
+    render(<Risk onAsk={vi.fn()} />);
     const list = await screen.findByRole("list", { name: /risk areas/i });
     expect(within(list).getAllByRole("button")).toHaveLength(2);
     expect(screen.getByText(/not measured blood results and they are not diagnoses/)).toBeTruthy();
@@ -194,7 +220,7 @@ describe("RiskOverviewView", () => {
   it("opens an area and asks about one risk with its code as context", async () => {
     getRiskOverview.mockResolvedValue(risks());
     const onAsk = vi.fn();
-    render(<RiskOverviewView onAsk={onAsk} onClose={vi.fn()} />);
+    render(<Risk onAsk={onAsk} />);
     fireEvent.click(await screen.findByRole("button", { name: /Heart & Circulation/ }));
     fireEvent.click(screen.getByRole("button", { name: /Cardiac health/ }));
     expect(screen.getByText("Percentile")).toBeTruthy();
@@ -204,14 +230,14 @@ describe("RiskOverviewView", () => {
 
   it("tells the member when two reports share the date", async () => {
     getRiskOverview.mockResolvedValue(risks({ same_day_alternatives: true, available_reports: [{ report_id: "b2", report_date: "2026-08-18", source_line: "advanced_bio_ai" }, { report_id: "b1", report_date: "2026-08-18", source_line: "bio_ai" }] }));
-    render(<RiskOverviewView onAsk={vi.fn()} onClose={vi.fn()} />);
+    render(<Risk onAsk={vi.fn()} />);
     expect(await screen.findByText(/more than one Bio-AI report on this date/)).toBeTruthy();
     expect(screen.getByRole("combobox", { name: "Report" })).toBeTruthy();
   });
 
   it("has no accessibility violations", async () => {
     getRiskOverview.mockResolvedValue(risks());
-    const { container } = render(<RiskOverviewView onAsk={vi.fn()} onClose={vi.fn()} />);
+    const { container } = render(<Risk onAsk={vi.fn()} />);
     await screen.findByRole("list", { name: /risk areas/i });
     expect(await violations(container)).toEqual([]);
   });
@@ -235,5 +261,18 @@ describe("Welcome buttons", () => {
     render(<WelcomeExperience me={me} meLoading={false} onSend={onSend} inputRef={createRef()} />);
     fireEvent.click(screen.getByText("My Blood Report"));
     expect(onSend).toHaveBeenCalledWith(expect.any(String), [], expect.objectContaining({ entry_point: "blood_report_overview" }));
+  });
+});
+
+
+describe("Header back button", () => {
+  it("appears only when there is somewhere to go back to", async () => {
+    const { CuraHeader } = await import("../CuraHeader");
+    const onBack = vi.fn();
+    const { rerender } = render(<CuraHeader onOpenSidebar={() => undefined} />);
+    expect(screen.queryByRole("button", { name: "Back" })).toBeNull();
+    rerender(<CuraHeader onOpenSidebar={() => undefined} onBack={onBack} />);
+    fireEvent.click(screen.getByRole("button", { name: "Back" }));
+    expect(onBack).toHaveBeenCalledTimes(1);
   });
 });

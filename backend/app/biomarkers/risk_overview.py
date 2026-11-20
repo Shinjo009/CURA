@@ -46,6 +46,7 @@ def _registry() -> dict:
             group_of[code] = group["id"]
     data["_group_of"] = group_of
     data["_names"] = names
+    data["_about"] = {group["id"]: group.get("about", "") for group in data["groups"]}
     data["_order"] = {group["id"]: index for index, group in enumerate(data["groups"])}
     data["_raised"] = {s.lower() for s in data["raised_statuses"]}
     data["_rank"] = {s.lower(): index for index, s in enumerate(data["status_order"])}
@@ -162,6 +163,7 @@ def build_risk_overview(reports: list[BioAIReport], report_id: str | None = None
             RiskGroupSummary(
                 id=group_id,
                 name=reg["_names"].get(group_id, OTHER_RISKS_NAME),
+                about=reg["_about"].get(group_id, reg.get("other_about", "")),
                 risk_count=len(items),
                 raised_count=len(raised),
                 status_breakdown=dict(breakdown),

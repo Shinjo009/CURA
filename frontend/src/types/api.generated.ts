@@ -2171,6 +2171,11 @@ export interface components {
         };
         /** RiskGroupSummary */
         RiskGroupSummary: {
+            /**
+             * About
+             * @default
+             */
+            about: string;
             /** Id */
             id: string;
             /** Key Findings */
@@ -2522,6 +2527,11 @@ export interface components {
         SystemSummary: {
             /** Abnormal Count */
             abnormal_count: number;
+            /**
+             * About
+             * @default
+             */
+            about: string;
             /** Available Count */
             available_count: number;
             /** Caveat */

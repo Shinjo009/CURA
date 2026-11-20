@@ -5476,6 +5476,11 @@
       },
       "RiskGroupSummary": {
         "properties": {
+          "about": {
+            "default": "",
+            "title": "About",
+            "type": "string"
+          },
           "id": {
             "title": "Id",
             "type": "string"
@@ -6441,6 +6446,11 @@
           "abnormal_count": {
             "title": "Abnormal Count",
             "type": "integer"
+          },
+          "about": {
+            "default": "",
+            "title": "About",
+            "type": "string"
           },
           "available_count": {
             "title": "Available Count",

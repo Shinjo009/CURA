@@ -54,11 +54,21 @@ export function CuraPage() {
   }
 
   const [overviewKind, setOverviewKind] = useState<"blood" | "bio_ai" | null>(null);
+  const [openGroupId, setOpenGroupId] = useState<string | null>(null);
   // Asking from the overview starts the conversation, which replaces the overview.
   function askFromOverview(text: string, contextRef: ContextRef) {
     setOverviewKind(null);
+    setOpenGroupId(null);
     void sendWithContext(text, [], contextRef);
   }
+
+  // One step back each time: out of an opened card, then out of the overview, then out of a chat.
+  const goBack =
+    overviewKind && !started
+      ? () => (openGroupId ? setOpenGroupId(null) : setOverviewKind(null))
+      : started
+        ? () => startNew()
+        : undefined;
 
   const overview = useOverview();
   const [markerKey, setMarkerKey] = useState<string | null>(null);
@@ -93,6 +103,7 @@ export function CuraPage() {
   function startNew() {
     newConversation();
     setOverviewKind(null);
+    setOpenGroupId(null);
     setSelectedDocumentIds([]);
     setDrawerOpen(false);
   }
@@ -124,17 +135,17 @@ export function CuraPage() {
         />
       }
     >
-      <CuraHeader onOpenSidebar={() => setDrawerOpen(true)} />
+      <CuraHeader onOpenSidebar={() => setDrawerOpen(true)} onBack={goBack} />
       <div className="main-scroll" ref={scrollRef}>
-        {!started && overviewKind === "blood" && <BodySystemOverviewView onAsk={askFromOverview} onClose={() => setOverviewKind(null)} />}
-        {!started && overviewKind === "bio_ai" && <RiskOverviewView onAsk={askFromOverview} onClose={() => setOverviewKind(null)} />}
+        {!started && overviewKind === "blood" && <BodySystemOverviewView onAsk={askFromOverview} openId={openGroupId} onOpenChange={setOpenGroupId} />}
+        {!started && overviewKind === "bio_ai" && <RiskOverviewView onAsk={askFromOverview} openId={openGroupId} onOpenChange={setOpenGroupId} />}
         {!started && !overviewKind && (
           <WelcomeExperience
             me={me}
             meLoading={meLoading}
             suggestions={suggestions}
             onSend={sendWithContext}
-            onOpenOverview={setOverviewKind}
+            onOpenOverview={(kind) => { setOpenGroupId(null); setOverviewKind(kind); }}
             inputRef={inputRef}
           />
         )}

@@ -99,6 +99,7 @@ class SystemSummary(BaseModel):
     id: str
     name: str
     scope: Literal["primary", "related_only"] = "primary"
+    about: str = ""
     caveat: str | None = None
     available_count: int
     abnormal_count: int
@@ -177,6 +178,7 @@ class RiskKeyFinding(BaseModel):
 class RiskGroupSummary(BaseModel):
     id: str
     name: str
+    about: str = ""
     risk_count: int
     raised_count: int
     status_breakdown: dict[str, int] = Field(default_factory=dict)

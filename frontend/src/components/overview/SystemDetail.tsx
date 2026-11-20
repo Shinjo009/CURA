@@ -13,14 +13,12 @@ export function SystemDetail({
   results,
   related,
   reportId,
-  onBack,
   onAsk,
 }: {
   system: SystemSummary;
   results: BiomarkerResult[];
   related: BiomarkerResult[];
   reportId?: string | null;
-  onBack: () => void;
   onAsk: (text: string, contextRef: ContextRef) => void;
 }) {
   const heading = useRef<HTMLHeadingElement>(null);
@@ -30,12 +28,10 @@ export function SystemDetail({
   const partial = (system.group_coverage ?? []).filter((g) => g.partial);
   return (
     <section className="system-detail" aria-labelledby="system-detail-title">
-      <button type="button" className="overview-back" onClick={onBack}>
-        ← {t("ui.overview.all_systems", "All body systems")}
-      </button>
       <h2 id="system-detail-title" tabIndex={-1} ref={heading}>
         {system.name}
       </h2>
+      {system.about ? <p className="system-about">{system.about}</p> : null}
       <p className="muted">{systemSummaryLine(system)}</p>
       <StatusBreakdownBar counts={system.status_breakdown} name={system.name} />
       {system.caveat ? (

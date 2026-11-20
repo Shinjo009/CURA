@@ -73,32 +73,38 @@ export function orderResults(results: BiomarkerResult[]): BiomarkerResult[] {
 
 export type AskAction = { id: string; label: string; text: string; contextRef: ContextRef };
 
+function joinNames(names: string[]): string {
+  if (names.length <= 1) return names.join("");
+  return `${names.slice(0, -1).join(", ")} and ${names[names.length - 1]}`;
+}
+
 export function systemAsks(system: SystemSummary, results: BiomarkerResult[], reportId?: string | null): AskAction[] {
-  const names = orderResults(results)
-    .slice(0, 6)
-    .map((item) => item.display_name);
-  const list = names.length ? ` The results I am looking at are ${names.join(", ")}.` : "";
+  const ordered = orderResults(results);
+  const flagged = ordered.filter((item) => OUT_OF_RANGE.has(item.status)).slice(0, 3).map((item) => item.display_name);
+  const focus = (flagged.length ? flagged : ordered.slice(0, 3).map((item) => item.display_name));
+  // Result names stay in the question so chat knows which results are meant. The numbers do not.
+  const especially = focus.length ? `, especially ${joinNames(focus)}` : "";
   const ref: ContextRef = { type: "blood_report", source: "supershyft", report_id: reportId ?? null };
   const asks: AskAction[] = [
     {
       id: "explain",
       label: t("ui.overview.explain_these", "Explain these results"),
-      text: `Explain my ${system.name} results in simple words.${list}`,
+      text: `Explain my ${system.name} results in simple words${especially}.`,
       contextRef: ref,
     },
   ];
-  if (system.abnormal_count > 0) {
+  if (flagged.length > 0) {
     asks.push({
       id: "outside",
       label: t("ui.overview.what_is_outside_range", "What is outside range?"),
-      text: `Which of my ${system.name} results are outside the reference range, and what might that mean?${list}`,
+      text: `Why might my ${joinNames(flagged)} be outside the normal range?`,
       contextRef: ref,
     });
   }
   asks.push({
     id: "next",
     label: t("ui.overview.what_can_i_do", "What can I do?"),
-    text: `What can I do to support my ${system.name}, based on my results?${list}`,
+    text: `What can I do to support my ${system.name}${especially}?`,
     contextRef: ref,
   });
   return asks;
@@ -125,7 +131,7 @@ export function riskGroupAsks(group: RiskGroupSummary, risks: RiskResult[], repo
     {
       id: "explain",
       label: t("ui.overview.explain_these_risks", "Explain these risks"),
-      text: `Explain my ${group.name} Bio-AI risk results in simple words. The risks are ${names.join(", ")}.`,
+      text: `Explain my ${group.name} Bio-AI results in simple words, especially ${joinNames(names.slice(0, 3))}.`,
       contextRef: ref,
     },
     {

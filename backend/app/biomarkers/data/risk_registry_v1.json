@@ -10,14 +10,16 @@
     "cardiac_health",
     "dyslipidemia",
     "hypertension"
-   ]
+   ],
+   "about": "Your chances of heart and blood vessel problems, based on your overall health picture."
   },
   {
    "id": "liver_health",
    "name": "Liver Health",
    "codes": [
     "nafld"
-   ]
+   ],
+   "about": "Your chances of fatty liver changes."
   },
   {
    "id": "blood_sugar_metabolism",
@@ -25,28 +27,32 @@
    "codes": [
     "type_2_diabetes",
     "obesity"
-   ]
+   ],
+   "about": "Your chances of blood sugar and weight related problems."
   },
   {
    "id": "thyroid_health",
    "name": "Thyroid Health",
    "codes": [
     "thyroid"
-   ]
+   ],
+   "about": "Your chances of thyroid problems."
   },
   {
    "id": "hormonal_health",
    "name": "Hormonal Health",
    "codes": [
     "pcos"
-   ]
+   ],
+   "about": "Your chances of hormone related conditions."
   },
   {
    "id": "immunity_inflammation",
    "name": "Immunity & Inflammation",
    "codes": [
     "oxidative_stress"
-   ]
+   ],
+   "about": "Strain on your body from oxidative stress."
   }
  ],
  "raised_statuses": [
@@ -66,5 +72,6 @@
   "medium",
   "mild",
   "low"
- ]
+ ],
+ "other_about": "Predicted risks that have not been grouped yet."
 }
