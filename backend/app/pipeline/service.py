@@ -1681,7 +1681,17 @@ class ChatService:
                 if presentation.risk_explanation:
                     presentation.findings, presentation.raw_findings, presentation.themes = [], [], []
                     presentation.headline = None
-                    presentation.suggestion_chips = presentation.suggestion_chips[:4]
+                    from app.biomarkers.risk_overview import _display, _registry
+                    from app.contracts.followup import FollowUpSuggestion as _Follow
+
+                    code = re.sub(r"[^a-z0-9]+", "_", (risk.code or risk.name or "").lower()).strip("_")
+                    name = _display(_registry(), code, risk.name).get("name", risk.name).lower()
+                    # Level 3 questions build on what was just explained.
+                    asks = [f"What causes {name}?", "Can my risk change over time?", f"Which foods can help lower my {name} risk?"]
+                    if presentation.risk_explanation.related_tests:
+                        asks.append("What do my blood tests say about this?")
+                    suggestions = [_Follow(text=t, category="explore", handling_path="CONTINUE_INTERPRETATION") for t in asks]
+                    presentation.suggestion_chips = list(asks)
         if presentation is not None and settings.cura_prompt_variant == "house" and is_nutrition_overview(payload.message):
             from app.pipeline.nutrition_plan import parse_nutrition_plan
 

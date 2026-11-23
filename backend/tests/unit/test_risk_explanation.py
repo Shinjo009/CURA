@@ -101,3 +101,15 @@ def test_points_are_bullets_and_stock_notes_are_dropped():
     parsed = parse_risk_explanation(plain_answer(text, None, _ctx(), whole_report=False, keep_layout=True), risk=risk, markers=[])
     assert parsed.condition == ["Your body turns food into sugar.", "Insulin works like a key."]
     assert [s.title for s in parsed.more] == ["Common signs", "What can raise this risk"]
+
+
+def test_everyday_names_come_first_and_unknown_risks_keep_the_report_name():
+    from app.biomarkers.risk_overview import _display, _registry
+
+    reg = _registry()
+    assert _display(reg, "hypertension", "Hypertension") == {"name": "High Blood Pressure", "medical": "Hypertension"}
+    assert _display(reg, "nafld", "NAFLD")["name"] == "Fatty Liver"
+    assert _display(reg, "hypothyroidism", "x")["name"] == "Underactive Thyroid"
+    assert _display(reg, "oxidative_stress", "Oxidative Stress")["explain"]
+    assert _display(reg, "brand_new_risk", "Brand New Risk") == {"name": "Brand New Risk"}
+    assert reg["_group_of"]["hypothyroidism"] == "thyroid_health"

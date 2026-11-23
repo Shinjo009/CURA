@@ -2289,6 +2289,11 @@ export interface components {
             status_breakdown?: {
                 [key: string]: number;
             };
+            /**
+             * Topic
+             * @default
+             */
+            topic: string;
         };
         /** RiskHistoryPoint */
         RiskHistoryPoint: {
@@ -2368,10 +2373,20 @@ export interface components {
             /** Contributing Factors */
             contributing_factors?: string[];
             /**
+             * Display Name
+             * @default
+             */
+            display_name: string;
+            /**
              * Duplicates Collapsed
              * @default 0
              */
             duplicates_collapsed: number;
+            /**
+             * Explain
+             * @default
+             */
+            explain: string;
             /** Group Id */
             group_id: string;
             /** History */
@@ -2392,6 +2407,11 @@ export interface components {
             lifestyle_contribution?: number | null;
             /** Measured On */
             measured_on?: string | null;
+            /**
+             * Medical Name
+             * @default
+             */
+            medical_name: string;
             /** Name */
             name: string;
             /** Percentile */

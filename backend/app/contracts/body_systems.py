@@ -157,6 +157,9 @@ class RiskResult(BaseModel):
     status: str | None = None  # the report's own wording
     level: RiskLevel = "unknown"
     about: str = ""  # plain words for "a higher risk of ..."
+    display_name: str = ""  # everyday name first, from the registry
+    medical_name: str = ""  # shown as the secondary line when it differs
+    explain: str = ""  # one sentence for a condition with no everyday name
     percentile: float | None = None
     lifestyle_contribution: float | None = None
     contributing_factors: list[str] = Field(default_factory=list)
@@ -180,6 +183,7 @@ class RiskGroupSummary(BaseModel):
     id: str
     name: str
     about: str = ""
+    topic: str = ""  # the area in everyday words, for questions
     risk_count: int
     raised_count: int
     status_breakdown: dict[str, int] = Field(default_factory=dict)

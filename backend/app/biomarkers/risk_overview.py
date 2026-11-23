@@ -47,10 +47,19 @@ def _registry() -> dict:
     data["_group_of"] = group_of
     data["_names"] = names
     data["_about"] = {group["id"]: group.get("about", "") for group in data["groups"]}
+    data["_topic"] = {group["id"]: group.get("topic", "") for group in data["groups"]}
     data["_order"] = {group["id"]: index for index, group in enumerate(data["groups"])}
     data["_raised"] = {s.lower() for s in data["raised_statuses"]}
     data["_rank"] = {s.lower(): index for index, s in enumerate(data["status_order"])}
     return data
+
+
+def _display(reg: dict, code: str, report_name: str | None) -> dict:
+    """Everyday name first. A risk the registry does not know keeps the report's own name."""
+    entry = (reg.get("display") or {}).get(code)
+    if entry:
+        return entry
+    return {"name": report_name or code.replace("_", " ").title()}
 
 
 def _code(risk: BioAIRisk) -> str:
@@ -137,6 +146,9 @@ def build_risk_overview(reports: list[BioAIReport], report_id: str | None = None
                 status=risk.status,
                 level=_level(risk.status),
                 about=str((reg.get("risk_about") or {}).get(code, "")),
+                display_name=_display(reg, code, risk.name).get("name", ""),
+                medical_name=_display(reg, code, risk.name).get("medical", ""),
+                explain=_display(reg, code, risk.name).get("explain", ""),
                 percentile=risk.percentile,
                 lifestyle_contribution=risk.lifestyle_contribution,
                 contributing_factors=list(risk.contributing_factors or []),
@@ -165,6 +177,7 @@ def build_risk_overview(reports: list[BioAIReport], report_id: str | None = None
                 id=group_id,
                 name=reg["_names"].get(group_id, OTHER_RISKS_NAME),
                 about=reg["_about"].get(group_id, reg.get("other_about", "")),
+                topic=reg["_topic"].get(group_id, ""),
                 risk_count=len(items),
                 raised_count=len(raised),
                 status_breakdown=dict(breakdown),

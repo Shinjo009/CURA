@@ -2,11 +2,16 @@ import { useState } from "react";
 import type { ContextRef } from "../../types/chat";
 import type { RiskGroupSummary, RiskResult } from "../../types/bodySystems";
 import { useRiskOverview } from "../../hooks/useReportOverviews";
-import { FULL_BIO_AI_ASK, riskAsks, riskGroupAsks } from "../../lib/bodySystems";
+import { FULL_BIO_AI_ASK, reportLevelAsks, riskAsks, riskGroupAsks, riskName } from "../../lib/bodySystems";
 import { shortDate, TrendChart } from "../marker/TrendChart";
 import { AskCuraActions } from "./AskCuraActions";
 import { ReportPicker } from "./ReportPicker";
 import { t } from "../../i18n";
+
+/** Medical name or a one sentence explanation: the secondary line under an everyday name. */
+function secondaryLine(risk: RiskResult): string {
+  return risk.medical_name || risk.explain || "";
+}
 
 function RiskRow({ risk, reportId, onAsk }: { risk: RiskResult; reportId?: string | null; onAsk: (text: string, ref: ContextRef) => void }) {
   const [open, setOpen] = useState(false);
@@ -15,8 +20,8 @@ function RiskRow({ risk, reportId, onAsk }: { risk: RiskResult; reportId?: strin
     <li className="result-row" data-level={risk.level}>
       <button type="button" className="result-row-head" aria-expanded={open} onClick={() => setOpen((v) => !v)}>
         <span className="result-row-name">
-          {risk.name}
-          <span className="result-row-group">{t("ui.overview.predicted_risk", "Predicted risk")}</span>
+          {riskName(risk)}
+          <span className="result-row-group">{secondaryLine(risk) || t("ui.overview.predicted_risk", "Predicted risk")}</span>
         </span>
         <span className="result-row-value">{risk.score != null ? `Score ${risk.score}` : "No score"}</span>
         <span className="status-chip" data-level={risk.level}>
@@ -60,9 +65,9 @@ function RiskRow({ risk, reportId, onAsk }: { risk: RiskResult; reportId?: strin
                 {t("ui.overview.factors", "Contributing factors")}: {risk.contributing_factors!.join(", ")}
               </p>
             ) : null}
-            {points.length >= 2 ? <TrendChart label={`${risk.name} risk score`} points={points} /> : null}
+            {points.length >= 2 ? <TrendChart label={`${riskName(risk)} risk score`} points={points} /> : null}
             <p className="muted">{t("ui.overview.not_a_diagnosis", "A predicted risk is not a diagnosis and not a measured result.")}</p>
-            <AskCuraActions actions={riskAsks(risk, reportId)} onAsk={onAsk} label={`${t("ui.overview.ask_cura_about", "Ask CURA about")} ${risk.name}`} />
+            <AskCuraActions actions={riskAsks(risk, reportId)} onAsk={onAsk} label={`${t("ui.overview.ask_cura_about", "Ask CURA about")} ${riskName(risk)}`} />
           </div>
         </div>
       ) : null}
@@ -126,7 +131,6 @@ export function RiskOverviewView({
   const setOpenId = onOpenChange;
   const query = useRiskOverview(reportId);
   const data = query.data;
-  const explainAll = () => onAsk(FULL_BIO_AI_ASK.text, { ...FULL_BIO_AI_ASK.contextRef, report_id: data?.report?.report_id ?? null });
 
   if (query.isLoading) {
     return (
@@ -239,7 +243,8 @@ export function RiskOverviewView({
               <ul className="attention-list">
                 {raisedRisks.map((risk) => (
                   <li key={risk.code} className="attention-card" data-testid="attention-card">
-                    <strong>{risk.name}</strong>
+                    <strong>{riskName(risk)}</strong>
+                    {secondaryLine(risk) ? <span className="muted">{secondaryLine(risk)}</span> : null}
                     <span className="attention-level">{risk.status ? `${risk.status} ${t("ui.overview.predicted_risk_lower", "predicted risk")}` : t("ui.overview.raised_risk", "Raised predicted risk")}</span>
                     {risk.about ? <p>{`${t("ui.overview.suggests", "Your assessment suggests a higher risk of")} ${risk.about}.`}</p> : null}
                     <button type="button" className="outline-button" onClick={() => onAsk(riskAsks(risk, data.report?.report_id)[0].text, riskAsks(risk, data.report?.report_id)[0].contextRef)}>
@@ -277,11 +282,7 @@ export function RiskOverviewView({
           </section>
         </>
       )}
-      <div className="chips">
-        <button type="button" onClick={explainAll}>
-          {t("ui.overview.explain_whole_bio", "Explain my whole Bio-AI report")}
-        </button>
-      </div>
+      <AskCuraActions actions={reportLevelAsks(data.report?.report_id)} onAsk={onAsk} label={t("ui.overview.ask_about_report", "Ask CURA about your report")} />
     </section>
   );
 }

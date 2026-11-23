@@ -236,6 +236,34 @@ describe("RiskOverviewView", () => {
     expect(screen.queryByRole("img", { name: /illustration/i })).toBeNull();
   });
 
+  it("shows the everyday name first with the medical name as the secondary line", async () => {
+    const data = risks();
+    data.risks![0] = { ...data.risks![0], display_name: "Heart Health", medical_name: "Cardiac health", about: "heart problems" };
+    getRiskOverview.mockResolvedValue(data);
+    const onAsk = vi.fn();
+    render(<Risk onAsk={onAsk} />);
+    const card = await screen.findByTestId("attention-card");
+    expect(within(card).getByText("Heart Health")).toBeTruthy();
+    expect(within(card).getByText("Cardiac health")).toBeTruthy();
+    fireEvent.click(within(card).getByRole("button", { name: "Understand this risk" }));
+    expect(onAsk).toHaveBeenCalledWith("What does my Heart Health risk result mean?", expect.objectContaining({ entry_point: "risk_explainer", risk_code: "cardiac_health" }));
+  });
+
+  it("asks different questions at the report level and at the health area level", async () => {
+    const data = risks();
+    data.groups![0] = { ...data.groups![0], topic: "heart health" };
+    getRiskOverview.mockResolvedValue(data);
+    const onAsk = vi.fn();
+    render(<Risk onAsk={onAsk} />);
+    fireEvent.click(await screen.findByRole("button", { name: "Which of my health risks need attention?" }));
+    expect(onAsk).toHaveBeenCalledWith("Which of my health risks need attention?", expect.objectContaining({ type: "bio_ai_report" }));
+    expect(screen.getByRole("button", { name: "How can I improve my overall health?" })).toBeTruthy();
+    fireEvent.click(screen.getByRole("button", { name: /Heart & Circulation/ }));
+    expect(screen.getByRole("button", { name: "Why is my heart health risk increased?" })).toBeTruthy();
+    expect(screen.getByRole("button", { name: "What do my blood tests say about my heart health?" })).toBeTruthy();
+    expect(screen.queryByRole("button", { name: "Which of my health risks need attention?" })).toBeNull();
+  });
+
   it("opens an area and asks about one risk with its code as context", async () => {
     getRiskOverview.mockResolvedValue(risks());
     const onAsk = vi.fn();

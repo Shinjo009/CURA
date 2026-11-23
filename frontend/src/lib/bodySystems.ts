@@ -124,30 +124,38 @@ export function resultAsks(item: BiomarkerResult): AskAction[] {
   return asks;
 }
 
-export function riskGroupAsks(group: RiskGroupSummary, risks: RiskResult[], reportId?: string | null): AskAction[] {
-  const names = risks.slice(0, 6).map((r) => r.name);
+/** The everyday name first; a risk the registry does not know keeps the report's own name. */
+export function riskName(risk: RiskResult): string {
+  return (risk.display_name || risk.name || "").trim();
+}
+
+/** Level 1, the whole Bio-AI report: questions about overall health. */
+export function reportLevelAsks(reportId?: string | null): AskAction[] {
   const ref: ContextRef = { type: "bio_ai_report", source: "supershyft", report_id: reportId ?? null };
   return [
-    {
-      id: "explain",
-      label: t("ui.overview.explain_these_risks", "Explain these risks"),
-      text: `Explain my ${group.name} Bio-AI results in simple words, especially ${joinNames(names.slice(0, 3))}.`,
-      contextRef: ref,
-    },
-    {
-      id: "lower",
-      label: t("ui.overview.what_can_i_do", "What can I do?"),
-      text: `What can I do to lower my ${group.name} risks, based on my Bio-AI report?`,
-      contextRef: ref,
-    },
+    { id: "attention", label: "Which of my health risks need attention?", text: "Which of my health risks need attention?", contextRef: ref },
+    { id: "improve", label: "How can I improve my overall health?", text: "How can I improve my overall health?", contextRef: ref },
+  ];
+}
+
+/** Level 2, one health area: questions about that area, worded by whether any risk in it is raised. */
+export function riskGroupAsks(group: RiskGroupSummary, _risks: RiskResult[], reportId?: string | null): AskAction[] {
+  const topic = (group.topic || group.name).toLowerCase();
+  const ref: ContextRef = { type: "bio_ai_report", source: "supershyft", report_id: reportId ?? null };
+  const first =
+    group.raised_count > 0 ? `Why is my ${topic} risk increased?` : `What helps keep my ${topic} risk healthy?`;
+  return [
+    { id: "why", label: first, text: first, contextRef: ref },
+    { id: "tests", label: `What do my blood tests say about my ${topic}?`, text: `What do my blood tests say about my ${topic}?`, contextRef: ref },
+    { id: "lower", label: `What can I do to protect my ${topic}?`, text: `What can I do to protect my ${topic}, based on my Bio-AI report?`, contextRef: ref },
   ];
 }
 
 export function riskAsks(risk: RiskResult, reportId?: string | null): AskAction[] {
   const ref: ContextRef = { type: "bio_ai_risk", source: "supershyft", risk_code: risk.code, report_id: reportId ?? null };
   return [
-    { id: "mean", label: t("ui.overview.what_does_this_mean", "What does this mean?"), text: `What does my ${risk.name} risk result mean?`, contextRef: { ...ref, entry_point: "risk_explainer" } },
-    { id: "do", label: t("ui.overview.what_can_i_do", "What can I do?"), text: `What can I do about my ${risk.name} risk?`, contextRef: ref },
+    { id: "mean", label: t("ui.overview.what_does_this_mean", "What does this mean?"), text: `What does my ${riskName(risk)} risk result mean?`, contextRef: { ...ref, entry_point: "risk_explainer" } },
+    { id: "do", label: t("ui.overview.what_can_i_do", "What can I do?"), text: `What can I do about my ${riskName(risk)} risk?`, contextRef: ref },
   ];
 }
 

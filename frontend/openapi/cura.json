@@ -5718,6 +5718,11 @@
             },
             "title": "Status Breakdown",
             "type": "object"
+          },
+          "topic": {
+            "default": "",
+            "title": "Topic",
+            "type": "string"
           }
         },
         "required": [
@@ -5961,10 +5966,20 @@
             "title": "Contributing Factors",
             "type": "array"
           },
+          "display_name": {
+            "default": "",
+            "title": "Display Name",
+            "type": "string"
+          },
           "duplicates_collapsed": {
             "default": 0,
             "title": "Duplicates Collapsed",
             "type": "integer"
+          },
+          "explain": {
+            "default": "",
+            "title": "Explain",
+            "type": "string"
           },
           "group_id": {
             "title": "Group Id",
@@ -6014,6 +6029,11 @@
               }
             ],
             "title": "Measured On"
+          },
+          "medical_name": {
+            "default": "",
+            "title": "Medical Name",
+            "type": "string"
           },
           "name": {
             "title": "Name",

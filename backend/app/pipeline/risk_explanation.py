@@ -84,9 +84,12 @@ def _paragraphs(lines: list[str]) -> list[str]:
 def score_card_for(risk) -> RiskScoreCard:
     from app.biomarkers.risk_overview import _level
 
+    from app.biomarkers.risk_overview import _display, _registry
+
+    code = re.sub(r"[^a-z0-9]+", "_", (risk.code or risk.name or "").lower()).strip("_")
     return RiskScoreCard(
         code=risk.code,
-        name=risk.name,
+        name=_display(_registry(), code, risk.name).get("name", risk.name),
         score=risk.score,
         status=risk.status,
         level=_level(risk.status),

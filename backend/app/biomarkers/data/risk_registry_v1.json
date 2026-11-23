@@ -11,7 +11,8 @@
     "dyslipidemia",
     "hypertension"
    ],
-   "about": "How healthy your heart and blood vessels may be."
+   "about": "How healthy your heart and blood vessels may be.",
+   "topic": "heart health"
   },
   {
    "id": "liver_health",
@@ -19,7 +20,8 @@
    "codes": [
     "nafld"
    ],
-   "about": "Your chances of developing excess fat in your liver."
+   "about": "Your chances of developing excess fat in your liver.",
+   "topic": "liver health"
   },
   {
    "id": "blood_sugar_metabolism",
@@ -28,15 +30,19 @@
     "type_2_diabetes",
     "obesity"
    ],
-   "about": "How your body handles sugar, energy and weight."
+   "about": "How your body handles sugar, energy and weight.",
+   "topic": "blood sugar and weight"
   },
   {
    "id": "thyroid_health",
    "name": "Thyroid Health",
    "codes": [
-    "thyroid"
+    "thyroid",
+    "hypothyroidism",
+    "hyperthyroidism"
    ],
-   "about": "Health risks related to the gland that helps control your energy and metabolism."
+   "about": "Health risks related to the gland that helps control your energy and metabolism.",
+   "topic": "thyroid health"
   },
   {
    "id": "hormonal_health",
@@ -44,7 +50,8 @@
    "codes": [
     "pcos"
    ],
-   "about": "Your chances of hormone related conditions."
+   "about": "Your chances of hormone related conditions.",
+   "topic": "hormone health"
   },
   {
    "id": "immunity_inflammation",
@@ -52,7 +59,8 @@
    "codes": [
     "oxidative_stress"
    ],
-   "about": "Processes that can put stress on your body's cells."
+   "about": "Processes that can put stress on your body's cells.",
+   "topic": "cell health"
   }
  ],
  "raised_statuses": [
@@ -84,5 +92,47 @@
   "thyroid": "the gland that helps control your energy and metabolism not working well",
   "pcos": "hormone imbalance that affects periods and metabolism",
   "oxidative_stress": "a process that can damage your body's cells over time"
+ },
+ "display": {
+  "hypertension": {
+   "name": "High Blood Pressure",
+   "medical": "Hypertension"
+  },
+  "cardiac_health": {
+   "name": "Heart Health",
+   "medical": "Cardiac health"
+  },
+  "dyslipidemia": {
+   "name": "Cholesterol Imbalance",
+   "medical": "Dyslipidemia"
+  },
+  "type_2_diabetes": {
+   "name": "Type 2 Diabetes",
+   "explain": "A condition where sugar stays too high in your blood."
+  },
+  "obesity": {
+   "name": "Obesity & Weight Health",
+   "medical": "Obesity"
+  },
+  "nafld": {
+   "name": "Fatty Liver",
+   "medical": "NAFLD"
+  },
+  "hypothyroidism": {
+   "name": "Underactive Thyroid",
+   "medical": "Hypothyroidism"
+  },
+  "hyperthyroidism": {
+   "name": "Overactive Thyroid",
+   "medical": "Hyperthyroidism"
+  },
+  "oxidative_stress": {
+   "name": "Oxidative Stress",
+   "explain": "When unstable molecules put extra strain on your body's cells."
+  },
+  "pcos": {
+   "name": "PCOS",
+   "explain": "A hormone condition that can affect periods and metabolism."
+  }
  }
 }
