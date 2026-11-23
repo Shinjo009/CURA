@@ -10,6 +10,7 @@ import { InsightNote } from "./messages/InsightNote";
 import { MarkdownAnswer } from "./messages/MarkdownAnswer";
 import { SemanticBlocks } from "./messages/SemanticAnswer";
 import { PresentedAnswer } from "./messages/PresentedAnswer";
+import { RiskExplanationView } from "./risk/RiskExplanationView";
 import { PreviewAnswer } from "./messages/PreviewAnswer";
 import { ProvenanceLine } from "./messages/ProvenanceLine";
 import { TestingOptionCard } from "./messages/TestingOptionCard";
@@ -108,7 +109,7 @@ export function MessageList({
             ) : m.role === "assistant" ? (
               <>
                 {topHeadline(m.presentation) ? <h3 className="answer-headline">{topHeadline(m.presentation)}</h3> : null}
-                <MarkdownAnswer content={m.content} />
+                {m.presentation?.risk_explanation ? <RiskExplanationView data={m.presentation.risk_explanation} /> : <MarkdownAnswer content={m.content} />}
                 {m.semantic?.blocks?.length ? <SemanticBlocks blocks={m.semantic.blocks} answer={m.content} /> : null}
                 {m.presentation ? (
                   <PresentedAnswer

@@ -1092,7 +1092,7 @@ export interface components {
             /** Document Id */
             document_id?: string | null;
             /** Entry Point */
-            entry_point?: "blood_report_overview" | null;
+            entry_point?: ("blood_report_overview" | "risk_explainer") | null;
             /** Marker Code */
             marker_code?: string | null;
             /** Report Id */
@@ -1306,6 +1306,28 @@ export interface components {
          * @enum {string}
          */
         ExperienceBlockKind: "direct_answer" | "key_facts" | "interpretation" | "personal_relevance" | "uncertainty" | "next_step" | "continuation";
+        /** ExplainerAction */
+        ExplainerAction: {
+            /**
+             * Detail
+             * @default
+             */
+            detail: string;
+            /**
+             * Icon
+             * @default habit
+             */
+            icon: string;
+            /** Title */
+            title: string;
+        };
+        /** ExplainerSection */
+        ExplainerSection: {
+            /** Items */
+            items?: string[];
+            /** Title */
+            title: string;
+        };
         /**
          * FactKind
          * @enum {string}
@@ -2074,6 +2096,15 @@ export interface components {
             /** Travel */
             travel?: string[];
         };
+        /** RelatedTest */
+        RelatedTest: {
+            finding: components["schemas"]["PresentedFinding"];
+            /**
+             * Why
+             * @default
+             */
+            why: string;
+        };
         /** ReportOverview */
         ReportOverview: {
             /** Date */
@@ -2205,6 +2236,30 @@ export interface components {
         RewindRequest: {
             /** Keep */
             keep: number;
+        };
+        /**
+         * RiskExplanation
+         * @description A Bio-AI risk explained in four steps. Values come from the report, the wording from the model.
+         */
+        RiskExplanation: {
+            /** Actions */
+            actions?: components["schemas"]["ExplainerAction"][];
+            /** Condition */
+            condition?: string[];
+            /** Condition Title */
+            condition_title: string;
+            /** Meaning */
+            meaning?: string[];
+            /**
+             * Meaning Title
+             * @default What does this mean for you?
+             */
+            meaning_title: string;
+            /** More */
+            more?: components["schemas"]["ExplainerSection"][];
+            /** Related Tests */
+            related_tests?: components["schemas"]["RelatedTest"][];
+            score_card?: components["schemas"]["RiskScoreCard"] | null;
         };
         /** RiskGroupSummary */
         RiskGroupSummary: {
@@ -2347,6 +2402,37 @@ export interface components {
             previous_score?: number | null;
             /** Report Id */
             report_id?: string | null;
+            /** Score */
+            score?: number | null;
+            /** Status */
+            status?: string | null;
+        };
+        /**
+         * RiskScoreCard
+         * @description Verified Bio-AI values from the report. Never written by the model.
+         */
+        RiskScoreCard: {
+            /** Assessed On */
+            assessed_on?: string | null;
+            /** Code */
+            code: string;
+            /** Contributing Factors */
+            contributing_factors?: string[];
+            /**
+             * Level
+             * @default unknown
+             */
+            level: string;
+            /** Lifestyle Contribution */
+            lifestyle_contribution?: number | null;
+            /** Name */
+            name: string;
+            /** Percentile */
+            percentile?: number | null;
+            /** Previous On */
+            previous_on?: string | null;
+            /** Previous Score */
+            previous_score?: number | null;
             /** Score */
             score?: number | null;
             /** Status */
@@ -2533,6 +2619,7 @@ export interface components {
             related_findings?: components["schemas"]["PresentedFinding"][];
             /** Response Depth */
             response_depth?: string | null;
+            risk_explanation?: components["schemas"]["RiskExplanation"] | null;
             /** Structured Next Steps */
             structured_next_steps?: {
                 [key: string]: unknown;

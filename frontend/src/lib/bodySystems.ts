@@ -146,7 +146,7 @@ export function riskGroupAsks(group: RiskGroupSummary, risks: RiskResult[], repo
 export function riskAsks(risk: RiskResult, reportId?: string | null): AskAction[] {
   const ref: ContextRef = { type: "bio_ai_risk", source: "supershyft", risk_code: risk.code, report_id: reportId ?? null };
   return [
-    { id: "mean", label: t("ui.overview.what_does_this_mean", "What does this mean?"), text: `What does my ${risk.name} risk result mean?`, contextRef: ref },
+    { id: "mean", label: t("ui.overview.what_does_this_mean", "What does this mean?"), text: `What does my ${risk.name} risk result mean?`, contextRef: { ...ref, entry_point: "risk_explainer" } },
     { id: "do", label: t("ui.overview.what_can_i_do", "What can I do?"), text: `What can I do about my ${risk.name} risk?`, contextRef: ref },
   ];
 }

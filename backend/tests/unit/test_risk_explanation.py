@@ -1,0 +1,92 @@
+from app.contracts.bio_ai import BioAIRisk
+from app.contracts.blood import BloodMarker
+from app.contracts.common import AnswerDepth, IntentType
+from app.contracts.context_ref import ContextRef
+from app.contracts.health_context import HealthContext
+from app.pipeline.query_planner import _apply_context_ref
+from app.pipeline.response_mode import plain_answer
+from app.pipeline.risk_explanation import action_icon, parse_risk_explanation
+
+ANSWER = """## What is Type 2 diabetes?
+Your body turns food into sugar for energy. A hormone called insulin works like a key.
+
+In Type 2 diabetes the key stops working well, so extra sugar stays in your blood.
+
+## What does this mean for you?
+Your result is in the healthy band today. Daily habits keep it that way.
+
+## Related tests
+- **HbA1c**: shows your average blood sugar over three months.
+- **Made up test**: not in the report.
+
+## What can you do?
+- **Eat balanced meals**: Add dal and vegetables at lunch.
+- **Walk daily**: Walk 30 minutes after dinner.
+- **Sleep well**: Keep a steady bedtime.
+
+## More to explore
+### Common signs
+- Feeling very thirsty
+### What can raise this risk
+- Low activity
+- Family history
+"""
+
+
+def _ctx():
+    return HealthContext(intent=IntentType.bio_ai_explanation, answer_depth=list(AnswerDepth)[0], explainer="bio_ai_risk")
+
+
+def _parse(markers):
+    risk = BioAIRisk(code="type_2_diabetes", name="Type 2 diabetes", score=17, status="Healthy", percentile=4, lifestyle_contribution=18, contributing_factors=["Low activity"])
+    cleaned = plain_answer(ANSWER, None, _ctx(), whole_report=False, keep_layout=True)
+    return parse_risk_explanation(cleaned, risk=risk, markers=markers)
+
+
+def test_explanation_is_split_into_the_four_steps_after_cleanup():
+    marker = BloodMarker(id="1", key="hba1c", name="HbA1c", value=5.2, unit="%", reference_low=4, reference_high=5.6)
+    parsed = _parse([marker])
+    assert parsed.condition_title == "What is Type 2 diabetes?" and len(parsed.condition) == 2
+    assert parsed.meaning_title.startswith("What does this mean")
+    assert [a.icon for a in parsed.actions] == ["meal", "move", "sleep"]
+    assert [s.title for s in parsed.more] == ["Common signs", "What can raise this risk"]
+
+
+def test_score_and_blood_values_come_from_the_report_not_the_model():
+    marker = BloodMarker(id="1", key="hba1c", name="HbA1c", value=5.2, unit="%", reference_low=4, reference_high=5.6)
+    parsed = _parse([marker])
+    assert parsed.score_card.score == 17 and parsed.score_card.status == "Healthy" and parsed.score_card.level == "not_raised"
+    assert [t.finding.value for t in parsed.related_tests] == ["5.2"]  # the invented test is dropped
+    assert _parse([]).related_tests == []
+
+
+def test_a_plain_paragraph_is_not_an_explanation():
+    risk = BioAIRisk(code="x", name="X", score=1, status="Healthy")
+    assert parse_risk_explanation("Just a paragraph.", risk=risk, markers=[]) is None
+
+
+def test_action_icons_use_the_title_first():
+    assert action_icon("Walk daily") == "move"
+    assert action_icon("Something else") == "habit"
+
+
+def test_only_the_explicit_entry_point_makes_an_explanation():
+    from app.contracts.query import QueryPlan
+
+    base = QueryPlan(intent=IntentType.general_health_question, raw_message="What does my Type 2 diabetes risk mean?")
+    ask = ContextRef(type="bio_ai_risk", source="supershyft", risk_code="type_2_diabetes", entry_point="risk_explainer")
+    plan = _apply_context_ref(base, ask)
+    assert plan.entry_point == "risk_explainer" and plan.needs_blood is True
+    other = _apply_context_ref(base, ContextRef(type="bio_ai_risk", source="supershyft", risk_code="type_2_diabetes"))
+    assert other.entry_point is None and other.needs_blood is False
+
+
+def test_risk_explainer_prompt_is_added_only_for_the_explainer():
+    from app.pipeline.prompt_modules import RISK_EXPLAINER, house_system
+
+    assert "—" not in RISK_EXPLAINER and "–" not in RISK_EXPLAINER
+    for heading in ("## What does this mean for you?", "## Related tests", "## What can you do?", "## More to explore"):
+        assert heading in RISK_EXPLAINER
+    on = house_system(_ctx(), "What does my Type 2 diabetes risk result mean?")
+    off_ctx = HealthContext(intent=IntentType.bio_ai_explanation, answer_depth=list(AnswerDepth)[0])
+    assert RISK_EXPLAINER in on and RISK_EXPLAINER not in house_system(off_ctx, "What can I do about my Type 2 diabetes risk?")

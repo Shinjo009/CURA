@@ -1665,8 +1665,23 @@ class ChatService:
             answer,
             reasoned.llm_mode,
             context,
-            whole_report=plan.intent not in _NARROW_INTENTS and not is_nutrition_overview(payload.message),
+            whole_report=plan.intent not in _NARROW_INTENTS or is_nutrition_overview(payload.message),
+            keep_layout=bool(context.explainer) or is_nutrition_overview(payload.message),
         )
+        if presentation is not None and settings.cura_prompt_variant == "house" and context.explainer == "bio_ai_risk":
+            from app.pipeline.risk_explanation import parse_risk_explanation
+
+            topic = (plan.topic or "").lower()
+            risk = next((r for r in context.bio_ai_risks if (r.code or "").lower().replace(" ", "_") == topic), None) or (
+                context.bio_ai_risks[0] if len(context.bio_ai_risks) == 1 else None
+            )
+            if risk is not None:
+                # The answer text stays whole for history. The cards read the same content from the structure.
+                presentation.risk_explanation = parse_risk_explanation(answer, risk=risk, markers=list(context.markers or []))
+                if presentation.risk_explanation:
+                    presentation.findings, presentation.raw_findings, presentation.themes = [], [], []
+                    presentation.headline = None
+                    presentation.suggestion_chips = presentation.suggestion_chips[:4]
         if presentation is not None and settings.cura_prompt_variant == "house" and is_nutrition_overview(payload.message):
             from app.pipeline.nutrition_plan import parse_nutrition_plan
 

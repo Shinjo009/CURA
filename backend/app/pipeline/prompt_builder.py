@@ -926,6 +926,9 @@ def _requested_codes(context: HealthContext) -> set[str]:
 
 
 def _relevant_markers(context: HealthContext):
+    if getattr(context, "explainer", None):
+        # A risk explanation links the risk to any measured result that bears on it, so it sees the whole panel.
+        return list(context.markers)
     spec = context.task_contract or {}
     named = {_topic_key(key) for key in (spec.get("card_keys") or [])}
     goal = spec.get("goal") or ""
@@ -968,6 +971,8 @@ def _relevant_risks(context: HealthContext):
 
 
 def _use_compact_context(context: HealthContext) -> bool:
+    if getattr(context, "explainer", None):
+        return False
     depth = getattr(context.answer_depth, "value", None)
     if depth in {"broad", "detailed"}:
         return False

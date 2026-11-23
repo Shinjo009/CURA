@@ -33,7 +33,7 @@ export type ContextRef = {
   risk_code?: string | null;
   report_id?: string | null;
   document_id?: string | null;
-  entry_point?: "blood_report_overview" | null;
+  entry_point?: "blood_report_overview" | "risk_explainer" | null;
 };
 
 export type Recommendation = {
@@ -208,6 +208,30 @@ export type StructuredResponse = {
   related_findings?: PresentedFinding[];
   suggestion_chips?: string[];
   nutrition_plan?: NutritionPlanData | null;
+  risk_explanation?: RiskExplanationData | null;
+};
+
+export type RiskExplanationData = {
+  condition_title: string;
+  condition: string[];
+  score_card?: {
+    code: string;
+    name: string;
+    score?: number | null;
+    status?: string | null;
+    level: string;
+    assessed_on?: string | null;
+    percentile?: number | null;
+    lifestyle_contribution?: number | null;
+    contributing_factors?: string[];
+    previous_score?: number | null;
+    previous_on?: string | null;
+  } | null;
+  meaning_title: string;
+  meaning: string[];
+  related_tests: Array<{ finding: PresentedFinding; why?: string }>;
+  actions: Array<{ title: string; detail?: string; icon: string }>;
+  more: Array<{ title: string; items: string[] }>;
 };
 
 export type NutritionFoodData = { name: string; why?: string; icon?: string };

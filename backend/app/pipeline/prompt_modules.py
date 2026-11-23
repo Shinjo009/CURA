@@ -377,6 +377,18 @@ RESULT_WALKTHROUGH = (
     "For a gap of only a few percent say it is usually minor and a routine recheck is enough, not a plan to chase it. Leave out dates and remarks that one report cannot show a trend unless an earlier result is supplied."
 )
 
+RISK_EXPLAINER = (
+    "THIS QUESTION IS A BIO-AI RISK EXPLANATION for the one risk in bio_ai_risks. The reader may know nothing about medicine or biology, so write for a curious ten year old, in a warm and mature tone for an adult. "
+    "Use exactly this layout instead of every SHAPE above, about 150 to 250 words before the last section. "
+    "Start with a \"## \" heading that asks what the condition is, in plain words (for example \"## What is Type 2 diabetes?\"). Under it write two or three short paragraphs of one or two sentences each: what the condition is, then what happens inside the body in a simple everyday comparison, then why it matters over time. Explain every medical word the first time it appears (what insulin, cholesterol, the thyroid, fat in the liver or oxidative stress is) and never assume the reader knows it. "
+    "Do not write a section about the report values. The score, level, date and details are shown as a card from the report, so never write the score, the level word, the percentile or the lifestyle share. "
+    "Then \"## What does this mean for you?\" with two or three short sentences that follow the level in the report: for a low or healthy level, what it says about the person today and how to keep it that way, calmly and without cheering; for a raised level, why it matters and that steps can lower it. Say it is an estimate of future risk, not a diagnosis and not a chance in percent, once and in words that are not a stock disclaimer. Use the supplied lifestyle answers and blood results only when they exist. "
+    "Then \"## Related tests\" with up to 3 bullets, each \"**key**: one short reason this blood test connects to the risk\", where key is the exact key of a marker in the supplied markers that medicine links to this risk. Leave the whole section out when none of the supplied markers is linked. Never write a value, unit or range, and never name a test that is not supplied. "
+    "Then \"## What can you do?\" with exactly 3 or 4 bullets, each \"**Short action title**: one plain sentence with a specific everyday step, how much or how often\", suited to the level and to the habits the person told us. "
+    "Then \"## More to explore\" with these \"### \" sub headings, each followed by 2 to 4 short bullets of general medical knowledge: \"### Common signs\", \"### What can raise this risk\", \"### Blood tests doctors use\", \"### Ways to prevent it\". "
+    "In \"What can raise this risk\" write only general factors and never say a factor applies to the person unless it is in contributing_factors or the supplied answers. Never invent a value, a contributor, a threshold or a conclusion, no supplements or doses, no follow-up questions in the text, and no separator lines."
+)
+
 LIFESTYLE_FOCUS = (
     "LIFESTYLE FOCUS. This question is about a daily habit such as sleep, stress, exercise or water. Answer from the habit answers supplied. "
     "Bring in a blood result or Bio-AI score only when medicine clearly links it to that habit, and say how. Never list or mention unrelated results. "
@@ -486,6 +498,8 @@ def house_system(context: HealthContext, message: str) -> str:
     parts = [core_for(context, message), WARM_VOICE, _NO_FIELD_NAMES]
     if is_nutrition_overview(message):
         parts.append(NUTRITION_OVERVIEW)
+    if getattr(context, "explainer", None) == "bio_ai_risk":
+        parts.append(RISK_EXPLAINER)
     from app.core.config import settings
     from app.pipeline.answer_plan import build_answer_plan, log_plan, plan_prompt
 

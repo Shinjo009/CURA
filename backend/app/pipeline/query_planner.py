@@ -300,12 +300,14 @@ def _apply_context_ref(plan: QueryPlan, ref: ContextRef) -> QueryPlan:
             knowledge_scope=KnowledgeScope.personal,
             topic=(ref.risk_code or "").lower().replace(" ", "_"),
             topic_name=ref.risk_code,
-            needs_blood=False,
+            needs_blood=ref.entry_point == "risk_explainer",
             needs_bio_ai=True,
             needs_lifestyle=True,
             needs_supershyft=True,
             needs_general=False,
         )
+        if ref.entry_point == "risk_explainer":
+            update["entry_point"] = "risk_explainer"
     elif ref.type == "bio_ai_report":
         update.update(
             intent=IntentType.bio_ai_explanation,

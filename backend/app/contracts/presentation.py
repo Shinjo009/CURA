@@ -98,6 +98,51 @@ class NutritionPlan(BaseModel):
     limit: list[NutritionFood] = Field(default_factory=list)
 
 
+class RiskScoreCard(BaseModel):
+    """Verified Bio-AI values from the report. Never written by the model."""
+
+    code: str
+    name: str
+    score: float | None = None
+    status: str | None = None
+    level: str = "unknown"
+    assessed_on: str | None = None
+    percentile: float | None = None
+    lifestyle_contribution: float | None = None
+    contributing_factors: list[str] = Field(default_factory=list)
+    previous_score: float | None = None
+    previous_on: str | None = None
+
+
+class RelatedTest(BaseModel):
+    finding: PresentedFinding
+    why: str = ""
+
+
+class ExplainerAction(BaseModel):
+    title: str
+    detail: str = ""
+    icon: str = "habit"
+
+
+class ExplainerSection(BaseModel):
+    title: str
+    items: list[str] = Field(default_factory=list)
+
+
+class RiskExplanation(BaseModel):
+    """A Bio-AI risk explained in four steps. Values come from the report, the wording from the model."""
+
+    condition_title: str
+    condition: list[str] = Field(default_factory=list)
+    score_card: RiskScoreCard | None = None
+    meaning_title: str = "What does this mean for you?"
+    meaning: list[str] = Field(default_factory=list)
+    related_tests: list[RelatedTest] = Field(default_factory=list)
+    actions: list[ExplainerAction] = Field(default_factory=list)
+    more: list[ExplainerSection] = Field(default_factory=list)
+
+
 class StructuredResponse(BaseModel):
     mode: ResponseMode = ResponseMode.single_value
     headline: str | None = None
@@ -128,3 +173,4 @@ class StructuredResponse(BaseModel):
     related_findings: list[PresentedFinding] = Field(default_factory=list)
     suggestion_chips: list[str] = Field(default_factory=list)
     nutrition_plan: NutritionPlan | None = None
+    risk_explanation: RiskExplanation | None = None

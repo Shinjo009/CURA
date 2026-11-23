@@ -2021,7 +2021,10 @@
           "entry_point": {
             "anyOf": [
               {
-                "const": "blood_report_overview",
+                "enum": [
+                  "blood_report_overview",
+                  "risk_explainer"
+                ],
                 "type": "string"
               },
               {
@@ -2729,6 +2732,49 @@
         ],
         "title": "ExperienceBlockKind",
         "type": "string"
+      },
+      "ExplainerAction": {
+        "properties": {
+          "detail": {
+            "default": "",
+            "title": "Detail",
+            "type": "string"
+          },
+          "icon": {
+            "default": "habit",
+            "title": "Icon",
+            "type": "string"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          }
+        },
+        "required": [
+          "title"
+        ],
+        "title": "ExplainerAction",
+        "type": "object"
+      },
+      "ExplainerSection": {
+        "properties": {
+          "items": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          }
+        },
+        "required": [
+          "title"
+        ],
+        "title": "ExplainerSection",
+        "type": "object"
       },
       "FactKind": {
         "enum": [
@@ -5159,6 +5205,23 @@
         "title": "RecentContext",
         "type": "object"
       },
+      "RelatedTest": {
+        "properties": {
+          "finding": {
+            "$ref": "#/components/schemas/PresentedFinding"
+          },
+          "why": {
+            "default": "",
+            "title": "Why",
+            "type": "string"
+          }
+        },
+        "required": [
+          "finding"
+        ],
+        "title": "RelatedTest",
+        "type": "object"
+      },
       "ReportOverview": {
         "properties": {
           "date": {
@@ -5541,6 +5604,70 @@
           "keep"
         ],
         "title": "RewindRequest",
+        "type": "object"
+      },
+      "RiskExplanation": {
+        "description": "A Bio-AI risk explained in four steps. Values come from the report, the wording from the model.",
+        "properties": {
+          "actions": {
+            "items": {
+              "$ref": "#/components/schemas/ExplainerAction"
+            },
+            "title": "Actions",
+            "type": "array"
+          },
+          "condition": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Condition",
+            "type": "array"
+          },
+          "condition_title": {
+            "title": "Condition Title",
+            "type": "string"
+          },
+          "meaning": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Meaning",
+            "type": "array"
+          },
+          "meaning_title": {
+            "default": "What does this mean for you?",
+            "title": "Meaning Title",
+            "type": "string"
+          },
+          "more": {
+            "items": {
+              "$ref": "#/components/schemas/ExplainerSection"
+            },
+            "title": "More",
+            "type": "array"
+          },
+          "related_tests": {
+            "items": {
+              "$ref": "#/components/schemas/RelatedTest"
+            },
+            "title": "Related Tests",
+            "type": "array"
+          },
+          "score_card": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/RiskScoreCard"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "condition_title"
+        ],
+        "title": "RiskExplanation",
         "type": "object"
       },
       "RiskGroupSummary": {
@@ -5965,6 +6092,114 @@
           "group_id"
         ],
         "title": "RiskResult",
+        "type": "object"
+      },
+      "RiskScoreCard": {
+        "description": "Verified Bio-AI values from the report. Never written by the model.",
+        "properties": {
+          "assessed_on": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Assessed On"
+          },
+          "code": {
+            "title": "Code",
+            "type": "string"
+          },
+          "contributing_factors": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Contributing Factors",
+            "type": "array"
+          },
+          "level": {
+            "default": "unknown",
+            "title": "Level",
+            "type": "string"
+          },
+          "lifestyle_contribution": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lifestyle Contribution"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "percentile": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Percentile"
+          },
+          "previous_on": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Previous On"
+          },
+          "previous_score": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Previous Score"
+          },
+          "score": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Score"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Status"
+          }
+        },
+        "required": [
+          "code",
+          "name"
+        ],
+        "title": "RiskScoreCard",
         "type": "object"
       },
       "RiskTotals": {
@@ -6417,6 +6652,16 @@
               }
             ],
             "title": "Response Depth"
+          },
+          "risk_explanation": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/RiskExplanation"
+              },
+              {
+                "type": "null"
+              }
+            ]
           },
           "structured_next_steps": {
             "items": {

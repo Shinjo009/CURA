@@ -224,6 +224,7 @@ class ContextBuilder:
             data_source="supershyft" if personal else "general",
             resolved_topic=plan.topic,
             resolved_topic_name=plan.topic_name,
+            explainer="bio_ai_risk" if plan.entry_point == "risk_explainer" else None,
             display_name=profile.display_name or None,
             requested_entity_codes=list(plan.requested_metrics or []),
             operations=list(plan.operations or []),
