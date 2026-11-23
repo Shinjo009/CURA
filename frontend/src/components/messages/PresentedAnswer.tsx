@@ -4,6 +4,7 @@ import { AssistantBody } from "./AssistantBody";
 import { MarkdownAnswer } from "./MarkdownAnswer";
 import { availableFindings, FindingsTable, RawResultsDisclosure, RelatedResults } from "./FindingsTable";
 import { TestingOptionCard } from "./TestingOptionCard";
+import { NutritionPlanCards } from "./NutritionPlanCards";
 import { ThemeList } from "./ThemeCards";
 import { ValueCard } from "./ValueCard";
 import { t } from "../../i18n";
@@ -84,6 +85,7 @@ export function PresentedAnswer({
           <p>{presentation.personal_relevance}</p>
         </aside>
       ) : null}
+      {presentation.nutrition_plan ? <NutritionPlanCards plan={presentation.nutrition_plan} /> : null}
       {singleWithRange ? <ValueCard finding={findings[0]} compact /> : null}
       {narrative && (presentation.themes || []).length > 0 ? <ThemeList themes={presentation.themes || []} /> : null}
       {narrative && visibleFindings.length > 0 ? (

@@ -1665,8 +1665,17 @@ class ChatService:
             answer,
             reasoned.llm_mode,
             context,
-            whole_report=plan.intent not in _NARROW_INTENTS or is_nutrition_overview(payload.message),
+            whole_report=plan.intent not in _NARROW_INTENTS and not is_nutrition_overview(payload.message),
         )
+        if presentation is not None and settings.cura_prompt_variant == "house" and is_nutrition_overview(payload.message):
+            from app.pipeline.nutrition_plan import parse_nutrition_plan
+
+            parsed = parse_nutrition_plan(answer)
+            if parsed:
+                # The cards carry the foods; the message keeps only the personal opening.
+                answer, presentation.nutrition_plan = parsed
+                presentation.findings, presentation.raw_findings, presentation.themes = [], [], []
+                presentation.headline = None
         if looks_like_structured_json(answer):
             answer = public_answer_text(answer)
         safety_caution = getattr(pre_safety, "caution", None)

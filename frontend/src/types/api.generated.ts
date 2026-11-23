@@ -1737,6 +1737,43 @@ export interface components {
             /** Role */
             role: string;
         };
+        /** NutritionFood */
+        NutritionFood: {
+            /**
+             * Icon
+             * @default
+             */
+            icon: string;
+            /** Name */
+            name: string;
+            /**
+             * Why
+             * @default
+             */
+            why: string;
+        };
+        /**
+         * NutritionPlan
+         * @description The tapped Nutrition answer as cards: what the body needs, foods to include, foods to limit.
+         */
+        NutritionPlan: {
+            /** Include */
+            include?: components["schemas"]["NutritionFood"][];
+            /** Limit */
+            limit?: components["schemas"]["NutritionFood"][];
+            /** Priorities */
+            priorities?: components["schemas"]["NutritionPriority"][];
+        };
+        /** NutritionPriority */
+        NutritionPriority: {
+            /** Title */
+            title: string;
+            /**
+             * Why
+             * @default
+             */
+            why: string;
+        };
         /** PackageAction */
         PackageAction: {
             catalog_kind?: components["schemas"]["CatalogItemKind"] | null;
@@ -2469,6 +2506,7 @@ export interface components {
             next_conversation_action?: string | null;
             /** Next Steps */
             next_steps?: string[];
+            nutrition_plan?: components["schemas"]["NutritionPlan"] | null;
             /** Overall Summary */
             overall_summary?: string | null;
             /** Personal Relevance */

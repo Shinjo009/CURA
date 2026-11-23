@@ -304,3 +304,20 @@ def test_card_duplicating_text_is_cleaned():
     assert drop_rule_lines("a\n-\n---\nb") == "a\nb"
     assert "range" not in trim_card_numbers("Vitamin D is low (range 30 to 100 ng/mL) today.")
     assert trim_card_numbers("**Vitamin D: 12 ng/mL** is low") == "**Vitamin D** is low"
+
+
+def test_nutrition_answer_becomes_cards():
+    from app.pipeline.nutrition_plan import parse_nutrition_plan
+
+    text = (
+        "You told us you eat vegetables once a day. Food can help with steadier energy.\n\n"
+        "## What your body needs\n- **Steadier blood sugar**: slow carbs keep energy even.\n- **More iron**: it carries oxygen.\n- **Vitamin D**: bones need it.\n\n"
+        "## Foods to include\n- **Spinach**: iron, a bowl at lunch.\n- **Moong dal**: protein, daily.\n- **Oats**: slow carbs, 4 mornings a week.\n- **Curd**: calcium, one cup.\n\n"
+        "## Foods to limit\n- **Fried snacks**: raise fat in the blood.\n- **Sweet tea**: sugar spikes.\n"
+    )
+    intro, plan = parse_nutrition_plan(text)
+    assert intro.startswith("You told us") and "##" not in intro
+    assert [p.title for p in plan.priorities] == ["Steadier blood sugar", "More iron", "Vitamin D"]
+    assert [f.name for f in plan.include][:2] == ["Spinach", "Moong dal"] and plan.include[0].icon
+    assert len(plan.limit) == 2
+    assert parse_nutrition_plan("Just a paragraph.") is None

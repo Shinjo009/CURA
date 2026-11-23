@@ -3971,6 +3971,75 @@
         "title": "MessageOut",
         "type": "object"
       },
+      "NutritionFood": {
+        "properties": {
+          "icon": {
+            "default": "",
+            "title": "Icon",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "why": {
+            "default": "",
+            "title": "Why",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "title": "NutritionFood",
+        "type": "object"
+      },
+      "NutritionPlan": {
+        "description": "The tapped Nutrition answer as cards: what the body needs, foods to include, foods to limit.",
+        "properties": {
+          "include": {
+            "items": {
+              "$ref": "#/components/schemas/NutritionFood"
+            },
+            "title": "Include",
+            "type": "array"
+          },
+          "limit": {
+            "items": {
+              "$ref": "#/components/schemas/NutritionFood"
+            },
+            "title": "Limit",
+            "type": "array"
+          },
+          "priorities": {
+            "items": {
+              "$ref": "#/components/schemas/NutritionPriority"
+            },
+            "title": "Priorities",
+            "type": "array"
+          }
+        },
+        "title": "NutritionPlan",
+        "type": "object"
+      },
+      "NutritionPriority": {
+        "properties": {
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "why": {
+            "default": "",
+            "title": "Why",
+            "type": "string"
+          }
+        },
+        "required": [
+          "title"
+        ],
+        "title": "NutritionPriority",
+        "type": "object"
+      },
       "PackageAction": {
         "properties": {
           "catalog_kind": {
@@ -6266,6 +6335,16 @@
             },
             "title": "Next Steps",
             "type": "array"
+          },
+          "nutrition_plan": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/NutritionPlan"
+              },
+              {
+                "type": "null"
+              }
+            ]
           },
           "overall_summary": {
             "anyOf": [

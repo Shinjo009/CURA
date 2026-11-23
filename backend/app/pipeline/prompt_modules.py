@@ -350,12 +350,12 @@ def is_nutrition_overview(message: str) -> bool:
 
 
 NUTRITION_OVERVIEW = (
-    "THIS QUESTION IS A NUTRITION OVERVIEW. Use this layout instead of SHAPE 2, and make it specific to this person. "
-    "(1) One opening bullet of two short sentences: what the person told us about how they eat (diet preference and habits such as how often they have vegetables, fruit, whole grains or fried food; say \"you told us\" for a habit), and what that eating pattern is doing well or missing. No praise words. "
-    "(2) Then up to 3 sections, each starting with a \"## \" heading in plain words (use body_system, for example ## Heart and blood vessels, ## Bones and vitamins, ## Blood sugar, ## Blood and iron), only for areas that food can influence and that need attention. "
-    "Under each heading exactly two bullets with no bold label and no numbers, units or ranges (the cards show them): first, in plain words, what the result is for and what a low or high level does in the body or how it can feel; second, how the person's own eating habits could be contributing and which everyday foods move it, tied to a habit they told us when one is supplied. "
-    "(3) A final \"## What to do next\" with at most 3 bullets. Each names a specific food, how much and how often, the reason in a few words, and changes one thing about the habits the person told us (for example \"you told us you have vegetables 1 to 2 times a day, so add a bowl of cooked greens at lunch\"). Respect the diet preference. "
-    "Never vague advice, no supplements or doses, no separator lines, and never invent a result or a habit the person did not report."
+    "THIS QUESTION IS A NUTRITION OVERVIEW. Use exactly this layout instead of SHAPE 2, written for this person. "
+    "(1) A personal opening of two or three conversational sentences, no bullets and no heading: what the person told us about how they eat (diet preference, how often they have vegetables, fruit, whole grains, fried food; say \"you told us\"), and what their results suggest food can help with. No praise words, no numbers. "
+    "(2) \"## What your body needs\" with exactly 3 bullets, the top three priorities for this person from their results and habits. Each is \"**Short priority**: one plain sentence on why\" (for example \"**Steadier blood sugar**: ...\"). No values, units or ranges, the cards show them. "
+    "(3) \"## Foods to include\" with 4 to 6 bullets. Each is \"**Food**: why it helps this person and how much or how often\". Real everyday foods that fit the diet preference and the three priorities, and never a food the diet preference excludes. "
+    "(4) \"## Foods to limit\" with 2 or 3 bullets in the same form, tied to the person's results or habits they told us. "
+    "Nothing else: no other headings, no separator lines, no supplements or doses, no follow-up questions in the text, and never invent a result or a habit the person did not report."
 )
 
 

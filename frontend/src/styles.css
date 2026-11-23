@@ -1177,3 +1177,15 @@ mark.page-line { background: var(--highlight); color: var(--text); box-shadow: i
   border-radius: 999px; padding: 6px 12px; min-height: 36px; cursor: pointer; font-size: 14px;
 }
 .back-button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* Nutrition answer cards */
+.nutrition-plan { display: grid; gap: 16px; margin: 12px 0; }
+.nutrition-plan h4 { margin: 0 0 8px; font-size: 0.95rem; }
+.priority-list, .food-grid { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.food-grid { grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); }
+.priority-card, .food-card { display: flex; gap: 10px; align-items: flex-start; padding: 10px 12px; border: 1px solid var(--border, #e3e6ea); border-radius: 12px; background: var(--surface, #fff); }
+.priority-card p, .food-card p { margin: 2px 0 0; font-size: 0.88rem; opacity: 0.85; }
+.priority-number { flex: none; width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; font-size: 0.8rem; font-weight: 600; background: var(--ov-in, #17818a); color: #fff; }
+.food-icon { flex: none; font-size: 1.6rem; line-height: 1; }
+.food-include { border-left: 4px solid var(--ov-in, #17818a); }
+.food-limit { border-left: 4px solid var(--ov-out, #b83a6a); }

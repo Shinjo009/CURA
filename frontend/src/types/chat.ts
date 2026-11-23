@@ -207,6 +207,14 @@ export type StructuredResponse = {
   topic_summary?: { main_facts?: string[]; user_told_cura?: string[]; remaining_question?: string | null; text?: string | null } | null;
   related_findings?: PresentedFinding[];
   suggestion_chips?: string[];
+  nutrition_plan?: NutritionPlanData | null;
+};
+
+export type NutritionFoodData = { name: string; why?: string; icon?: string };
+export type NutritionPlanData = {
+  priorities: Array<{ title: string; why?: string }>;
+  include: NutritionFoodData[];
+  limit: NutritionFoodData[];
 };
 
 export type ChatResponse = {

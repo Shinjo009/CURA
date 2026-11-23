@@ -79,6 +79,25 @@ class HealthTheme(BaseModel):
     related_findings: list[PresentedFinding] = Field(default_factory=list)
 
 
+class NutritionPriority(BaseModel):
+    title: str
+    why: str = ""
+
+
+class NutritionFood(BaseModel):
+    name: str
+    why: str = ""
+    icon: str = ""
+
+
+class NutritionPlan(BaseModel):
+    """The tapped Nutrition answer as cards: what the body needs, foods to include, foods to limit."""
+
+    priorities: list[NutritionPriority] = Field(default_factory=list)
+    include: list[NutritionFood] = Field(default_factory=list)
+    limit: list[NutritionFood] = Field(default_factory=list)
+
+
 class StructuredResponse(BaseModel):
     mode: ResponseMode = ResponseMode.single_value
     headline: str | None = None
@@ -108,3 +127,4 @@ class StructuredResponse(BaseModel):
     topic_summary: dict | None = None
     related_findings: list[PresentedFinding] = Field(default_factory=list)
     suggestion_chips: list[str] = Field(default_factory=list)
+    nutrition_plan: NutritionPlan | None = None
