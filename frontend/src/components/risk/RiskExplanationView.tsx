@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from "react";
+import { useState } from "react";
 import type { RiskExplanationData } from "../../types/chat";
 import { ValueCard } from "../messages/ValueCard";
 import { t } from "../../i18n";
@@ -23,24 +23,19 @@ export function ExplainerSection({ title, paragraphs, id }: { title: string; par
   return (
     <section className="risk-step" aria-labelledby={id}>
       <h3 id={id}>{title}</h3>
-      {paragraphs.map((p) => (
-        <p key={p}>{p}</p>
-      ))}
+      <ul className="risk-points">
+        {paragraphs.map((p) => (
+          <li key={p}>{p}</li>
+        ))}
+      </ul>
     </section>
   );
 }
 
 /** Verified values from the report: score out of 100, the report's own level and date. Nothing here is model written. */
 export function RiskScoreCard({ card }: { card: Card }) {
-  const [open, setOpen] = useState(false);
   const score = card.score;
   const pct = typeof score === "number" ? Math.min(Math.max(score, 0), 100) : null;
-  const details: Array<[string, ReactNode]> = [];
-  if (card.percentile != null) details.push([t("ui.risk.percentile", "Percentile"), card.percentile]);
-  if (card.lifestyle_contribution != null) details.push([t("ui.risk.lifestyle", "Lifestyle contribution"), `${card.lifestyle_contribution}%`]);
-  if (card.previous_score != null) details.push([t("ui.risk.previous", "Previous score"), card.previous_score]);
-  const factors = card.contributing_factors ?? [];
-  const hasDetails = details.length > 0 || factors.length > 0;
   return (
     <article className="risk-score-card" data-level={card.level} data-testid="risk-score-card">
       <header>
@@ -65,31 +60,7 @@ export function RiskScoreCard({ card }: { card: Card }) {
         <p className="muted">{t("ui.risk.no_score", "No score in this report.")}</p>
       )}
       {card.assessed_on ? <p className="muted">{`${t("ui.risk.assessed_on", "Assessed on")} ${longDate(card.assessed_on)}`}</p> : null}
-      {hasDetails ? (
-        <>
-          <button type="button" className="expand-toggle" aria-expanded={open} onClick={() => setOpen((v) => !v)}>
-            {t("ui.risk.view_details", "View assessment details")}
-            <span aria-hidden="true">{open ? "⌃" : "⌄"}</span>
-          </button>
-          {open ? (
-            <div className="risk-details">
-              <dl className="biomarker-facts">
-                {details.map(([k, v]) => (
-                  <div key={k}>
-                    <dt>{k}</dt>
-                    <dd>{v}</dd>
-                  </div>
-                ))}
-              </dl>
-              {factors.length > 0 ? (
-                <p className="muted">
-                  {t("ui.risk.from_report", "Contributing factors in your report")}: {factors.join(", ")}
-                </p>
-              ) : null}
-            </div>
-          ) : null}
-        </>
-      ) : null}
+      <p className="risk-card-note">{t("ui.risk.card_note", "This card is an estimate of future risk, not a diagnosis and not a percent chance.")}</p>
     </article>
   );
 }
@@ -130,21 +101,35 @@ export function ActionCards({ actions, title }: { actions: RiskExplanationData["
   );
 }
 
-/** Extra reading (signs, causes, tests, prevention) stays closed until the person wants it. */
-export function ExpandableInfo({ sections, generalNote }: { sections: RiskExplanationData["more"]; generalNote?: string }) {
-  if (sections.length === 0) return null;
+/** Extra reading (signs, causes, tests, prevention) stays closed until the person opens it. */
+function ExpandItem({ section, note }: { section: RiskExplanationData["more"][number]; note?: string }) {
+  const [open, setOpen] = useState(false);
   return (
-    <section className="risk-more" aria-label={t("ui.risk.more", "More to explore")}>
-      {sections.map((section) => (
-        <details key={section.title} className="risk-expand">
-          <summary>{section.title}</summary>
-          {generalNote && /raise|cause|factor/i.test(section.title) ? <p className="muted">{generalNote}</p> : null}
+    <div className="risk-expand" data-open={open}>
+      <button type="button" className="expand-toggle" aria-expanded={open} onClick={() => setOpen((v) => !v)}>
+        <strong>{section.title}</strong>
+        <span aria-hidden="true">{open ? "⌃" : "⌄"}</span>
+      </button>
+      {open ? (
+        <>
+          {note ? <p className="muted">{note}</p> : null}
           <ul>
             {section.items.map((item) => (
               <li key={item}>{item}</li>
             ))}
           </ul>
-        </details>
+        </>
+      ) : null}
+    </div>
+  );
+}
+
+export function ExpandableInfo({ sections, generalNote }: { sections: RiskExplanationData["more"]; generalNote?: string }) {
+  if (sections.length === 0) return null;
+  return (
+    <section className="risk-more" aria-label={t("ui.risk.more", "More to explore")}>
+      {sections.map((section) => (
+        <ExpandItem key={section.title} section={section} note={generalNote && /raise|cause|factor/i.test(section.title) ? generalNote : undefined} />
       ))}
     </section>
   );

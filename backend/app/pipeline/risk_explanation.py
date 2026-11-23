@@ -55,20 +55,30 @@ def _split_item(text: str) -> tuple[str, str]:
     return text.replace("**", "").strip(), ""
 
 
+_NOTE = re.compile(r"left out|did not list|not listed|not supplied|no (?:specific )?(?:blood )?(?:markers?|tests?) (?:were|was|are)|section is", re.I)
+_ESTIMATE = re.compile(r"estimate of (?:your )?future risk|not a diagnosis", re.I)
+
+
 def _paragraphs(lines: list[str]) -> list[str]:
+    """One point per bullet. A plain paragraph becomes one point. Notes about missing data and the stock estimate line are dropped."""
     out, cur = [], []
     for line in lines:
-        if not line.strip():
+        b = _BULLET.match(line)
+        if b:
             if cur:
                 out.append(" ".join(cur))
                 cur = []
-        elif not _BULLET.match(line):
-            cur.append(line.strip())
+            out.append(b.group(1))
+        elif not line.strip():
+            if cur:
+                out.append(" ".join(cur))
+                cur = []
         else:
-            cur.append(_BULLET.match(line).group(1))
+            cur.append(line.strip())
     if cur:
         out.append(" ".join(cur))
-    return [p.replace("**", "").strip() for p in out if p.strip()]
+    points = [p.replace("**", "").strip() for p in out if p.strip()]
+    return [p for p in points if not _NOTE.search(p) and not _ESTIMATE.search(p)]
 
 
 def score_card_for(risk) -> RiskScoreCard:
@@ -165,7 +175,9 @@ def parse_risk_explanation(text: str, *, risk, markers) -> RiskExplanation | Non
                 continue
             b = _BULLET.match(line)
             if b and cur is not None and len(cur.items) < MAX_ITEMS:
-                cur.items.append(b.group(1).replace("**", "").strip())
+                item = b.group(1).replace("**", "").strip()
+                if not _NOTE.search(item):
+                    cur.items.append(item)
         extra = [s for s in extra if s.items]
 
     return RiskExplanation(

@@ -90,3 +90,14 @@ def test_risk_explainer_prompt_is_added_only_for_the_explainer():
     on = house_system(_ctx(), "What does my Type 2 diabetes risk result mean?")
     off_ctx = HealthContext(intent=IntentType.bio_ai_explanation, answer_depth=list(AnswerDepth)[0])
     assert RISK_EXPLAINER in on and RISK_EXPLAINER not in house_system(off_ctx, "What can I do about my Type 2 diabetes risk?")
+
+
+def test_points_are_bullets_and_stock_notes_are_dropped():
+    text = ANSWER.replace(
+        "Your body turns food into sugar for energy. A hormone called insulin works like a key.\n\nIn Type 2 diabetes the key stops working well, so extra sugar stays in your blood.",
+        "- Your body turns food into sugar.\n- Insulin works like a key.\n- This card is an estimate of future risk, not a diagnosis.",
+    ) + "### Blood tests doctors use\n- Your report did not list specific markers, so this section is left out.\n"
+    risk = BioAIRisk(code="t", name="T", score=1, status="Healthy")
+    parsed = parse_risk_explanation(plain_answer(text, None, _ctx(), whole_report=False, keep_layout=True), risk=risk, markers=[])
+    assert parsed.condition == ["Your body turns food into sugar.", "Insulin works like a key."]
+    assert [s.title for s in parsed.more] == ["Common signs", "What can raise this risk"]

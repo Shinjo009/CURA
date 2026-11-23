@@ -30,14 +30,19 @@ describe("RiskExplanationView", () => {
     expect(screen.getByText("HbA1c")).toBeTruthy();
   });
 
-  it("keeps technical details and extra reading closed until asked", () => {
+  it("shows the estimate note on the card and keeps extra reading closed until opened", () => {
     render(<RiskExplanationView data={data} />);
-    expect(screen.queryByText("Percentile")).toBeNull();
-    fireEvent.click(screen.getByRole("button", { name: /View assessment details/ }));
-    expect(screen.getByText("Percentile")).toBeTruthy();
-    expect(screen.getByText(/Contributing factors in your report: Low activity/)).toBeTruthy();
-    const details = document.querySelectorAll("details");
-    expect(details).toHaveLength(2);
-    details.forEach((d) => expect(d.open).toBe(false));
+    expect(screen.getByText("This card is an estimate of future risk, not a diagnosis and not a percent chance.")).toBeTruthy();
+    expect(screen.queryByText(/assessment details/i)).toBeNull();
+    expect(screen.queryByText("Feeling very thirsty")).toBeNull();
+    fireEvent.click(screen.getByRole("button", { name: /Common signs/ }));
+    expect(screen.getByText("Feeling very thirsty")).toBeTruthy();
+    fireEvent.click(screen.getByRole("button", { name: /What can raise this risk/ }));
+    expect(screen.getByText("General information, not confirmed for you.")).toBeTruthy();
+  });
+
+  it("lists the condition as bullet points", () => {
+    render(<RiskExplanationView data={data} />);
+    expect(screen.getAllByRole("listitem").length).toBeGreaterThanOrEqual(3);
   });
 });
