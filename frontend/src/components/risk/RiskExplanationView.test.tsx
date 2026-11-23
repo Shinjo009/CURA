@@ -27,7 +27,7 @@ describe("RiskExplanationView", () => {
     expect(within(card).getByText("Healthy")).toBeTruthy();
     expect(container.querySelector("img")).toBeNull();
     expect(screen.getAllByTestId("action-card")).toHaveLength(2);
-    expect(screen.getByText("HbA1c")).toBeTruthy();
+    expect(screen.getByText("Your HbA1c can help us understand this.")).toBeTruthy();
   });
 
   it("shows the estimate note on the card and keeps extra reading closed until opened", () => {
@@ -41,8 +41,14 @@ describe("RiskExplanationView", () => {
     expect(screen.getByText("General information, not confirmed for you.")).toBeTruthy();
   });
 
-  it("lists the condition as bullet points", () => {
-    render(<RiskExplanationView data={data} />);
-    expect(screen.getAllByRole("listitem").length).toBeGreaterThanOrEqual(3);
+  it("opens with a personal line and shows related tests as a card that asks CURA", () => {
+    const asked: string[] = [];
+    render(<RiskExplanationView data={data} onAsk={(text) => asked.push(text)} />);
+    expect(screen.getByText("Let's understand what Type 2 diabetes is and what your result means for your health.")).toBeTruthy();
+    const related = screen.getByTestId("related-tests");
+    expect(within(related).getByText("5.2 %")).toBeTruthy();
+    fireEvent.click(within(related).getByRole("button", { name: "Check my blood test results" }));
+    expect(asked).toEqual(["What do my HbA1c results say about my Type 2 diabetes risk?"]);
+    expect(document.querySelectorAll("hr").length).toBe(2);
   });
 });

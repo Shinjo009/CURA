@@ -1242,6 +1242,22 @@ mark.page-line { background: var(--highlight); color: var(--text); box-shadow: i
 .risk-expand { border: 1px solid var(--border, #e3e6ea); border-radius: 12px; padding: 10px 12px; }
 .risk-expand summary { cursor: pointer; font-weight: 600; }
 .risk-expand ul { margin: 8px 0 0; padding-left: 18px; }
-.risk-points { margin: 0; padding-left: 20px; display: grid; gap: 8px; line-height: 1.6; }
 .risk-card-note { margin: 4px 0 0; font-size: 0.88rem; opacity: 0.8; }
 .risk-expand ul { margin: 8px 0 0; padding-left: 18px; }
+
+/* Risk explanation, laid out like the design */
+.risk-opening { margin: 0 0 4px; line-height: 1.55; }
+.risk-divider { border: 0; border-top: 1px solid var(--border, #e3e6ea); margin: 4px 0; }
+.risk-step h3 { font-size: 1.2rem; font-weight: 700; margin: 0 0 10px; }
+.risk-points { display: grid; gap: 10px; }
+.risk-points p { margin: 0; line-height: 1.65; }
+.risk-level { display: inline-flex; align-items: center; gap: 6px; }
+.risk-score-card { border-radius: 18px; padding: 16px; gap: 8px; }
+.related-card { padding: 14px; border: 1px solid var(--border, #e3e6ea); border-radius: 16px; display: grid; gap: 8px; }
+.related-card h3 { display: flex; align-items: center; gap: 8px; font-size: 1.05rem; margin: 0; }
+.related-card p { margin: 0; }
+.related-icon { display: inline-flex; color: var(--ov-in, #17818a); }
+.related-values { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.related-values li { display: inline-flex; gap: 6px; padding: 4px 10px; border-radius: 999px; background: var(--surface-2, #f1f3f5); font-size: 0.88rem; }
+.action-icon { color: var(--ov-in, #17818a); }
+.action-card strong { font-size: 1.05rem; }
