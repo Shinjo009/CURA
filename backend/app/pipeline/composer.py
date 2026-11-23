@@ -84,7 +84,7 @@ def _marker_out_of_range(marker) -> bool:
     return _out_of_range(marker)
 
 
-from app.pipeline.prompt_modules import is_nutrition_overview  # noqa: E402
+from app.pipeline.turn_kinds import TurnKind, kind_of  # noqa: E402
 
 _CARD_TITLES = {"Results linked to your diet", "Results outside your range", "Your Bio-AI scores"}
 
@@ -163,7 +163,7 @@ def _diet_on_record(context) -> str | None:
 
 def _staged_follow_ups(llm_questions, plan, context, history, shown, answer_text="") -> list[FollowUpSuggestion]:
     """The four questions the house prompt asks for (understanding, personal relevance, action, explore), on whole report answers."""
-    if settings.cura_prompt_variant != "house" or not (plan.intent in _OVERVIEW_INTENTS or is_nutrition_overview(plan.raw_message)):
+    if settings.cura_prompt_variant != "house" or not (plan.intent in _OVERVIEW_INTENTS or kind_of(context, plan.raw_message) == TurnKind.nutrition_overview):
         return []
     if plan.knowledge_scope != KnowledgeScope.personal or not (context.markers or context.bio_ai_risks):
         return []
@@ -315,7 +315,7 @@ class ResponseComposer:
                 presentation.headline = "Your Bio-AI scores"
             elif sum(1 for m in (context.markers or []) if _marker_out_of_range(m)) > 1:
                 presentation.headline = "Results outside your range"
-        if settings.cura_prompt_variant == "house" and is_nutrition_overview(plan.raw_message) and presentation.headline:
+        if settings.cura_prompt_variant == "house" and kind_of(context, plan.raw_message) == TurnKind.nutrition_overview and presentation.headline:
             presentation.headline = "Results linked to your diet"
         if settings.cura_prompt_variant == "house" and presentation.headline in _CARD_TITLES and not presentation.findings:
             # A card title with no card under it is just a stray heading.

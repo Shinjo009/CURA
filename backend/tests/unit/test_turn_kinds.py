@@ -1,0 +1,68 @@
+"""One test per turn kind: what it loads, which prompt module it adds, and the shape it returns."""
+
+import pytest
+
+from app.contracts.common import AnswerDepth, IntentType
+from app.contracts.context_ref import ContextRef
+from app.contracts.health_context import HealthContext
+from app.contracts.query import QueryPlan
+from app.pipeline import prompt_modules
+from app.pipeline.prompt_modules import house_system
+from app.pipeline.query_planner import _apply_context_ref
+from app.pipeline.turn_kinds import REGISTRY, TurnKind, kind_of, resolve_turn_kind, spec_for
+
+
+def _plan(**kw):
+    return QueryPlan(intent=IntentType.general_health_question, raw_message="x", **kw)
+
+
+def _ctx(kind="general"):
+    return HealthContext(intent=IntentType.bio_ai_explanation, answer_depth=list(AnswerDepth)[0], turn_kind=kind)
+
+
+def test_every_kind_has_a_spec_and_every_named_module_exists():
+    assert set(REGISTRY) == set(TurnKind)
+    for spec in REGISTRY.values():
+        if spec.prompt_module:
+            assert isinstance(getattr(prompt_modules, spec.prompt_module), str)
+
+
+@pytest.mark.parametrize(
+    "ref,kind,blood,bio,quest",
+    [
+        (ContextRef(type="bio_ai_risk", source="supershyft", risk_code="x", entry_point="risk_explainer"), TurnKind.bio_ai_risk, True, True, True),
+        (ContextRef(type="bio_ai_report", source="supershyft", entry_point="health_area"), TurnKind.health_area, True, True, True),
+    ],
+)
+def test_card_entry_points_load_what_their_kind_needs(ref, kind, blood, bio, quest):
+    plan = _apply_context_ref(_plan(), ref)
+    assert resolve_turn_kind(plan.raw_message, plan.entry_point) == kind
+    assert (plan.needs_blood, plan.needs_bio_ai, plan.needs_questionnaire) == (blood, bio, quest)
+
+
+def test_a_plain_tap_without_an_entry_point_stays_general_and_narrow():
+    plan = _apply_context_ref(_plan(), ContextRef(type="bio_ai_risk", source="supershyft", risk_code="x"))
+    assert resolve_turn_kind(plan.raw_message, plan.entry_point) == TurnKind.general
+    assert plan.needs_blood is False
+
+
+def test_typed_text_only_matches_the_nutrition_overview():
+    assert resolve_turn_kind("What should I know about my nutrition?") == TurnKind.nutrition_overview
+    assert resolve_turn_kind("What can I eat to lower my LDL?") == TurnKind.general
+    assert resolve_turn_kind("What does my Hypertension risk mean?") == TurnKind.general
+
+
+@pytest.mark.parametrize("kind,module", [(TurnKind.bio_ai_risk, "RISK_EXPLAINER"), (TurnKind.health_area, "HEALTH_AREA"), (TurnKind.nutrition_overview, "NUTRITION_OVERVIEW")])
+def test_each_kind_adds_its_own_prompt_module_and_no_other(kind, module):
+    system = house_system(_ctx(kind.value), "a question")
+    assert getattr(prompt_modules, module) in system
+    for other in ("RISK_EXPLAINER", "HEALTH_AREA", "NUTRITION_OVERVIEW"):
+        if other != module:
+            assert getattr(prompt_modules, other) not in system
+
+
+def test_card_kinds_keep_their_layout_and_the_rest_do_not():
+    assert spec_for(TurnKind.bio_ai_risk).keep_layout and spec_for(TurnKind.bio_ai_risk).card == "risk_explanation"
+    assert spec_for(TurnKind.nutrition_overview).card == "nutrition_plan"
+    assert not spec_for(TurnKind.general).keep_layout and spec_for(TurnKind.general).card is None
+    assert kind_of(_ctx("health_area"), "x") == TurnKind.health_area

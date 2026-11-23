@@ -489,12 +489,15 @@ _NARROW_INTENT_NAMES = frozenset({
 })
 
 
+from app.pipeline.turn_kinds import TurnKind, kind_of, spec_for  # noqa: E402
+
+
 def core_for(context, message: str) -> str:
     """The shared prompt. A narrow question leaves out the whole-report and Bio-AI layouts
     (about 4,500 characters it never uses); a report-wide question gets the full text."""
     core = HOUSE_CORE.strip()
     intent = getattr(getattr(context, "intent", None), "value", "") or ""
-    if intent not in _NARROW_INTENT_NAMES or is_nutrition_overview(message) or has_focus_brief(context):
+    if intent not in _NARROW_INTENT_NAMES or kind_of(context, message) == TurnKind.nutrition_overview or has_focus_brief(context):
         return core
     start, end = core.find("SHAPE 1A,"), core.find("SHAPE 2,")
     if 0 < start < end:
@@ -504,12 +507,9 @@ def core_for(context, message: str) -> str:
 
 def house_system(context: HealthContext, message: str) -> str:
     parts = [core_for(context, message), WARM_VOICE, _NO_FIELD_NAMES]
-    if is_nutrition_overview(message):
-        parts.append(NUTRITION_OVERVIEW)
-    if getattr(context, "explainer", None) == "bio_ai_risk":
-        parts.append(RISK_EXPLAINER)
-    elif getattr(context, "explainer", None) == "health_area":
-        parts.append(HEALTH_AREA)
+    kind_spec = spec_for(kind_of(context, message))
+    if kind_spec.prompt_module:
+        parts.append(globals()[kind_spec.prompt_module])
     from app.core.config import settings
     from app.pipeline.answer_plan import build_answer_plan, log_plan, plan_prompt
 

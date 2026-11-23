@@ -925,8 +925,11 @@ def _requested_codes(context: HealthContext) -> set[str]:
     return {_topic_key(code) for code in (context.requested_entity_codes or []) if code}
 
 
+from app.pipeline.turn_kinds import spec_for  # noqa: E402
+
+
 def _relevant_markers(context: HealthContext):
-    if getattr(context, "explainer", None):
+    if spec_for(getattr(context, "turn_kind", None)).whole_record:
         # A risk explanation links the risk to any measured result that bears on it, so it sees the whole panel.
         return list(context.markers)
     spec = context.task_contract or {}
@@ -971,7 +974,7 @@ def _relevant_risks(context: HealthContext):
 
 
 def _use_compact_context(context: HealthContext) -> bool:
-    if getattr(context, "explainer", None):
+    if spec_for(getattr(context, "turn_kind", None)).whole_record:
         return False
     depth = getattr(context.answer_depth, "value", None)
     if depth in {"broad", "detailed"}:

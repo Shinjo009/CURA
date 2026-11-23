@@ -139,7 +139,9 @@ def _entity_coverage(answer: str, plan: QueryPlan, context: HealthContext) -> Qu
             # "metabolic risk" resolves to the report-level score; its absence is not news.
             and str(c).lower() not in {"metabolic_score", "metabolic_age"}
         ]
-    if getattr(context, "explainer", None):
+    from app.pipeline.turn_kinds import spec_for
+
+    if spec_for(getattr(context, "turn_kind", None)).skip_coverage_notes:
         # An overview turn supplies the whole record; the model decides what is relevant.
         coverage_codes = []
     for code in coverage_codes:

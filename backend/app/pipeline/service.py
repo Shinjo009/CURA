@@ -168,7 +168,6 @@ def _topic_follow_ups(items, message: str, answer: str):
 
 
 # Questions about one result, one topic or a general matter: plain bullets with no report headings.
-from app.pipeline.prompt_modules import is_nutrition_overview  # noqa: E402
 
 _NARROW_INTENTS = frozenset({
     IntentType.latest_result,
@@ -1661,46 +1660,22 @@ class ChatService:
         self._progress.measure("compose")
         eval_turn.setdefault("answer_stages", {})["post_safety_answer"] = pre_compose_answer
         eval_turn["answer_stages"]["post_composer_answer"] = answer
+        from app.pipeline.turn_cards import attach_card
+        from app.pipeline.turn_kinds import TurnKind, kind_of, spec_for
+
+        turn_kind = kind_of(context, payload.message)
+        kind_spec = spec_for(turn_kind)
         answer = plain_answer(
             answer,
             reasoned.llm_mode,
             context,
-            whole_report=plan.intent not in _NARROW_INTENTS or is_nutrition_overview(payload.message),
-            keep_layout=bool(context.explainer) or is_nutrition_overview(payload.message),
+            whole_report=plan.intent not in _NARROW_INTENTS or turn_kind == TurnKind.nutrition_overview,
+            keep_layout=kind_spec.keep_layout,
         )
-        if presentation is not None and settings.cura_prompt_variant == "house" and context.explainer == "bio_ai_risk":
-            from app.pipeline.risk_explanation import parse_risk_explanation
-
-            topic = (plan.topic or "").lower()
-            risk = next((r for r in context.bio_ai_risks if (r.code or "").lower().replace(" ", "_") == topic), None) or (
-                context.bio_ai_risks[0] if len(context.bio_ai_risks) == 1 else None
+        if presentation is not None and settings.cura_prompt_variant == "house":
+            answer, suggestions = attach_card(
+                kind_spec, answer=answer, context=context, plan=plan, presentation=presentation, suggestions=suggestions
             )
-            if risk is not None:
-                # The answer text stays whole for history. The cards read the same content from the structure.
-                presentation.risk_explanation = parse_risk_explanation(answer, risk=risk, markers=list(context.markers or []))
-                if presentation.risk_explanation:
-                    presentation.findings, presentation.raw_findings, presentation.themes = [], [], []
-                    presentation.headline = None
-                    from app.biomarkers.risk_overview import _display, _registry
-                    from app.contracts.followup import FollowUpSuggestion as _Follow
-
-                    code = re.sub(r"[^a-z0-9]+", "_", (risk.code or risk.name or "").lower()).strip("_")
-                    name = _display(_registry(), code, risk.name).get("name", risk.name).lower()
-                    # Level 3 questions build on what was just explained.
-                    asks = [f"What causes {name}?", "Can my risk change over time?", f"Which foods can help lower my {name} risk?"]
-                    if presentation.risk_explanation.related_tests:
-                        asks.append("What do my blood tests say about this?")
-                    suggestions = [_Follow(text=t, category="explore", handling_path="CONTINUE_INTERPRETATION") for t in asks]
-                    presentation.suggestion_chips = list(asks)
-        if presentation is not None and settings.cura_prompt_variant == "house" and is_nutrition_overview(payload.message):
-            from app.pipeline.nutrition_plan import parse_nutrition_plan
-
-            parsed = parse_nutrition_plan(answer)
-            if parsed:
-                # The cards carry the foods; the message keeps only the personal opening.
-                answer, presentation.nutrition_plan = parsed
-                presentation.findings, presentation.raw_findings, presentation.themes = [], [], []
-                presentation.headline = None
         if looks_like_structured_json(answer):
             answer = public_answer_text(answer)
         safety_caution = getattr(pre_safety, "caution", None)

@@ -36,7 +36,7 @@ Button: Check my blood sugar results
 
 
 def _ctx():
-    return HealthContext(intent=IntentType.bio_ai_explanation, answer_depth=list(AnswerDepth)[0], explainer="bio_ai_risk")
+    return HealthContext(intent=IntentType.bio_ai_explanation, answer_depth=list(AnswerDepth)[0], turn_kind="bio_ai_risk")
 
 
 def _parse(markers):
@@ -141,7 +141,7 @@ def test_overview_context_sees_the_whole_panel_and_gets_the_area_prompt():
     from app.pipeline.prompt_modules import HEALTH_AREA, house_system
 
     marker = BloodMarker(id="1", key="ldl", name="LDL", value=120, unit="mg/dL", reference_low=0, reference_high=100)
-    ctx = HealthContext(intent=IntentType.bio_ai_explanation, answer_depth=list(AnswerDepth)[0], explainer="health_area", markers=[marker])
+    ctx = HealthContext(intent=IntentType.bio_ai_explanation, answer_depth=list(AnswerDepth)[0], turn_kind="health_area", markers=[marker])
     assert _relevant_markers(ctx) == [marker]
     assert HEALTH_AREA in house_system(ctx, "What do my blood tests say about my heart health?")
     assert "—" not in HEALTH_AREA and "–" not in HEALTH_AREA

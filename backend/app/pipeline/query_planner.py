@@ -261,6 +261,19 @@ def _own_result_for_test_question(plan: QueryPlan, message: str) -> QueryPlan:
     return plan.model_copy(update={"needs_blood": True, "needs_personal_data": True})
 
 
+def _apply_kind_needs(update: dict, entry_point: str | None) -> None:
+    """A card's entry point names a turn kind; the registry says which sources that kind needs."""
+    from app.pipeline.turn_kinds import ENTRY_POINT_KINDS, spec_for
+
+    kind = ENTRY_POINT_KINDS.get(entry_point or "")
+    if kind is None:
+        return
+    spec = spec_for(kind)
+    update.update(entry_point=entry_point, needs_blood=spec.needs_blood, needs_bio_ai=spec.needs_bio_ai)
+    if spec.needs_questionnaire:
+        update["needs_questionnaire"] = True
+
+
 def _apply_context_ref(plan: QueryPlan, ref: ContextRef) -> QueryPlan:
     update: dict = {"report_id": ref.report_id, "explicit_source_ref": True}
     if ref.type == "blood_marker":
@@ -300,28 +313,25 @@ def _apply_context_ref(plan: QueryPlan, ref: ContextRef) -> QueryPlan:
             knowledge_scope=KnowledgeScope.personal,
             topic=(ref.risk_code or "").lower().replace(" ", "_"),
             topic_name=ref.risk_code,
-            needs_blood=ref.entry_point == "risk_explainer",
+            needs_blood=False,
             needs_bio_ai=True,
             needs_lifestyle=True,
             needs_supershyft=True,
             needs_general=False,
         )
-        if ref.entry_point == "risk_explainer":
-            update["entry_point"] = "risk_explainer"
+        _apply_kind_needs(update, ref.entry_point)
     elif ref.type == "bio_ai_report":
         update.update(
             intent=IntentType.bio_ai_explanation,
             knowledge_scope=KnowledgeScope.personal,
-            needs_blood=ref.entry_point == "health_area",
+            needs_blood=False,
             needs_bio_ai=True,
-            needs_questionnaire=ref.entry_point == "health_area",
+            needs_questionnaire=False,
             needs_supershyft=True,
             needs_general=False,
             source=QuerySource.bio_ai,
         )
-        if ref.entry_point == "health_area":
-            # A question about a health area (or the whole report) joins blood results, Bio-AI risks and habits.
-            update["entry_point"] = "health_area"
+        _apply_kind_needs(update, ref.entry_point)
     elif ref.type == "health_scenario":
         update.update(
             intent=IntentType.health_scenario,

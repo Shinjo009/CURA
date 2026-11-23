@@ -156,6 +156,9 @@ def _with_pattern_keys(message: str, keys: list[str]) -> list[str]:
     return list(dict.fromkeys([*keys, *extra])) if extra else keys
 
 
+from app.pipeline.turn_kinds import resolve_turn_kind  # noqa: E402
+
+
 class ContextBuilder:
     def __init__(self, registry: ProviderRegistry):
         self.registry = registry
@@ -224,7 +227,7 @@ class ContextBuilder:
             data_source="supershyft" if personal else "general",
             resolved_topic=plan.topic,
             resolved_topic_name=plan.topic_name,
-            explainer={"risk_explainer": "bio_ai_risk", "health_area": "health_area"}.get(plan.entry_point or ""),
+            turn_kind=resolve_turn_kind(plan.raw_message, plan.entry_point).value,
             display_name=profile.display_name or None,
             requested_entity_codes=list(plan.requested_metrics or []),
             operations=list(plan.operations or []),

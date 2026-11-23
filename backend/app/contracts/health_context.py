@@ -118,8 +118,8 @@ class HealthContext(BaseModel):
     data_source: str = "general"
     resolved_topic: str | None = None
     resolved_topic_name: str | None = None
-    # "bio_ai_risk" when the person tapped Understand this risk: the answer becomes a structured explanation.
-    explainer: str | None = None
+    # What kind of turn this is (see turn_kinds). The registry says what it needs.
+    turn_kind: str = "general"
     status: str = "ok"
     markers: list[BloodMarker] = Field(default_factory=list)
     bio_ai_risks: list[BioAIRisk] = Field(default_factory=list)
