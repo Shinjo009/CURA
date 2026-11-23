@@ -2301,6 +2301,11 @@ export interface components {
         };
         /** RiskResult */
         RiskResult: {
+            /**
+             * About
+             * @default
+             */
+            about: string;
             /** Change */
             change?: ("increased" | "decreased" | "unchanged") | null;
             /** Code */

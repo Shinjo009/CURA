@@ -5802,6 +5802,11 @@
       },
       "RiskResult": {
         "properties": {
+          "about": {
+            "default": "",
+            "title": "About",
+            "type": "string"
+          },
           "change": {
             "anyOf": [
               {

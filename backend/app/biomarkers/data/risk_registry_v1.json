@@ -11,7 +11,7 @@
     "dyslipidemia",
     "hypertension"
    ],
-   "about": "Your chances of heart and blood vessel problems, based on your overall health picture."
+   "about": "How healthy your heart and blood vessels may be."
   },
   {
    "id": "liver_health",
@@ -19,7 +19,7 @@
    "codes": [
     "nafld"
    ],
-   "about": "Your chances of fatty liver changes."
+   "about": "Your chances of developing excess fat in your liver."
   },
   {
    "id": "blood_sugar_metabolism",
@@ -28,7 +28,7 @@
     "type_2_diabetes",
     "obesity"
    ],
-   "about": "Your chances of blood sugar and weight related problems."
+   "about": "How your body handles sugar, energy and weight."
   },
   {
    "id": "thyroid_health",
@@ -36,7 +36,7 @@
    "codes": [
     "thyroid"
    ],
-   "about": "Your chances of thyroid problems."
+   "about": "Health risks related to the gland that helps control your energy and metabolism."
   },
   {
    "id": "hormonal_health",
@@ -52,7 +52,7 @@
    "codes": [
     "oxidative_stress"
    ],
-   "about": "Strain on your body from oxidative stress."
+   "about": "Processes that can put stress on your body's cells."
   }
  ],
  "raised_statuses": [
@@ -73,5 +73,16 @@
   "mild",
   "low"
  ],
- "other_about": "Predicted risks that have not been grouped yet."
+ "other_about": "Predicted risks that have not been grouped yet.",
+ "risk_about": {
+  "cardiac_health": "heart and blood vessel problems",
+  "dyslipidemia": "unhealthy levels of fats in your blood",
+  "hypertension": "high blood pressure",
+  "nafld": "fat building up in your liver",
+  "type_2_diabetes": "blood sugar staying high over time (type 2 diabetes)",
+  "obesity": "carrying extra weight that strains your health",
+  "thyroid": "the gland that helps control your energy and metabolism not working well",
+  "pcos": "hormone imbalance that affects periods and metabolism",
+  "oxidative_stress": "a process that can damage your body's cells over time"
+ }
 }

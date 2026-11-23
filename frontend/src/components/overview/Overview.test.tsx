@@ -217,6 +217,25 @@ describe("RiskOverviewView", () => {
     expect(screen.queryByText("Liver Health")).toBeNull();
   });
 
+  it("leads with the summary, metabolic age and the risks that need attention", async () => {
+    const data = risks();
+    data.risks![0].about = "heart and blood vessel problems";
+    getRiskOverview.mockResolvedValue(data);
+    const onAsk = vi.fn();
+    render(<Risk onAsk={onAsk} />);
+    expect(await screen.findByText("Understand your future health")).toBeTruthy();
+    const summary = screen.getByTestId("risk-summary");
+    expect(within(summary).getByText("No raised risk")).toBeTruthy();
+    expect(within(summary).getByText("Needs attention")).toBeTruthy();
+    expect(screen.getByText("34 years")).toBeTruthy();
+    const card = screen.getByTestId("attention-card");
+    expect(within(card).getByText("moderate predicted risk")).toBeTruthy();
+    expect(within(card).getByText(/higher risk of heart and blood vessel problems/)).toBeTruthy();
+    fireEvent.click(within(card).getByRole("button", { name: "Understand this risk" }));
+    expect(onAsk).toHaveBeenCalledWith("What does my Cardiac health risk result mean?", expect.objectContaining({ risk_code: "cardiac_health" }));
+    expect(screen.queryByRole("img", { name: /illustration/i })).toBeNull();
+  });
+
   it("opens an area and asks about one risk with its code as context", async () => {
     getRiskOverview.mockResolvedValue(risks());
     const onAsk = vi.fn();

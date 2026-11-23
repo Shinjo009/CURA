@@ -136,6 +136,7 @@ def build_risk_overview(reports: list[BioAIReport], report_id: str | None = None
                 score=risk.score,
                 status=risk.status,
                 level=_level(risk.status),
+                about=str((reg.get("risk_about") or {}).get(code, "")),
                 percentile=risk.percentile,
                 lifestyle_contribution=risk.lifestyle_contribution,
                 contributing_factors=list(risk.contributing_factors or []),

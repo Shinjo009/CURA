@@ -156,6 +156,7 @@ class RiskResult(BaseModel):
     score: float | None = None
     status: str | None = None  # the report's own wording
     level: RiskLevel = "unknown"
+    about: str = ""  # plain words for "a higher risk of ..."
     percentile: float | None = None
     lifestyle_contribution: float | None = None
     contributing_factors: list[str] = Field(default_factory=list)

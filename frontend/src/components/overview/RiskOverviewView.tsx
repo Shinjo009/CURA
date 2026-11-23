@@ -73,7 +73,43 @@ function RiskRow({ risk, reportId, onAsk }: { risk: RiskResult; reportId?: strin
 function groupLine(group: RiskGroupSummary): string {
   const n = group.risk_count;
   const base = `${n} ${n === 1 ? "risk" : "risks"}`;
-  return group.raised_count > 0 ? `${base} · ${group.raised_count} ${t("ui.overview.raised", "raised")}` : `${base} · ${t("ui.overview.none_raised", "none raised")}`;
+  if (group.raised_count === 0) return `${base} · ${t("ui.overview.none_raised_cap", "None raised")}`;
+  return `${base} · ${group.raised_count} ${t("ui.overview.raised", "raised")}`;
+}
+
+function longDate(value: string): string {
+  const d = new Date(value);
+  return Number.isNaN(d.getTime()) ? value : d.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
+}
+
+/** Ring split into raised and not raised. The numbers beside it say the same thing in words. */
+function RiskDonut({ total, raised }: { total: number; raised: number }) {
+  const r = 46;
+  const c = 2 * Math.PI * r;
+  const share = total > 0 ? raised / total : 0;
+  return (
+    <div className="risk-donut" role="img" aria-label={`${total} risks assessed, ${raised} needs attention`}>
+      <svg viewBox="0 0 120 120" width="120" height="120" aria-hidden="true">
+        <circle cx="60" cy="60" r={r} fill="none" strokeWidth="12" className="donut-clear" />
+        {raised > 0 ? (
+          <circle
+            cx="60"
+            cy="60"
+            r={r}
+            fill="none"
+            strokeWidth="12"
+            className="donut-raised"
+            strokeDasharray={`${c * share} ${c}`}
+            transform="rotate(-90 60 60)"
+          />
+        ) : null}
+      </svg>
+      <div className="donut-centre">
+        <strong>{total}</strong>
+        <span>{t("ui.overview.risks_assessed_label", "Risks assessed")}</span>
+      </div>
+    </div>
+  );
 }
 
 /** Predicted risks the Bio-AI report returned. Never mixed with measured blood results. */
@@ -143,22 +179,24 @@ export function RiskOverviewView({
     );
   }
 
+  const total = data.totals?.risk_count ?? risks.length;
+  const raisedRisks = risks.filter((r) => r.level === "raised");
+  const raisedCount = raisedRisks.length;
+  const clearCount = Math.max(total - raisedCount, 0);
+  const age = data.report?.metabolic_age;
+  const reportRef: ContextRef = { type: "bio_ai_report", source: "supershyft", report_id: data.report?.report_id ?? null };
+  const openGroupOf = (risk: RiskResult) => groups.find((g) => g.id === risk.group_id)?.id ?? null;
+
   return (
-    <section className="overview" aria-labelledby="overview-title">
-      <div className="overview-head">
-        <div>
-          <h2 id="overview-title">{t("ui.overview.bio_title", "Your Bio-AI report")}</h2>
-          {data.report ? (
-            <p className="muted">
-              {t("ui.overview.report_dated", "Report dated")} {shortDate(data.report.report_date)}
-              {data.report.metabolic_age != null ? ` · ${t("ui.overview.metabolic_age", "metabolic age")} ${data.report.metabolic_age}` : ""}
-              {` · ${data.totals?.risk_count ?? 0} ${t("ui.overview.risks_assessed", "risks assessed")}`}
-            </p>
-          ) : null}
-        </div>
-      </div>
-      <p className="overview-note" role="note">
-        {data.disclaimer}
+    <section className="overview bio-overview" aria-labelledby="overview-title">
+      <h2 id="overview-title">{t("ui.overview.bio_title", "Understand your future health")}</h2>
+      {data.report ? (
+        <p className="muted">
+          {t("ui.overview.bio_assessment", "Bio-AI assessment")} · {longDate(data.report.report_date)}
+        </p>
+      ) : null}
+      <p className="bio-intro">
+        {t("ui.overview.bio_intro", "Your Bio-AI report helps you understand which health conditions you may be more likely to develop in the future, based on your blood results and lifestyle.")}
       </p>
       {data.same_day_alternatives ? (
         <p className="muted">{t("ui.overview.same_day", "You have more than one Bio-AI report on this date. Choose which one to view.")}</p>
@@ -167,34 +205,77 @@ export function RiskOverviewView({
       {data.state !== "ready" || groups.length === 0 ? (
         <p>{t("ui.overview.no_risks", "This report has no risk results to show.")}</p>
       ) : (
-        <ul className="system-grid" aria-label={t("ui.overview.risk_groups", "Risk areas in your report")}>
-          {groups.map((group) => (
-            <li key={group.id}>
-              <button
-                type="button"
-                className="system-card"
-                data-state={group.raised_count > 0 ? "attention" : "all_in_range"}
-                aria-label={`${group.name}. ${groupLine(group)}. ${t("ui.overview.open_risks", "Open risks")}`}
-                onClick={() => setOpenId(group.id)}
-              >
-                <span className="system-card-name">{group.name}</span>
-                {group.about ? <span className="system-card-about">{group.about}</span> : null}
-                <span className="system-card-line">{groupLine(group)}</span>
-                <span className="system-card-tag">{t("ui.overview.predicted_risk", "Predicted risk")}</span>
-                {(group.key_findings ?? []).length > 0 ? (
-                  <span className="system-card-findings">
-                    {group.key_findings!.map((f) => (
-                      <span key={f.code}>
-                        {f.name}
-                        {f.status ? ` · ${f.status}` : ""}
-                      </span>
-                    ))}
-                  </span>
-                ) : null}
+        <>
+          <div className="risk-summary" data-testid="risk-summary">
+            <RiskDonut total={total} raised={raisedCount} />
+            <ul className="risk-legend">
+              <li data-kind="clear">
+                <span className="legend-dot" aria-hidden="true" />
+                <strong>{clearCount}</strong>
+                <span>{t("ui.overview.no_raised_risk", "No raised risk")}</span>
+              </li>
+              <li data-kind="raised">
+                <span className="legend-dot" aria-hidden="true" />
+                <strong>{raisedCount}</strong>
+                <span>{t("ui.overview.needs_attention", "Needs attention")}</span>
+              </li>
+            </ul>
+          </div>
+          {age != null ? (
+            <section className="metabolic-age" aria-labelledby="metabolic-age-title">
+              <p id="metabolic-age-title" className="muted">{t("ui.overview.your_metabolic_age", "Your metabolic age")}</p>
+              <p className="metabolic-age-value">{`${Math.round(age)} ${t("ui.overview.years", "years")}`}</p>
+              <p>{t("ui.overview.metabolic_age_about", "An estimate of your metabolic health expressed as an age.")}</p>
+              <button type="button" className="link-button" onClick={() => onAsk("What does my metabolic age mean for my health?", reportRef)}>
+                {t("ui.overview.understand_metabolic_age", "Understand my metabolic age")}
               </button>
-            </li>
-          ))}
-        </ul>
+            </section>
+          ) : null}
+          <section className="attention-section" aria-labelledby="attention-title">
+            <h3 id="attention-title">{t("ui.overview.what_deserves_attention", "What deserves your attention")}</h3>
+            {raisedRisks.length === 0 ? (
+              <p className="muted">{t("ui.overview.nothing_raised", "No risk is raised in this report.")}</p>
+            ) : (
+              <ul className="attention-list">
+                {raisedRisks.map((risk) => (
+                  <li key={risk.code} className="attention-card" data-testid="attention-card">
+                    <strong>{risk.name}</strong>
+                    <span className="attention-level">{risk.status ? `${risk.status} ${t("ui.overview.predicted_risk_lower", "predicted risk")}` : t("ui.overview.raised_risk", "Raised predicted risk")}</span>
+                    {risk.about ? <p>{`${t("ui.overview.suggests", "Your assessment suggests a higher risk of")} ${risk.about}.`}</p> : null}
+                    <button type="button" className="outline-button" onClick={() => onAsk(riskAsks(risk, data.report?.report_id)[0].text, riskAsks(risk, data.report?.report_id)[0].contextRef)}>
+                      {t("ui.overview.understand_this_risk", "Understand this risk")}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+            <p className="overview-note" role="note">
+              {data.disclaimer}
+            </p>
+          </section>
+          <section className="explore-section" aria-labelledby="explore-title">
+            <h3 id="explore-title">{t("ui.overview.explore_health", "Explore your health")}</h3>
+            <p className="muted">{t("ui.overview.explore_sub", "Understand different areas of your body")}</p>
+            <ul className="system-grid" aria-label={t("ui.overview.risk_groups", "Risk areas in your report")}>
+              {groups.map((group) => (
+                <li key={group.id}>
+                  <button
+                    type="button"
+                    className="system-card"
+                    data-state={group.raised_count > 0 ? "attention" : "all_in_range"}
+                    aria-label={`${group.name}. ${groupLine(group)}. ${t("ui.overview.open_risks", "Open risks")}`}
+                    onClick={() => setOpenId(group.id)}
+                  >
+                    <span className="system-card-name">{group.name}</span>
+                    {group.about ? <span className="system-card-about">{group.about}</span> : null}
+                    <span className="system-card-line">{groupLine(group)}</span>
+                    <span className="system-card-tag">{t("ui.overview.explore_risks", "Explore health risks")} →</span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </section>
+        </>
       )}
       <div className="chips">
         <button type="button" onClick={explainAll}>
