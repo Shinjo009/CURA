@@ -172,12 +172,12 @@ export function RiskOverviewView({
           <p className="overview-note" role="note">
             {data.disclaimer}
           </p>
-          <AskCuraActions actions={riskGroupAsks(open, own, data.report?.report_id)} onAsk={onAsk} label={`${t("ui.overview.ask_cura_about", "Ask CURA about")} ${open.name}`} />
           <ul className="result-list">
             {own.map((risk) => (
               <RiskRow key={risk.code} risk={risk} reportId={data.report?.report_id} onAsk={onAsk} />
             ))}
           </ul>
+          <AskCuraActions actions={riskGroupAsks(open, own, data.report?.report_id)} onAsk={onAsk} label={`${t("ui.overview.ask_cura_about", "Ask CURA about")} ${open.name}`} />
         </section>
       </div>
     );

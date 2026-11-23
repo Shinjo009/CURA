@@ -45,12 +45,12 @@ export function SystemDetail({
           {t("ui.overview.partial_tail", "Tests that are not on your report are not assessed.")}
         </p>
       ) : null}
-      <AskCuraActions actions={systemAsks(system, own, reportId)} onAsk={onAsk} label={`${t("ui.overview.ask_cura_about", "Ask CURA about")} ${system.name}`} />
       <ul className="result-list">
         {orderResults(own).map((item, index) => (
           <ResultRow key={item.result_id} item={item} onAsk={onAsk} defaultOpen={index === 0 && outsideRange(system.status_breakdown) > 0 && own.length === 1} />
         ))}
       </ul>
+      <AskCuraActions actions={systemAsks(system, own, reportId)} onAsk={onAsk} label={`${t("ui.overview.ask_cura_about", "Ask CURA about")} ${system.name}`} />
       {alsoRelated.length > 0 ? (
         <>
           <h3>{t("ui.overview.also_relevant", "Also relevant here")}</h3>

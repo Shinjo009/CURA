@@ -145,7 +145,10 @@ def shape_blood_reports(reports: list[BloodReport], plan: QueryPlan) -> list[Blo
     """Plan filter applied after the cache read. Copies so the cached reports stay intact."""
     blood = [report.model_copy(deep=True) for report in reports]
     if plan.report_id:
-        blood = [report for report in blood if report.report_id == plan.report_id]
+        # A Bio-AI report id says nothing about which blood report to use, so only narrow when it names one.
+        named = [report for report in blood if report.report_id == plan.report_id]
+        if named or plan.needs_blood and not plan.needs_bio_ai:
+            blood = named
     from app.pipeline.bio_ai_selection import requested_dates
 
     dated_request = bool(requested_dates(plan.raw_message or ""))

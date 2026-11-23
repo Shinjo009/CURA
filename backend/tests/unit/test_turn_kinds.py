@@ -66,3 +66,12 @@ def test_card_kinds_keep_their_layout_and_the_rest_do_not():
     assert spec_for(TurnKind.nutrition_overview).card == "nutrition_plan"
     assert not spec_for(TurnKind.general).keep_layout and spec_for(TurnKind.general).card is None
     assert kind_of(_ctx("health_area"), "x") == TurnKind.health_area
+
+
+def test_a_bio_ai_report_id_does_not_hide_the_blood_report():
+    from app.contracts.blood import BloodReport
+    from integrations.supershyft.ihr import shape_blood_reports
+
+    blood = BloodReport(report_id="blood-1", report_date="2026-08-25", markers=[])
+    plan = _plan(report_id="bioai-9", needs_blood=True, needs_bio_ai=True)
+    assert [r.report_id for r in shape_blood_reports([blood], plan)] == ["blood-1"]

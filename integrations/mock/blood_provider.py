@@ -24,7 +24,8 @@ class MockBloodProvider:
     def apply_plan(self, reports: list[BloodReport], plan: QueryPlan) -> list[BloodReport]:
         reports = list(reports)
         if plan.report_id:
-            reports = [report for report in reports if report.report_id == plan.report_id]
+            named = [report for report in reports if report.report_id == plan.report_id]
+            reports = named or (reports if plan.needs_bio_ai else [])
         wanted_keys = retrieval_metric_keys(plan)
         if wanted_keys:
             wanted = set(wanted_keys)
