@@ -131,7 +131,7 @@ export function riskName(risk: RiskResult): string {
 
 /** Level 1, the whole Bio-AI report: questions about overall health. */
 export function reportLevelAsks(reportId?: string | null): AskAction[] {
-  const ref: ContextRef = { type: "bio_ai_report", source: "supershyft", report_id: reportId ?? null };
+  const ref: ContextRef = { type: "bio_ai_report", source: "supershyft", report_id: reportId ?? null, entry_point: "health_area" };
   return [
     { id: "attention", label: "Which of my health risks need attention?", text: "Which of my health risks need attention?", contextRef: ref },
     { id: "improve", label: "How can I improve my overall health?", text: "How can I improve my overall health?", contextRef: ref },
@@ -141,7 +141,8 @@ export function reportLevelAsks(reportId?: string | null): AskAction[] {
 /** Level 2, one health area: questions about that area, worded by whether any risk in it is raised. */
 export function riskGroupAsks(group: RiskGroupSummary, _risks: RiskResult[], reportId?: string | null): AskAction[] {
   const topic = (group.topic || group.name).toLowerCase();
-  const ref: ContextRef = { type: "bio_ai_report", source: "supershyft", report_id: reportId ?? null };
+  // health_area makes the answer join blood results, Bio-AI risks and habits for this area.
+  const ref: ContextRef = { type: "bio_ai_report", source: "supershyft", report_id: reportId ?? null, entry_point: "health_area" };
   const first =
     group.raised_count > 0 ? `Why is my ${topic} risk increased?` : `What helps keep my ${topic} risk healthy?`;
   return [

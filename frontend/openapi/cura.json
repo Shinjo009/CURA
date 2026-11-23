@@ -2023,7 +2023,8 @@
               {
                 "enum": [
                   "blood_report_overview",
-                  "risk_explainer"
+                  "risk_explainer",
+                  "health_area"
                 ],
                 "type": "string"
               },

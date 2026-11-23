@@ -124,3 +124,31 @@ def test_related_card_wording_is_written_for_the_condition():
     assert parsed.related_text.startswith("Your HbA1c test")
     assert parsed.related_button == "Check my blood sugar results"
     assert _parse([]).related_title == ""  # no verified test, no card
+
+
+def test_overview_questions_load_blood_results_and_habits_together():
+    from app.contracts.query import QueryPlan
+
+    base = QueryPlan(intent=IntentType.general_health_question, raw_message="What do my blood tests say about my heart health?")
+    area = _apply_context_ref(base, ContextRef(type="bio_ai_report", source="supershyft", entry_point="health_area"))
+    assert area.needs_blood and area.needs_bio_ai and area.needs_questionnaire and area.entry_point == "health_area"
+    plain = _apply_context_ref(base, ContextRef(type="bio_ai_report", source="supershyft"))
+    assert plain.needs_blood is False and plain.entry_point is None
+
+
+def test_overview_context_sees_the_whole_panel_and_gets_the_area_prompt():
+    from app.pipeline.prompt_builder import _relevant_markers
+    from app.pipeline.prompt_modules import HEALTH_AREA, house_system
+
+    marker = BloodMarker(id="1", key="ldl", name="LDL", value=120, unit="mg/dL", reference_low=0, reference_high=100)
+    ctx = HealthContext(intent=IntentType.bio_ai_explanation, answer_depth=list(AnswerDepth)[0], explainer="health_area", markers=[marker])
+    assert _relevant_markers(ctx) == [marker]
+    assert HEALTH_AREA in house_system(ctx, "What do my blood tests say about my heart health?")
+    assert "—" not in HEALTH_AREA and "–" not in HEALTH_AREA
+
+
+def test_missing_item_note_is_a_sentence_not_a_reason_code():
+    from app.pipeline.validator import _missing_sentence
+
+    assert _missing_sentence("Cardiac Health", "no_reports") == "Cardiac Health is not in your reports."
+    assert "no_reports" not in _missing_sentence("X", "weird_code")

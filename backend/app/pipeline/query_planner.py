@@ -312,13 +312,16 @@ def _apply_context_ref(plan: QueryPlan, ref: ContextRef) -> QueryPlan:
         update.update(
             intent=IntentType.bio_ai_explanation,
             knowledge_scope=KnowledgeScope.personal,
-            needs_blood=False,
+            needs_blood=ref.entry_point == "health_area",
             needs_bio_ai=True,
-            needs_questionnaire=False,
+            needs_questionnaire=ref.entry_point == "health_area",
             needs_supershyft=True,
             needs_general=False,
             source=QuerySource.bio_ai,
         )
+        if ref.entry_point == "health_area":
+            # A question about a health area (or the whole report) joins blood results, Bio-AI risks and habits.
+            update["entry_point"] = "health_area"
     elif ref.type == "health_scenario":
         update.update(
             intent=IntentType.health_scenario,

@@ -389,6 +389,14 @@ RISK_EXPLAINER = (
     "In \"What can raise this risk\" write only general factors and never say a factor applies to the person unless it is in contributing_factors or the supplied answers. Never invent a value, a contributor, a threshold or a conclusion, no supplements or doses, no follow-up questions in the text, and no separator lines."
 )
 
+HEALTH_AREA = (
+    "THIS QUESTION IS ABOUT A HEALTH AREA OR THE WHOLE BIO-AI REPORT, asked from the app's overview screen. The supplied data holds the person's blood results (markers), their Bio-AI risks and their habit answers together. "
+    "Answer from all three, joined up by body system: say what the blood results in that area show in words (never repeat values, the cards show them) and what the Bio-AI estimate says, and say plainly when they agree or differ. "
+    "A Bio-AI estimate and a blood result are different things: one predicts future risk, the other measures now. "
+    "Never say the report has no blood results when markers are supplied; if none relates to the area asked about, say that one sentence only. "
+    "Use short bullets, a specific everyday step with how much or how often, and only habits the person told us."
+)
+
 LIFESTYLE_FOCUS = (
     "LIFESTYLE FOCUS. This question is about a daily habit such as sleep, stress, exercise or water. Answer from the habit answers supplied. "
     "Bring in a blood result or Bio-AI score only when medicine clearly links it to that habit, and say how. Never list or mention unrelated results. "
@@ -500,6 +508,8 @@ def house_system(context: HealthContext, message: str) -> str:
         parts.append(NUTRITION_OVERVIEW)
     if getattr(context, "explainer", None) == "bio_ai_risk":
         parts.append(RISK_EXPLAINER)
+    elif getattr(context, "explainer", None) == "health_area":
+        parts.append(HEALTH_AREA)
     from app.core.config import settings
     from app.pipeline.answer_plan import build_answer_plan, log_plan, plan_prompt
 

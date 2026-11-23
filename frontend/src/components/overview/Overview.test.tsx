@@ -256,10 +256,12 @@ describe("RiskOverviewView", () => {
     const onAsk = vi.fn();
     render(<Risk onAsk={onAsk} />);
     fireEvent.click(await screen.findByRole("button", { name: "Which of my health risks need attention?" }));
-    expect(onAsk).toHaveBeenCalledWith("Which of my health risks need attention?", expect.objectContaining({ type: "bio_ai_report" }));
+    expect(onAsk).toHaveBeenCalledWith("Which of my health risks need attention?", expect.objectContaining({ type: "bio_ai_report", entry_point: "health_area" }));
     expect(screen.getByRole("button", { name: "How can I improve my overall health?" })).toBeTruthy();
     fireEvent.click(screen.getByRole("button", { name: /Heart & Circulation/ }));
     expect(screen.getByRole("button", { name: "Why is my heart health risk increased?" })).toBeTruthy();
+    fireEvent.click(screen.getByRole("button", { name: "What do my blood tests say about my heart health?" }));
+    expect(onAsk).toHaveBeenLastCalledWith("What do my blood tests say about my heart health?", expect.objectContaining({ entry_point: "health_area" }));
     expect(screen.getByRole("button", { name: "What do my blood tests say about my heart health?" })).toBeTruthy();
     expect(screen.queryByRole("button", { name: "Which of my health risks need attention?" })).toBeNull();
   });

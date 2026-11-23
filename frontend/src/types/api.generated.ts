@@ -1092,7 +1092,7 @@ export interface components {
             /** Document Id */
             document_id?: string | null;
             /** Entry Point */
-            entry_point?: ("blood_report_overview" | "risk_explainer") | null;
+            entry_point?: ("blood_report_overview" | "risk_explainer" | "health_area") | null;
             /** Marker Code */
             marker_code?: string | null;
             /** Report Id */

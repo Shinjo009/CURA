@@ -139,6 +139,9 @@ def _entity_coverage(answer: str, plan: QueryPlan, context: HealthContext) -> Qu
             # "metabolic risk" resolves to the report-level score; its absence is not news.
             and str(c).lower() not in {"metabolic_score", "metabolic_age"}
         ]
+    if getattr(context, "explainer", None):
+        # An overview turn supplies the whole record; the model decides what is relevant.
+        coverage_codes = []
     for code in coverage_codes:
         name = (display_name_for(code) or code).lower()
         slug = code.replace("_", " ").lower()
@@ -156,7 +159,7 @@ def _entity_coverage(answer: str, plan: QueryPlan, context: HealthContext) -> Qu
             if code.lower() not in blob and name not in blob:
                 item = next((row for row in context.missing if (row.key or "").lower() == code.lower()), None)
                 reason = (item.reason if item else "not found")
-                repairs.append(f"{display_name_for(code)} was {reason.replace('_', ' ')}.")
+                repairs.append(_missing_sentence(display_name_for(code), reason))
                 flags.append("entity_missing_disclosed")
             continue
         stated = any((row.fact or "").lower() == code.lower() for row in (context.user_stated or []))
@@ -176,6 +179,23 @@ def _entity_coverage(answer: str, plan: QueryPlan, context: HealthContext) -> Qu
             repairs.append(f"{display_name_for(code)} was not found in the retrieved records.")
             flags.append("entity_undisclosed")
     return QualityGateResult(passed=not flags, flags=list(dict.fromkeys(flags)), repairs=repairs)
+
+
+_MISSING_WORDS = {
+    "no_reports": "is not in your reports",
+    "no_report": "is not in your reports",
+    "not_found": "was not found in your report",
+    "not found": "was not found in your report",
+    "not_reported": "was not reported",
+    "no_data": "has no data in your report",
+}
+
+
+def _missing_sentence(name: str, reason: str) -> str:
+    """A complete sentence for a missing item. A raw reason code such as no_reports is never pasted in."""
+    key = (reason or "").strip().lower()
+    tail = _MISSING_WORDS.get(key) or (f"was {key}" if " " in key else "was not found in your report")
+    return f"{name} {tail}."
 
 
 def _drop_unsupported(answer: str, unsupported: list[tuple[str, str]]) -> str | None:
