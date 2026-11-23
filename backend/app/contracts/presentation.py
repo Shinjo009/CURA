@@ -139,6 +139,9 @@ class RiskExplanation(BaseModel):
     meaning_title: str = "What does this mean for you?"
     meaning: list[str] = Field(default_factory=list)
     related_tests: list[RelatedTest] = Field(default_factory=list)
+    related_title: str = ""  # written for this condition, for example about current blood sugar health
+    related_text: str = ""
+    related_button: str = ""
     actions: list[ExplainerAction] = Field(default_factory=list)
     more: list[ExplainerSection] = Field(default_factory=list)
 

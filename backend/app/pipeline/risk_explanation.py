@@ -127,7 +127,7 @@ def parse_risk_explanation(text: str, *, risk, markers) -> RiskExplanation | Non
         return next(((t, b) for t, b in sections if re.search(pattern, t, re.I)), None)
 
     meaning = find(r"mean for|mean to|means for|what.*mean")
-    related = find(r"related|connected|blood tests? (?:linked|that)")
+    related = find(r"related|connected|blood tests? (?:linked|that)|want to (?:know|see|check)|how .* doing")
     actions = find(r"what can you|can you do|protect|do next|you can do")
     more = find(r"explore|learn more|more about")
     condition = next(((t, b) for t, b in sections if (t, b) not in (meaning, related, actions, more)), None)
@@ -139,6 +139,14 @@ def parse_risk_explanation(text: str, *, risk, markers) -> RiskExplanation | Non
         return None
 
     tests: list[RelatedTest] = []
+    rel_text, rel_button = "", ""
+    if related:
+        for line in related[1]:
+            btn = re.match(r"^\s*button\s*:\s*(.+?)\s*$", line, re.I)
+            if btn:
+                rel_button = btn.group(1).replace("**", "")
+            elif line.strip() and not _BULLET.match(line) and not rel_text:
+                rel_text = line.strip().replace("**", "")
     if related and markers:
         from app.pipeline.presentation import _finding_from_marker
 
@@ -190,6 +198,9 @@ def parse_risk_explanation(text: str, *, risk, markers) -> RiskExplanation | Non
         meaning_title=meaning[0].strip(),
         meaning=meaning_paras,
         related_tests=tests,
+        related_title=related[0].strip() if related and tests else "",
+        related_text=rel_text if tests else "",
+        related_button=rel_button if tests else "",
         actions=acts,
         more=extra,
     )

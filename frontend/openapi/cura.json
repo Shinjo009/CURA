@@ -5646,12 +5646,27 @@
             "title": "More",
             "type": "array"
           },
+          "related_button": {
+            "default": "",
+            "title": "Related Button",
+            "type": "string"
+          },
           "related_tests": {
             "items": {
               "$ref": "#/components/schemas/RelatedTest"
             },
             "title": "Related Tests",
             "type": "array"
+          },
+          "related_text": {
+            "default": "",
+            "title": "Related Text",
+            "type": "string"
+          },
+          "related_title": {
+            "default": "",
+            "title": "Related Title",
+            "type": "string"
           },
           "score_card": {
             "anyOf": [

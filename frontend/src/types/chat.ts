@@ -230,6 +230,9 @@ export type RiskExplanationData = {
   meaning_title: string;
   meaning: string[];
   related_tests: Array<{ finding: PresentedFinding; why?: string }>;
+  related_title?: string;
+  related_text?: string;
+  related_button?: string;
   actions: Array<{ title: string; detail?: string; icon: string }>;
   more: Array<{ title: string; items: string[] }>;
 };

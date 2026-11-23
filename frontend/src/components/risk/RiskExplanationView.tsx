@@ -82,7 +82,7 @@ export function RiskScoreCard({ card }: { card: Card }) {
 }
 
 /** Invites the person to look at their own related results. Names and values come from the report. */
-export function RelatedBiomarkers({ tests, riskName, onAsk }: { tests: RiskExplanationData["related_tests"]; riskName: string; onAsk?: (text: string) => void }) {
+export function RelatedBiomarkers({ tests, riskName, onAsk, title, text, button }: { tests: RiskExplanationData["related_tests"]; riskName: string; onAsk?: (text: string) => void; title?: string; text?: string; button?: string }) {
   if (tests.length === 0) return null;
   const names = tests.map((item) => item.finding.label);
   const list = names.length > 1 ? `${names.slice(0, -1).join(", ")} and ${names[names.length - 1]}` : names[0];
@@ -90,9 +90,9 @@ export function RelatedBiomarkers({ tests, riskName, onAsk }: { tests: RiskExpla
     <section className="related-card" aria-labelledby="risk-related" data-testid="related-tests">
       <h3 id="risk-related">
         <span className="related-icon"><LineIcon name="test" /></span>
-        {t("ui.risk.want_to_know", "Want to see your related blood tests?")}
+        {title || t("ui.risk.want_to_know", "Want to see your related blood tests?")}
       </h3>
-      <p>{`${t("ui.risk.your_tests", "Your")} ${list} ${t("ui.risk.help_understand", "can help us understand this.")}`}</p>
+      <p>{text || `${t("ui.risk.your_tests", "Your")} ${list} ${t("ui.risk.help_understand", "can help us understand this.")}`}</p>
       <ul className="related-values">
         {tests.map((item) => (
           <li key={item.finding.label}>
@@ -103,7 +103,7 @@ export function RelatedBiomarkers({ tests, riskName, onAsk }: { tests: RiskExpla
       </ul>
       {onAsk ? (
         <button type="button" className="outline-button" onClick={() => onAsk(`What do my ${list} results say about my ${riskName} risk?`)}>
-          {t("ui.risk.check_results", "Check my blood test results")}
+          {button || t("ui.risk.check_results", "Check my blood test results")}
         </button>
       ) : null}
     </section>
@@ -188,7 +188,7 @@ export function RiskExplanationView({ data, onAsk }: { data: RiskExplanationData
         </section>
       ) : null}
       <ExplainerSection id="risk-meaning" title={data.meaning_title} paragraphs={data.meaning} />
-      <RelatedBiomarkers tests={data.related_tests} riskName={name} onAsk={onAsk} />
+      <RelatedBiomarkers tests={data.related_tests} riskName={name} onAsk={onAsk} title={data.related_title} text={data.related_text} button={data.related_button} />
       <hr className="risk-divider" />
       <ActionCards actions={data.actions} title={t("ui.risk.protect", "How can you protect your future health?")} />
       <ExpandableInfo sections={data.more} generalNote={t("ui.risk.general_note", "General information, not confirmed for you.")} />

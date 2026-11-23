@@ -15,7 +15,9 @@ In Type 2 diabetes the key stops working well, so extra sugar stays in your bloo
 ## What does this mean for you?
 Your result is in the healthy band today. Daily habits keep it that way.
 
-## Related tests
+## Want to know your current blood sugar health?
+Your HbA1c test shows how your sugar has been over three months.
+Button: Check my blood sugar results
 - **HbA1c**: shows your average blood sugar over three months.
 - **Made up test**: not in the report.
 
@@ -85,7 +87,7 @@ def test_risk_explainer_prompt_is_added_only_for_the_explainer():
     from app.pipeline.prompt_modules import RISK_EXPLAINER, house_system
 
     assert "—" not in RISK_EXPLAINER and "–" not in RISK_EXPLAINER
-    for heading in ("## What does this mean for you?", "## Related tests", "## What can you do?", "## More to explore"):
+    for heading in ("## What does this mean for you?", "Button: Check my", "## What can you do?", "## More to explore"):
         assert heading in RISK_EXPLAINER
     on = house_system(_ctx(), "What does my Type 2 diabetes risk result mean?")
     off_ctx = HealthContext(intent=IntentType.bio_ai_explanation, answer_depth=list(AnswerDepth)[0])
@@ -113,3 +115,12 @@ def test_everyday_names_come_first_and_unknown_risks_keep_the_report_name():
     assert _display(reg, "oxidative_stress", "Oxidative Stress")["explain"]
     assert _display(reg, "brand_new_risk", "Brand New Risk") == {"name": "Brand New Risk"}
     assert reg["_group_of"]["hypothyroidism"] == "thyroid_health"
+
+
+def test_related_card_wording_is_written_for_the_condition():
+    marker = BloodMarker(id="1", key="hba1c", name="HbA1c", value=5.2, unit="%", reference_low=4, reference_high=5.6)
+    parsed = _parse([marker])
+    assert parsed.related_title == "Want to know your current blood sugar health?"
+    assert parsed.related_text.startswith("Your HbA1c test")
+    assert parsed.related_button == "Check my blood sugar results"
+    assert _parse([]).related_title == ""  # no verified test, no card

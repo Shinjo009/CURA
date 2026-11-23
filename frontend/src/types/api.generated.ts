@@ -2257,8 +2257,23 @@ export interface components {
             meaning_title: string;
             /** More */
             more?: components["schemas"]["ExplainerSection"][];
+            /**
+             * Related Button
+             * @default
+             */
+            related_button: string;
             /** Related Tests */
             related_tests?: components["schemas"]["RelatedTest"][];
+            /**
+             * Related Text
+             * @default
+             */
+            related_text: string;
+            /**
+             * Related Title
+             * @default
+             */
+            related_title: string;
             score_card?: components["schemas"]["RiskScoreCard"] | null;
         };
         /** RiskGroupSummary */

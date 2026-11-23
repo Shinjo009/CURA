@@ -9,6 +9,9 @@ const data: RiskExplanationData = {
   score_card: { code: "t2d", name: "Type 2 diabetes", score: 17, status: "Healthy", level: "not_raised", assessed_on: "2026-08-25", percentile: 4, lifestyle_contribution: 18, contributing_factors: ["Low activity"] },
   meaning_title: "What does this mean for you?",
   meaning: ["Your result is in the healthy band today."],
+  related_title: "Want to know your current blood sugar health?",
+  related_text: "Your HbA1c test shows how your sugar has been over three months.",
+  related_button: "Check my blood sugar results",
   related_tests: [{ finding: { label: "HbA1c", value: "5.2", unit: "%", status: "normal", reference_low: 4, reference_high: 5.6, numeric_value: 5.2 }, why: "Average sugar over three months." }],
   actions: [{ title: "Walk daily", detail: "30 minutes after dinner.", icon: "move" }, { title: "Sleep well", detail: "Steady bedtime.", icon: "sleep" }],
   more: [{ title: "Common signs", items: ["Feeling very thirsty"] }, { title: "What can raise this risk", items: ["Low activity"] }],
@@ -27,7 +30,7 @@ describe("RiskExplanationView", () => {
     expect(within(card).getByText("Healthy")).toBeTruthy();
     expect(container.querySelector("img")).toBeNull();
     expect(screen.getAllByTestId("action-card")).toHaveLength(2);
-    expect(screen.getByText("Your HbA1c can help us understand this.")).toBeTruthy();
+    expect(screen.getByText("Want to know your current blood sugar health?")).toBeTruthy();
   });
 
   it("shows the estimate note on the card and keeps extra reading closed until opened", () => {
@@ -47,7 +50,7 @@ describe("RiskExplanationView", () => {
     expect(screen.getByText("Let's understand what Type 2 diabetes is and what your result means for your health.")).toBeTruthy();
     const related = screen.getByTestId("related-tests");
     expect(within(related).getByText("5.2 %")).toBeTruthy();
-    fireEvent.click(within(related).getByRole("button", { name: "Check my blood test results" }));
+    fireEvent.click(within(related).getByRole("button", { name: "Check my blood sugar results" }));
     expect(asked).toEqual(["What do my HbA1c results say about my Type 2 diabetes risk?"]);
     expect(document.querySelectorAll("hr").length).toBe(2);
   });
